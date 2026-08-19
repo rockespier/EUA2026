@@ -1,0 +1,47 @@
+﻿@model FrontAssistanceTravelers.WebTravel.Models.VMLogin;
+@{
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+<div class="row">
+    <div class="col-xl-7 order-1"><img class="bg-img-cover bg-center" src="~/assets/images/login/1.jpg" alt="looginpage"></div>
+    <div class="col-xl-5 p-0">
+        <div class="login-card">
+            <div>
+                <div><a class="logo text-center" asp-controller="Dashboard" asp-action="Index"><img class="img-fluid for-light" src="~/assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-dark" src="~/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
+                <div class="login-main">
+                    <form asp-controller="Autenticacion" autocomplete="off" asp-action="Acceso" method="post" class="theme-form" asp-route-ReturnUrl="@ViewData["ReturnUrl"]">
+                        <h4>Inicia sesión</h4>
+                        <p>Ingrese usuario y contraseña para acceder</p>
+                        <div class="form-group">
+                            <label class="col-form-label">Usuario</label>
+                            <input class="form-control" type="text" required="" asp-for="inpAccesoAcceso" autocomplete="off" value="">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Contraseña</label>
+                            <div class="form-input position-relative">
+                                <input class="form-control" type="password" name="inpAccesoPassword" asp-for="inpAccesoPassword" required="" value="">
+                                <div class="show-hide"><span class="show"></span></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a asp-controller="Autenticacion" asp-action="OlvideAcceso">Olvidé mi contraseña</a>
+                        </div>
+                        <div class="form-group">
+                            <div class="text-end mt-3">
+                                <button class="btn btn-primary btn-block w-100" type="submit">Ingresar</button>
+                            </div>
+                        </div>
+						@if (ViewData["ValidarError"] != null)
+						{
+							<div class="alert alert-danger dark alert-dismissible fade show" role="alert">
+								@ViewData["ValidarError"]
+								<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>
+
+						}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

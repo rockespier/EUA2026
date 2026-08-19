@@ -1,0 +1,114 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashItec = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
+}
+<style>
+	.dropdown .dropdown-toggle {
+		width: 350px !important;
+	}
+
+	select {
+		background: #fff;
+	}
+
+	option {
+		color: #2b2b2b;
+		opacity: 0.6;
+		font-size: 13px;
+		padding: 6px 12px;
+		border-top: 1px solid #efefef;
+	}
+</style>
+<div>
+</div>
+
+<div class="page-body">
+	<div class="container-fluid">
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3></h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashItec">
+								<svg class="stroke-icon">
+									<use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Dashboard</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-xl-12">
+				<div class="card">
+					<div class="card-header card-no-border">
+						<h5 class="m-0">Permisos</h5>						
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-sm-6 col-6-6">
+								<div class="mb-3">									
+									<div class="dropdown">
+										<label class="form-label" for="selPerfil">Perfil:</label>
+										<select class="dropdown-toggle" id="selPerfil" name="selPerfil" aria-label="viewButton">											
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-6-6">
+								<div class="mb-3">
+									<a href="javascript:void(0);" onclick="guardarPermisos();"
+									   class="btn btn-primary mb-3">
+										<span class="glyphicon glyphicon-plus"></span> Guardar
+									</a>
+								</div>
+							</div>
+						</div>
+						<div id="tvPermisos" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="ajson1" aria-busy="false">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Script{
+	<!-- Plugins JS start-->
+	<script src="../assets/js/sidebar-menu.js"></script>
+	<script src="../assets/js/slick/slick.min.js"></script>
+	<script src="../assets/js/slick/slick.js"></script>
+	<script src="../assets/js/header-slick.js"></script>
+
+	<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+	<script src="~/assets/js/jquery.ui.min.js"></script>
+	<script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
+	<script src="../assets/js/datatable/datatables/datatable.custom.js?v=2"></script>
+	<script src="../assets/js/datatable/datatable-extension/dataTables.buttons.min.js"></script>
+	<script src="../assets/js/datatable/datatable-extension/jszip.min.js"></script>
+	<script src="../assets/js/datatable/datatable-extension/buttons.colVis.min.js"></script>
+	<script src="../assets/js/datatable/datatable-extension/buttons.bootstrap4.min.js"></script>
+	<script src="../assets/js/datatable/datatable-extension/buttons.html5.min.js"></script>
+	<script src="~/assets/js/jquery.validate.js"></script>
+	<script src="~/assets/js/additional-methods.js"></script>
+	<script src="../assets/js/tree/jstree.min.js"></script>
+	<script src="~/assets/js/moment.js"></script>
+	<script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+
+
+
+	<!-- Plugins JS Ends-->
+	<!-- Theme js-->
+	<script src="../assets/js/script.js"></script>
+	<script src="~/travel/General.js?v=1.55"></script>
+	<script src="~/travel/Permiso.js?v=1.9"></script>
+}

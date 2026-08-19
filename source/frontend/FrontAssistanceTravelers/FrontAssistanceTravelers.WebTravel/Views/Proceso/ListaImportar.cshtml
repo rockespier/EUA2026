@@ -1,0 +1,264 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
+}
+<style>
+	.tab-content > .tab-pane {
+		padding-top: 70px !important;
+	}
+
+	div .action {
+		position: static !important;
+	}
+
+	.action {
+		display: flex;
+		justify-content: center; /* Center horizontally */
+		align-items: center; /* Center vertically */
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.btn {
+		padding: 0.375rem 0.75rem !important;
+		font-size: 1rem !important;
+	}
+
+	.modal-title {
+		white-space: nowrap;
+	}
+
+	.modal-header .derecha {
+		margin-left: 35rem;
+	}
+
+	.form-switch .form-check-input {
+		width: 3em;
+		height: 2em;
+	}
+
+	.grid-divider {
+		overflow-x: hidden;
+		position: relative;
+	}
+
+		.grid-divider > [class*="col-"]:nth-child(n + 2):after {
+			content: "";
+			background-color: black;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+
+			@@media (max-width: 767px) {
+				width: 100%;
+				height: 1px;
+				left: 0;
+				top: -4px;
+			}
+
+			@@media (min-width: 768px) {
+				width: 1px;
+				height: auto;
+				left: -1px;
+			}
+		}
+
+	#globalLoader {
+		display: none; /* Initially hidden */
+		position: fixed; /* Fixed to cover entire screen */
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+		z-index: 9999; /* Ensure it's on top */
+		justify-content: center;
+		align-items: center;
+	}
+
+	.spinner {
+		border: 4px solid #f3f3f3; /* Light grey */
+		border-top: 4px solid #3498db; /* Blue */
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		animation: spin 2s linear infinite;
+	}
+
+
+	@@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+</style>
+<link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/fixedcolumns.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/vendors/select.datatables.css" rel="stylesheet" />
+<div class="page-body">
+	<div id="globalLoader" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+		<div class="spinner"></div>
+		<span style="margin-top: 10px; font-family: sans-serif; font-size: 16px; color: white; font-weight: bold;">Cargando...</span>
+	</div>
+	<div class="container-fluid">
+		<input id="mdHidIdVentaTarjeta" name="mdHidIdVentaTarjeta" type="hidden" />
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3>Importar Ventas</h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashluser">
+								<svg class="stroke-icon">
+									<use href="/assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Ventas</li>
+						<li class="breadcrumb-item active">Importar Ventas</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- State saving Starts-->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<p>
+							<!--Filtros-->
+							<div class="card-body dropdown-basic">
+								<button id="btnBusqueda" type="button" class="btn btn-success" onclick="AbrirModaImportar();">
+									<i class="fa fa-upload"></i>  Importar Ventas
+								</button>
+							</div>
+						</p>
+						<div class="table-responsive user-datatable">
+							<table class="display" id="dtVenta">
+								<thead>
+									<tr>
+										<th>Agencia</th>
+										<th>Vigencia Inicio</th>
+										<th>Vigencia Fin</th>
+										<th>Producto</th>
+										<th>Costo</th>
+										<th>Cliente</th>
+										<th>Fecha Nacimiento</th>
+										<th id="idExternoCampo">Codigo Externo</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- State saving Ends-->
+		</div>
+	</div>
+	<!-- popup Venta Busqueda-->
+	<div class="modal fade bd-example-modal-lg" id="popupModalVentaSearch" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaSearch" name="tituloModalVentaSearch" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosVentaSearch" name="modalDatosVentaSearch" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row mb-3">
+								<div class="col-sm-12 col-md-12 text-center">
+									<div class="btn-radio">
+										<div class="btn-group" data-bs-toggle="buttons">
+											<div class="btn active">
+												<div class="radio radio-info">
+													<input id="radInterno" type="radio" name="radio1" value="option1" checked="" onchange="changeActive(this)">
+													<label for="radInterno">Interno</label>
+												</div>
+											</div>
+											<div class="btn">
+												<div class="radio radio-info">
+													<input id="radExterno" type="radio" name="radio1" value="option1" onchange="changeActive(this)">
+													<label for="radExterno">Externo</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-sm-12 col-md-12">
+									<div class="input-group">
+										<input type="file" class="form-control" id="mdFileImportar" name="mdFileImportar" accept=".xls,.xlsx" aria-describedby="mdBotImportar" aria-label="Upload">
+										<button class="btn btn-outline-success" type="button" id="mdBotImportar" namme="mdBotImportar">Importar</button>
+										<button class="btn btn-outline-success" type="button" id="mdBotImportarCarga" disabled namme="mdBotImportarCarga"> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;Importando...</button>
+									</div>
+								</div>
+							</div>
+							<div class="row" id="divResultado" name="divResultado">
+								<div class="col-sm-12 col-md-12 text-center">
+									<div id="mdDescargarError" name="mdDescargarError" class="col">
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-warning" type="button" id="btnLimpiarBsq" name="btnLimpiarBsq" onclick="clickDescargarPlantilla();">
+							<i class="fa fa-download"></i>  Plantilla
+						</button>
+
+						<button class="btn btn-info" type="button" id="btnLimpiarBsq" name="btnLimpiarBsq" onclick="clickImportarLimpiar();">
+							<i class="fa fa-eraser"></i>  Limpiar
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarSearch" name="btnCerrarSearch" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Busqueda-->
+</div>
+@section Script {
+		<!-- Plugins JS start-->
+		<script src="../assets/js/sidebar-menu.js"></script>
+		<script src="../assets/js/slick/slick.min.js"></script>
+		<script src="../assets/js/slick/slick.js"></script>
+		<script src="../assets/js/header-slick.js"></script>
+		<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+		<script src="~/assets/js/jquery.ui.min.js"></script>
+		<script src="../assets/js/select2/select2.full.min.js"></script>
+		<script src="../assets/js/select2/select2-custom.js"></script>
+		<script src="~/assets/js/datatable/datatablesv2/datatables.js"></script>
+		<script src="~/assets/js/datatable/datatablesv2/datatables.fixedcolumns.js"></script>
+		<script src="~/assets/js/datatable/datatablesv2/fixedcolumns.datatables.js"></script>
+		<script src="~/assets/js/datatable/datatablesv2/datatables.select.js"></script>
+		<script src="~/assets/js/datatable/datatablesv2/select.datatables.js"></script>
+		<script src="~/assets/js/datepicker/daterange-picker/moment.min.js"></script>
+		<script src="~/assets/js/datepicker/daterange-picker/daterangepicker.js"></script>s
+		<script src="../assets/js/dropzone/dropzone.js"></script>
+		<script src="~/assets/js/jquery.validate.js"></script>
+		<script src="~/assets/js/additional-methods.js"></script>
+		<script src="~/assets/js/moment.js"></script>
+		<script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+		<script src="~/assets/js/signature/signature_pad.umd.min.js"></script>
+		<!-- Plugins JS Ends-->
+		<!-- Theme js-->
+		<script src="../assets/js/script.js"></script>
+	<script src="~/travel/General.js?v=1.55"></script>
+		<script src="~/Travel/ImportarVenta.js?v=2.30"></script>
+}

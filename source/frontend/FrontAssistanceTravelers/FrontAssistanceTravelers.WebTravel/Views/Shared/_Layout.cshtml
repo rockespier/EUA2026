@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <partial name="_Style" />
+    @RenderSection("Style",false)
+    <style>
+        .error {
+            font-size: 0.875em !important;
+            color: #dc3545 !important;
+            margin: 8px 0px 8px !important;
+        }
+
+        .swal-footer {
+            text-align: center !important;
+        }
+
+        .seleccionar{
+            cursor:pointer !important;
+        }
+
+        .dark-only .seleccionar .text-nowrap {
+            cursor: pointer !important;
+            color: #808080 !important;
+        }
+
+        .dark-only .dt-column-title{
+            color: #FFF !important;
+        }
+
+        .dark-only .text-nowrap {
+            color: #808080 !important;
+        }
+    </style>
+</head>
+@if (ViewData["Title"] == "Dashboard")
+{
+    <body onload="startTime()">
+        <partial name="_Loader" />
+        <div class="tap-top"><i data-feather="chevrons-up"></i></div>
+        <div class="page-wrapper compact-wrapper" id="pageWrapper">
+            <div class="page-body-wrapper sidebar-icon">
+                <partial name="_Header" />
+                <div class="page-body-wrapper">
+                    <partial name="_SidePenal" />
+                    @RenderBody()
+                    <partial name="IconMarkup" />
+                    <partial name="_Footer" />
+                </div>
+            </div>
+        </div>
+        <partial name="_Script" />
+        @RenderSection("Script",false)       
+    </body>
+}
+else
+{
+    <body>
+        <partial name="_Loader" />
+        <div class="tap-top"><i data-feather="chevrons-up"></i></div>
+        <div class="page-wrapper compact-wrapper" id="pageWrapper">
+            <div class="page-body-wrapper sidebar-icon">
+                <partial name="_Header" />
+                <div class="page-body-wrapper">
+                    <partial name="_SidePenal" />
+                    @RenderBody()
+                    <!-- Popup Cambiar Contraseña-->
+                    <div class="modal fade bd-example-modal-xl" id="ModalCambiarContrasena" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ModalCambiarContrasena" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 id="tituloModal" name="tituloModal" class="modal-title">Cambio de Contraseña</h5>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form class="form theme-form" id="formContrasena" name="formContrasena">
+                                    <div class="modal-body">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-6-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Contraseña Actual</label>
+                                                        <input class="form-control" type="password" id="hhmdtxtPassActual" name="hhmdtxtPassActual" aria-hidden="true" placeholder="Contraseña" autocomplete="current-password">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-6-4">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Contraseña Nueva</label>
+                                                        <input class="form-control" type="password" id="hdmdtxtPass" name="hdmdtxtPass"  placeholder="Contraseña" >
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-6-4">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Repetir Contraseña</label>
+                                                        <input class="form-control" type="password" id="hdmdtxtPassRep" name="hdmdtxtPassRep" placeholder="Contraseña" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
+                                        <button class="btn btn-primary" id="GuardarPass" name="GuardarPass" onclick="clickValidarCambioPass();" type="button">Grabar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <partial name="IconMarkup" />
+                    <partial name="_Footer" />
+                </div>
+            </div>
+        </div>
+        
+        <partial name="_Script" />
+        @RenderSection("Script",false)
+
+  
+    </body>
+}
+</html>
+<script src="~/Travel/ContrasenaGeneral.js?v=1.5"></script>

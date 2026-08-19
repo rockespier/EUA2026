@@ -1,0 +1,577 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
+}
+<style>
+	.tab-content > .tab-pane {
+		padding-top: 70px !important;
+	}
+
+	div .action {
+		position: static !important;
+	}
+
+    .action {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+	.btn {
+		padding: 0.375rem 0.75rem !important;
+		font-size: 1rem !important;
+	}
+
+	.modal-title {
+		white-space: nowrap;
+	}
+
+	.modal-header .derecha {
+		margin-left: 35rem;
+	}
+
+	.form-switch .form-check-input {
+		width: 3em;
+		height: 2em;
+	}
+
+	.grid-divider {
+		overflow-x: hidden;
+		position: relative;
+	}
+
+		.grid-divider > [class*="col-"]:nth-child(n + 2):after {
+			content: "";
+			background-color: black;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+
+			@@media (max-width: 767px) {
+				width: 100%;
+				height: 1px;
+				left: 0;
+				top: -4px;
+			}
+
+			@@media (min-width: 768px) {
+				width: 1px;
+				height: auto;
+				left: -1px;
+			}
+		}
+
+</style>
+<link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/fixedcolumns.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/vendors/select.datatables.css" rel="stylesheet" /> 
+<div class="page-body">
+	<div class="container-fluid">
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3>Solicitudes</h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashluser">
+								<svg class="stroke-icon">
+									<use href="/assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Ventas</li>
+						<li class="breadcrumb-item active">Atender Solicitudes</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- State saving Starts-->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<p>
+							<!--Filtros-->							
+                            <a href="javascript:void(0);" onclick="procesarAtenderMasivo();" class="btn btn-success btn-sm mb-3" id="lnkAtender" name="lnkAtender">
+                                <i class="fa fa-check-circle"></i>  Atender solicitud
+							</a>
+                            <a href="javascript:void(0);" onclick="procesarRechazarMasivo();" class="btn btn-warning btn-sm mb-3" id="lnkRechazar" name="lnkRechazar">
+                                <i class="fa fa-times-circle"></i>  Rechazar solicitud
+                            </a>
+							<a href="javascript:void(0);" onclick="AbrirModalBusqueda();" class="btn btn-dark btn-sm mb-3" id="lnkNueva" name="lnkNueva">
+								<i class="fa fa-binoculars"></i>  Busqueda Avanzada
+							</a>
+						</p>
+						<div class="table-responsive user-datatable">
+							<table class="display" id="dtSolicitud">
+								<thead>
+									<tr>
+                                        <th></th>
+										<th>Agencia</th>
+										<th>Registrado</th>
+										<th>Solicitud</th>
+										<th>Registrador</th>
+										<th>Tarjeta</th>
+										<th>Tipo</th>
+                                        <th>Motivo</th>
+										<th>Estado</th>
+										<th>Atendido el</th>
+										<th>Atendido por </th>										
+										<th>Acciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- State saving Ends-->
+		</div>
+	</div>
+	<!-- popup Solicitud Consulta-->
+	<div class="modal fade bd-example-modal-lg" id="popupModalSolicitudRead" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalSolicitudRead" name="tituloModalSolicitudRead" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosSolicitudRead" name="modalDatosSolicitudRead" action="">
+					<div class="modal-body">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <input id="mdHidIdSolicTarjeta" name="mdHidIdSolicTarjeta" type="hidden" />
+                                <h5 class="card-title">DATOS DE LA SOLICITUD</h5>
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <b>Nº</b> :
+                                    </div>
+                                    <div id="mdAtsolVerNumeroVenta" name="mdAtsolVerNumeroVenta" class="col">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <b>TIPO</b> :
+                                    </div>
+                                    <div id="mdAtsolVerTipoSolicitud" name="mdAtsolVerTipoSolicitud" class="col">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <b>SOLICITADO POR</b> :
+                                    </div>
+                                    <div id="mdAtsolVerUsuario" name="mdAtsolVerUsuario" class="col">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <b>ESTADO</b> :
+                                    </div>
+                                    <div id="mdAtsolVerEstado" name="mdAtsolVerEstado" class="col">
+                                    </div>
+                                </div>
+                                <div id="mddivSoliEstadoResul" class="row">
+                                    <div id="mddivSoliTitulooResul" name="mddivSoliTitulooResul" class="col text-end">
+                                    </div>
+                                    <div id="mddivSoliUsuarioResul" name="mddivSoliUsuarioResul" class="col">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 id="mdAtsolVerTitSecundario" name="mdAtsolVerTitSecundario" class="card-title"></h5>
+                                <div id="mdAtsolVerDivAnular" name="mdAtsolVerDivAnular">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>OBSERVACION</b> :
+                                        </div>
+                                        <div id="mdAtsolVerAnulaObserva" name="mdAtsolVerAnulaObserva" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>MOTIVO DE ANULACION</b> :
+                                        </div>
+                                        <div id="mdAtsolVerAnulaMotivo" name="mdAtsolVerAnulaMotivo" class="col">
+                                        </div>
+                                    </div>
+                                    <div id="mdAtsolVerAnulaDivAdjunto" name="mdAtsolVerAnulaDivAdjunto" class="row">
+                                        <div class="col text-end">
+                                            <b>ADJUNTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerAnulaAdjunto" name="mdAtsolVerAnulaAdjunto" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivVigencia" name="mdAtsolVerDivVigencia">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>FECHA INICIAL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerVigenciaIni" name="mdAtsolVerVigenciaIni" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>FECHA FINAL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerVigenciaFin" name="mdAtsolVerVigenciaFin" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivReact" name="mdAtsolVerDivReact">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>OBSERVACION</b> :
+                                        </div>
+                                        <div id="mdAtsolVerReactObserva" name="mdAtsolVerReactObserva" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>MOTIVO DE ANULACION</b> :
+                                        </div>
+                                        <div id="mdAtsolVerReactMotivo" name="mdAtsolVerReactMotivo" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivTras" name="mdAtsolVerDivTras">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>AGENCIA</b> :
+                                        </div>
+                                        <div id="mdAtsolVerTrasAgencia" name="mdAtsolVerTrasAgencia" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>USUARIO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerTrasUsuario" name="mdAtsolVerTrasUsuario" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivCliente" name="mdAtsolVerDivCliente">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>NOMBRES Y APELLIDOS</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienNombApell" name="mdAtsolVerClienNombApell" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>DIRECCION / APDO. POSTAL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienDirec" name="mdAtsolVerClienDirec" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id="mdAtsolVerClienTipoDoc" name="mdAtsolVerClienTipoDoc" class="col text-end">
+                                        </div>
+                                        <div id="mdAtsolVerClienDoc" name="mdAtsolVerClienDoc" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>CIUDAD</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienCiudad" name="mdAtsolVerClienCiudad" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>TELEFONO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienMovil" name="mdAtsolVerClienMovil" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>FECHA NACIMIENTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienFecNac" name="mdAtsolVerClienFecNac" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>EDAD</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienEdad" name="mdAtsolVerClienEdad" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>PAIS DE RESIDENCIA</b> :
+                                        </div>
+                                        <div id="mdAtsolVerClienPais" name="mdAtsolVerClienPais" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivEmerge" name="mdAtsolVerDivEmerge">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>NOMBRES Y APELLIDOS</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerNombApell" name="mdAtsolVerEmerNombApell" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>DIRECCION</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerDirec" name="mdAtsolVerEmerDirec" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>DISTRITO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerDistr" name="mdAtsolVerEmerDistr" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>PAIS</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerPais" name="mdAtsolVerEmerPais" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>TELEFONO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerMovil" name="mdAtsolVerEmerMovil" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>E-EMAIL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerEmerCorreo" name="mdAtsolVerEmerCorreo" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivImporte" name="mdAtsolVerDivImporte">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>PRODUCTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerImpoProd" name="mdAtsolVerImpoProd" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>COSTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerImpoCosto" name="mdAtsolVerImpoCosto" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivTarjeta" name="mdAtsolVerDivTarjeta">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>PRODUCTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerTarjeProd" name="mdAtsolVerTarjeProd" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>COSTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerTarjeCosto" name="mdAtsolVerTarjeCosto" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="mdAtsolVerDivProducto" name="mdAtsolVerDivProducto">
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>PRODUCTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerProdNombre" name="mdAtsolVerProdNombre" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>FECHA INICIAL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerProdFecIni" name="mdAtsolVerProdFecIni" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>FECHA FINAL</b> :
+                                        </div>
+                                        <div id="mdAtsolVerProdFecFin" name="mdAtsolVerProdFecFin" class="col">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <b>COSTO</b> :
+                                        </div>
+                                        <div id="mdAtsolVerProdCosto" name="mdAtsolVerProdCosto" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+					<div class="modal-footer">
+                        <button class="btn btn-success" type="button" id="btnSolicitarCambio" name="btnSolicitarCambio" onclick="clickAtender();">
+							<i class="fa fa-check-circle"></i>  Atender solicitud
+						</button>
+                        <button class="btn btn-warning" type="button" id="btnSolicitarRechazo" name="btnSolicitarRechazo" onclick="clickRechazar();">
+							<i class="fa fa-times-circle"></i>  Rechazar solicitud
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarRead" name="btnCerrarRead" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Solicitud Consulta-->
+	<!-- popup Solicitud Busqueda-->
+	<div class="modal fade bd-example-modal-l" id="popupModalSolicitudSearch" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-l" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalSolicitudSearch" name="tituloModalSolicitudSearch" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosSolicitudSearch" name="modalDatosSolicitudSearch" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-6 col-6-6">
+									<div class="mb-2">
+										<label class="form-label">Ingresado el:</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecIncioVigSearch" name="mdvenFecIncioVigSearch">
+									</div>
+								</div>
+								<div class="col-sm-6 col-6-6">
+									<div class="mb-2">
+										<label class="form-label">Desde:</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecFinalVigSearch" name="mdvenFecFinalVigSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6 col-6-6">
+									<div>
+										<label class="form-label">Nº Tarjeta:</label>
+										<input type="number" class="form-control form-control-sm" id="mdvenNumTarjetaSearch" name="mdvenNumTarjetaSearch">
+									</div>
+								</div>
+								<div class="col-sm-6 col-6-6">
+									<div>
+										<label class="form-label">N° Solicitud:</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenCodSolicitudSearch" name="mdvenCodSolicitudSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label">Tipo:</label>
+										<select class="form-select form-select-sm" id="mdvenSelTipoSearch" name="mdvenSelTipoSearch">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">Estado:</label>
+										<select class="form-select form-select-sm" id="mdvenSelEstadoSearch" name="mdvenSelProductoProd">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label">Agencia:</label>
+                                        <input type="text" class="form-select form-control-sm typeahead" id="txtAgencia" placeholder="---Buscar Agencia---" name="txtAgencia" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">Usuario:</label>
+										<select class="form-select form-select-sm" id="mdvenSelUsuarioSearch" name="mdvenSelUsuarioSearch">
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-info" type="button" id="btnLimpiarBsq" name="btnLimpiarBsq" onclick="clickBuscarLimpiar();">
+							<i class="fa fa-eraser"></i>  Limpiar
+						</button>
+						<button class="btn btn-primary" type="button" id="btnBuscarVentas" name="btnBuscarVentas" onclick="clickBuscarVentas();">
+							<i class="fa fa-search"></i>  Buscar
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarSearch" name="btnCerrarSearch" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Solicitud Busqueda-->
+</div>
+@section Script {
+	<!-- Plugins JS start-->
+	<script src="../assets/js/sidebar-menu.js"></script>
+	<script src="../assets/js/slick/slick.min.js"></script>
+	<script src="../assets/js/slick/slick.js"></script>
+	<script src="../assets/js/header-slick.js"></script>
+
+	<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+	<script src="~/assets/js/jquery.ui.min.js"></script>
+    <script src="~/assets/js/typeahead/typeahead.bundle.js"></script>
+    
+     <script src="~/assets/js/datatable/datatablesv2/datatables.js"></script>
+    <script src="~/assets/js/datatable/datatablesv2/datatables.fixedcolumns.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/fixedcolumns.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.select.js"></script>
+    <script src="~/assets/js/datatable/datatablesv2/select.datatables.js"></script> 
+  
+	<script src="~/assets/js/datepicker/daterange-picker/moment.min.js"></script>
+	<script src="~/assets/js/datepicker/daterange-picker/daterangepicker.js"></script>s
+
+
+	<script src="../assets/js/dropzone/dropzone.js"></script>
+	<script src="~/assets/js/jquery.validate.js"></script>
+	<script src="~/assets/js/additional-methods.js"></script>
+	<script src="~/assets/js/moment.js"></script>
+	<script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+	<script src="~/assets/js/signature/signature_pad.umd.min.js"></script>
+
+	<!-- Plugins JS Ends-->
+	<!-- Theme js-->
+	<script src="../assets/js/script.js"></script>
+    <script src="~/travel/General.js?v=1.55"></script>
+	<script src="~/travel/Solicitud.js?v=2.84"></script>
+
+
+}
+
+
+
+
+
+

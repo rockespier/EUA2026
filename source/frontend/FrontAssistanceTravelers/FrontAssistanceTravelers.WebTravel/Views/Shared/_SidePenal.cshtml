@@ -1,0 +1,67 @@
+﻿@using System.Security.Claims;
+@{
+    var idUser = ((ClaimsIdentity)User.Identity).FindFirst("IdUsuario").Value;
+    var idPais = ((ClaimsIdentity)User.Identity).FindFirst("IdPais").Value;
+    var idEmpresa = ((ClaimsIdentity)User.Identity).FindFirst("IdEmpresa").Value;
+    var desEmpresa = ((ClaimsIdentity)User.Identity).FindFirst("DesEmpresa").Value;
+    var idPerfil = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Role).Value;
+    var tokenMenu = ((ClaimsIdentity)User.Identity).FindFirst("Token").Value;
+    var apiUrlMenu = ((ClaimsIdentity)User.Identity).FindFirst("BackApi").Value;
+    var apiUrlImagenes = ((ClaimsIdentity)User.Identity).FindFirst("BackApiImagenes").Value;
+    var indexDash = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
+    var desCorreo = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+    var idPageDashboard = ((ClaimsIdentity)User.Identity).FindFirst("idDashBoard").Value;
+    var desOrigen = ((ClaimsIdentity)User.Identity).FindFirst("Origen").Value;
+    var idAgenciaUsuario = ((ClaimsIdentity)User.Identity).FindFirst("IdAgenciaUsuario").Value;
+    var idAgenciaPais = ((ClaimsIdentity)User.Identity).FindFirst("IdAgenciaPais").Value;
+    var accUser = ((ClaimsIdentity)User.Identity).FindFirst("AccesoUsuario").Value;
+    var nomeUser = ((ClaimsIdentity)User.Identity)!.Name;
+    
+}
+<style>
+    #idopcionesmes{
+    border:none;
+    }
+
+    .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .sidebar-links {
+    margin-bottom:1px !important;
+    }
+</style>
+<div class="sidebar-wrapper" sidebar-layout="stroke-svg">
+    <div>
+        <div class="logo-wrapper">
+            <a asp-controller="Dashboard" asp-action="@indexDash"><img class="img-fluid for-light" src="~/assets/images/logo/logo_sm.png" alt=""><img class="img-fluid for-dark" src="~/assets/images/logo/logo_dark.png" alt=""></a>
+            <div class="back-btn"><i class="fa fa-angle-left"></i></div>
+            <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
+        </div>
+        <div class="logo-icon-wrapper"><a asp-controller="Dashboard" asp-action="@indexDash"><img class="img-fluid" src="~/assets/images/logo/logo-icon.png" alt=""></a></div>
+        <nav class="sidebar-main">
+            <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
+            <div id="sidebar-menu" class="simplebar-container" data-simplebar>
+                <ul class="sidebar-links" id="simple-bar" name="simple-bar" style="display: block;" >
+                    <li class="back-btn">
+                        <a asp-controller="Dashboard" asp-action="@indexDash"><img class="img-fluid" src="~/assets/images/logo/logo-icon.png" alt=""></a>
+                        <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
+        </nav>
+    </div>
+</div>
+<script>const elUserId = '@idUser'</script>
+<script>const elUserAcc = '@accUser'</script>
+<script>const elPaisId = '@idPais'</script>
+<script>const laEmpresarId = '@idEmpresa'</script>
+<script>const laEmpresarDes = '@desEmpresa'</script>
+<script>const elPerfilId = '@idPerfil'</script>
+<script>const eltokenMen = '@tokenMenu'</script>
+<script>const elurlApiMen = '@apiUrlMenu'</script>
+<script>const eldesCorreo = '@desCorreo'</script>
+<script>const elidPageDashboard = '@idPageDashboard'</script>
+<script>const elapiUrlImagenes = '@apiUrlImagenes'</script>
+<script>const elOrigen = '@desOrigen'</script>
+<script>const laAgenciaPaisId = '@idAgenciaPais'</script>
+<script>const laAgenciaUsuarioId = '@idAgenciaUsuario'</script>
+<script>const elNombreUsuario = '@nomeUser'</script>
+<script src="~/travel/Menu.js?v=1.61"></script>

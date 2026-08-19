@@ -1,0 +1,582 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashluser = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
+}
+<style>
+	.tab-content > .tab-pane {
+		padding-top: 70px !important;
+	}
+
+	div .action {
+		position: static !important;
+	}
+
+	.col {
+		display: flex;
+		flex-direction: column;
+		align-content: flex-start;
+		align-items: center;
+	}
+
+	.loading-state {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 9999;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.loader {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		display: inline-block;
+		position: relative;
+		border: 3px solid;
+		border-color: #FFF #FFF transparent;
+		box-sizing: border-box;
+		animation: rotation 1s linear infinite;
+	}
+
+		.loader::after {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 3px solid;
+			border-color: transparent #FF3D00 #FF3D00;
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			animation: rotationBack 0.5s linear infinite;
+			transform-origin: center center;
+		}
+
+	@@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@@keyframes rotationBack {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(-360deg);
+		}
+	}
+</style>
+<link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/fixedcolumns.datatables.css" rel="stylesheet" />
+<div class="page-body">
+	<div class="container-fluid">
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3>Productos</h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashluser">
+								<svg class="stroke-icon">
+									<use href="/assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Mantenimientos</li>
+						<li class="breadcrumb-item active">Productos</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid starts-->
+	<div style="display:none" name="cargar" id="cargar" class="loading-state">
+		<div class="loader"></div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- State saving Starts-->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<p>
+							<div class="row">
+								<div class="col-sm-1 col-6-1">
+									<div class="mb-3">
+										<label class="form-label" for="mdSelPais">Pais:</label>
+									</div>
+								</div>
+								<div class="col-sm-3 col-6-3">
+									<div class="mb-3">
+										<select class="form-select" id="mdSelPais" name="mdSelPais">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-1 col-6-1">
+									<div class="mb-3">
+										<label class="form-label">Solo Activos:</label>
+									</div>
+								</div>
+								<div class="col-sm-3 col-6-3">
+									
+									<div class="media-body text-start icon-state">
+										<label class="switch">
+											<input type="checkbox" checked="checked" id="mdchkActivos" name="mdchkActivos" wfd-id="id8"><span class="switch-state"></span>
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-4 col-6-4">
+									<div class="mb-3">
+										<a href="javascript:void(0);" onclick="BuscarLista();" class="btn btn-primary mb-3">
+											<span class="glyphicon glyphicon-plus"></span> Buscar
+										</a>
+										<a href="javascript:void(0);" onclick="AbrirModal(0);"
+										   class="btn btn-primary mb-3">
+											<span class="glyphicon glyphicon-plus"></span> Agregar nuevo producto
+										</a>
+										
+									</div>
+								</div>
+							</div>
+						</p>							
+						
+						<div class="table-responsive">
+							<table class="display" id="dtProductos">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Edad Minima</th>
+										<th>Edad Maxima</th>
+										<th>Nro. Días</th>
+										<th>Web?</th>
+										<th>Estado</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- State saving Ends-->
+		</div>
+	</div>
+	<!-- Container-fluid Ends-->
+	<!-- popup Producto-->
+	<div class="modal fade bd-example-modal-xl" id="popupModalCliente" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModal" name="tituloModal" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<form id="modalCliente" name="modalCliente" action="">
+					<div class="modal-body">
+						<div class="card">
+							<div class="card-body">
+								<div class="tabbed-card">
+									<ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab2" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" id="profile-top-tab2" data-bs-toggle="tab" href="#top-profile2" role="tab" aria-controls="top-profile2" aria-selected="true">
+												<i class="icofont icofont-man-in-glasses"></i>Producto
+											</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="contact-top-tab2" data-bs-toggle="tab" href="#top-contact2" role="tab" aria-controls="top-contact2" aria-selected="false">
+												<i class="icofont icofont-money"></i>Tarifas
+											</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="contact-top-tab2" data-bs-toggle="tab" href="#top-beneficios" role="tab" aria-controls="top-beneficios" aria-selected="false">
+												<i class="icofont icofont-layers"></i>Beneficios
+											</a>
+										</li>
+									</ul>
+									<div class="tab-content" id="top-tabContent2">										
+										<div class="tab-pane fade active show" id="top-profile2" role="tabpanel" aria-labelledby="profile-top-tab">
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="mb-3">
+														<label class="form-label">Nombre <span class="req">*</span></label>
+														<input class="form-control" type="text" id="mdtxtNombreProducto" name="mdtxtNombreProducto" placeholder="">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label" for="mdselTipo">Marca <span class="req">*</span></label>
+														<select class="form-select digits" id="mdselMarca" name="mdselMarca">
+														</select>
+													</div>
+												</div>											
+												
+												<div class="col-sm-2">
+													<div class="mb-3">
+														<label class="form-label">Estado</label>
+														<div class="media-body text-start icon-state">
+															<label class="switch">
+																<input type="checkbox" checked="" id="mdchkEstado" name="mdchkEstado" wfd-id="id8"><span class="switch-state"></span>
+															</label>
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Edad Minima <span class="req">*</span></label>
+														<input class="form-control" type="number" id="mdtxtEdadMinima" name="mdtxtEdadMinima" placeholder="">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Edad Maxima <span class="req">*</span></label>
+														<input class="form-control" type="number" id="mdtxtEdadMaxima" name="mdtxtEdadMaxima" placeholder="">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Edad 50% Adicional</label>
+														<input class="form-control" type="number" id="mdtxtDescuento" name="mdtxtDescuento" placeholder="">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Tipo Producto <span class="req">*</span></label>
+														<select class="form-select digits" id="mdselNrodias" name="mdselNrodias">
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Nro de ordén</label>
+														<input class="form-control" type="text" id="mdtxtNroOrden" name="mdtxtNroOrden" placeholder="">
+													</div>
+												</div>		
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Equivalencia ATV</label>
+														<input class="form-control" type="text" id="mdtxtATV" name="mdtxtATV" placeholder="">
+													</div>
+												</div>
+												
+												<div class="col-sm-4">
+													<div class="mb-3">
+														<label class="form-label">Web</label>
+														<div class="media-body text-start icon-state">
+															<label class="switch">
+																<input type="checkbox" checked="" id="mdchkWeb" name="mdchkWeb" wfd-id="id8"><span class="switch-state"></span>
+															</label>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+										<div class="tab-pane fade" id="top-contact2" role="tabpanel" aria-labelledby="contact-top-tab">
+											<p>
+												<a href="javascript:void(0);" onclick="AbrirModalTarifa(0);"
+												   class="btn btn-primary mb-3">
+													<span class="glyphicon glyphicon-plus"></span> Agregar nueva tarifa
+												</a>
+												<a href="javascript:void(0);" onclick="AbrirModalTarifaIncentivo(0);"
+												   class="btn btn-primary mb-3">
+													<span class="glyphicon glyphicon-plus"></span> Actualizar Masivamente
+												</a>												
+											</p>
+											<div class="table-responsive user-datatable">
+												<table class="display" id="dtTarifas">
+													<thead>
+														<tr>
+															<th>Nro dias minimo</th>
+															<th>Nro dias maximo</th>
+															<th>Importe</th>
+															<th>Incentivo</th>
+															<th>Publicidad</th>
+															<th>Acciones</th>
+														</tr>
+													</thead>
+
+												</table>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="top-beneficios" role="tabpanel" aria-labelledby="beneficios-top-tab">
+											<p>
+												<div class="row">
+													<div class="col-sm-1 col-6-1">
+														<div class="mb-3">
+															<label class="form-label" for="mdSelIdiomaBeneficio">Idioma:</label>
+														</div>
+													</div>
+													<div class="col-sm-4 col-6-4">
+														<div class="mb-3">															
+															<select class="form-select" id="mdSelIdiomaBeneficio" name="mdSelIdiomaBeneficio">
+															</select>
+														</div>
+													</div>
+													<div class="col-sm-7 col-6-7">
+														<div class="mb-3">
+															<a href="javascript:void(0);" onclick="BuscarListaBeneficios();" class="btn btn-primary mb-3">
+																<span class="glyphicon glyphicon-plus"></span> Buscar
+															</a>
+															<a href="javascript:void(0);" onclick="AbrirModalBeneficio(0);"
+															   class="btn btn-primary mb-3">
+																<span class="glyphicon glyphicon-plus"></span> Agregar nuevo beneficio
+															</a>
+															
+														</div>
+													</div>
+												</div>
+											</p>
+											
+											<div class="table-responsive user-datatable">
+												<table class="display" id="dtBeneficios">
+													<thead>
+														<tr>															
+															<th>Descripción</th>
+															<th>Cobertura</th>															
+															<th>Acciones</th>
+														</tr>
+													</thead>
+
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="modal-footer">						
+						<button type="button" id="btnCopiarProducto" class="btn btn-secondary">Copiar Producto</button>						
+						<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
+						<button class="btn btn-primary" type="button" id="Guardar" name="Guardar" onclick="clickValidar();">Grabar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Producto-->
+	<!-- popup Tarifas-->
+	<div class="modal fade bd-example-modal-xl" id="popupModalProductoTarifa" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalTarifa" name="tituloModalTarifa" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalTarifa" name="modalTarifa" action="">
+					<div class="modal-body">						
+						<div class="row">											
+							<div class="col-sm-4 col-6-4">
+								<div class="mb-3">
+									<label class="form-label">N° Dias Minimo <span class="req">*</span></label>
+									<input class="form-control" type="text" id="mdtextDiasMinimo" name="mdtextDiasMinimo" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-4 col-6-4">
+								<div class="mb-3">
+									<label class="form-label">N° Dias Maximo <span class="req">*</span></label>
+									<input class="form-control" type="text" id="mdtextDiasMaximo" name="mdtextDiasMaximo" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-4 col-6-4">
+								<div class="mb-3">
+									<label class="form-label" for="selTipo">Importe <span class="req">*</span></label>
+									<input class="form-control" type="text" id="mdtextImporte" name="mdtextImporte" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-4 col-6-4">
+								<div class="mb-3">
+									<label class="form-label">Incentivo</label>
+									<input class="form-control" type="text" id="mdtextIncentivo" name="mdtextIncentivo" placeholder="">
+								</div>
+							</div>																				
+							<div class="col-sm-4 col-6-4">
+								<div class="mb-3">
+									<label class="form-label">Publicidad</label>
+									<input class="form-control" id="mdtextPublicidad" name="mdtextPublicidad">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" id="bnCerrarTarifa" name="bnCerrarTarifa" data-bs-dismiss="modal">Cerrar</button>
+						<button class="btn btn-primary" type="button" id="GuardarTarifa" name="GuardarTarifa" onclick="clickValidarTarifa();">Grabar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Tarifas-->
+	<!-- popup Incentivos y Pulicidad-->
+	<div class="modal fade bd-example-modal-xl" id="popupModalProductoTarifaIncentivo" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="popupModalProductoTarifaIncentivo" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalTarifaIncentivo" name="tituloModalTarifaIncentivo" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="frmTarifaIncentivo" name="frmTarifaIncentivo" action="">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-4 col-md-4">
+								<div class="mb-3">
+									<label class="form-label">N° Dias Desde</label>
+									<input class="form-control" type="text" id="mdtextDiasMinimoIncentivo" name="mdtextDiasMinimoIncentivo" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4">
+								<div class="mb-3">
+									<label class="form-label">N° Dias Hasta</label>
+									<input class="form-control" type="text" id="mdtextDiasMaximoIncentivo" name="mdtextDiasMaximoIncentivo" placeholder="">
+								</div>
+							</div>							
+							<div class="col-sm-4 col-md-4">
+								<div class="mb-3">
+									<label class="form-label">Incentivo</label>
+									<input class="form-control" type="text" id="mdtextIncentivoIncentivo" name="mdtextIncentivoIncentivo" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4">
+								<div class="mb-3">
+									<label class="form-label">Publicidad</label>
+									<input class="form-control" id="mdtextPublicidadIncentivo" name="mdtextPublicidadIncentivo">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" id="bnCerrarIncentivo" name="bnCerrarIncentivo" data-bs-dismiss="modal">Cerrar</button>
+						<button class="btn btn-primary" type="button" id="GuardarIncentivo" name="GuardarIncentivo" onclick="clickValidarTarifaIncentivo();">Grabar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Incentivos y Pulicidad-->
+	<!-- popup Beneficios-->
+	<div class="modal fade bd-example-modal-xl" id="popupModalProductoBeneficio" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalBeneficio" name="tituloModalBeneficio" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalBeneficio" name="modalBeneficio" action="">
+					<div class="modal-body">
+						<div class="row">							
+							<div class="col-sm-6 col-6-6">
+								<div class="mb-3">
+									<label class="form-label">Descripción <span class="req">*</span></label>
+									<input class="form-control" type="text" id="mdtextDescripcion" name="mdtextDescripcion" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-6 col-6-6">
+								<div class="mb-3">
+									<label class="form-label">Cobertura <span class="req">*</span></label>
+									<input class="form-control" type="text" id="mdtextCobertura" name="mdtextCobertura" placeholder="">
+								</div>
+							</div>							
+							<div class="col-sm-3 col-6-3">
+								<div class="mb-3">
+									<label class="form-label">Orden</label>
+									<input class="form-control" type="text" id="mdtextOrden" name="mdtextOrden" placeholder="">
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" id="bnCerrarBeneficio" name="bnCerrarBeneficio" data-bs-dismiss="modal">Cerrar</button>
+						<button class="btn btn-primary" type="button" id="GuardarBeneficio" name="GuardarBeneficio" onclick="clickValidarBeneficio();">Grabar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Beneficios-->
+	<!-- Modal para copiar producto -->
+	<div class="modal fade" id="popupModalCopiarProducto" tabindex="-1" role="dialog" aria-labelledby="tituloModalCopiar" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="tituloModalCopiar">Copiar Producto</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="frmCopiarProducto">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="mdSelPaisDestino">País Destino <span class="text-danger">*</span></label>
+							<select class="form-control" id="mdSelPaisDestino" name="mdSelPaisDestino">
+								<option value="">---Seleccione---</option>
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-primary" onclick="confirmarCopiaProducto()">Confirmar Copia</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Script {
+	<!-- Plugins JS start-->
+	<script src="../assets/js/sidebar-menu.js"></script>
+	<script src="../assets/js/slick/slick.min.js"></script>
+	<script src="../assets/js/slick/slick.js"></script>
+	<script src="../assets/js/header-slick.js"></script>
+	<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+	<script src="~/assets/js/jquery.ui.min.js"></script>
+	<script src="~/assets/js/typeahead/typeahead.bundle.js"></script>
+
+	<script src="~/assets/js/datatable/datatablesv2/datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.fixedcolumns.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/fixedcolumns.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.select.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/select.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/dataTables.buttons.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.dataTables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/jszip.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/pdfmake.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/vfs_fonts.js"></script>
+	
+	<script src="~/assets/js/datatable/datatablesv2/buttons.html5.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.print.min.js"></script>
+
+	<script src="~/assets/js/jquery.validate.js"></script>
+	<script src="~/assets/js/additional-methods.js"></script>
+	<script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+
+	<!-- Plugins JS Ends-->
+	<!-- Theme js-->
+	<script src="../assets/js/script.js"></script>
+	<script src="~/travel/General.js?v=1.55"></script>
+	<script src="~/travel/productos.js?v=2.55"></script>
+}
+
+

@@ -1,0 +1,447 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
+}
+<style>
+	.tab-content > .tab-pane {
+		padding-top: 70px !important;
+	}
+
+	div .action {
+		position: static !important;
+	}
+
+	.action {
+		display: flex;
+		justify-content: center; /* Center horizontally */
+		align-items: center; /* Center vertically */
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.btn {
+		padding: 0.375rem 0.75rem !important;
+		font-size: 1rem !important;
+	}
+
+	.modal-title {
+		white-space: nowrap;
+	}
+
+	.modal-header .derecha {
+		margin-left: 35rem;
+	}
+
+	.form-switch .form-check-input {
+		width: 3em;
+		height: 2em;
+	}
+
+	.grid-divider {
+		overflow-x: hidden;
+		position: relative;
+	}
+
+		.grid-divider > [class*="col-"]:nth-child(n + 2):after {
+			content: "";
+			background-color: black;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+
+			@@media (max-width: 767px) {
+				width: 100%;
+				height: 1px;
+				left: 0;
+				top: -4px;
+			}
+
+			@@media (min-width: 768px) {
+				width: 1px;
+				height: auto;
+				left: -1px;
+			}
+		}
+
+	#globalLoader {
+		display: none; /* Initially hidden */
+		position: fixed; /* Fixed to cover entire screen */
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+		z-index: 9999; /* Ensure it's on top */
+		justify-content: center;
+		align-items: center;
+	}
+
+	.spinner {
+		border: 4px solid #f3f3f3; /* Light grey */
+		border-top: 4px solid #3498db; /* Blue */
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		animation: spin 2s linear infinite;
+	}
+
+
+	@@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.typeahead {
+		width: 100%;
+		padding: 0.375rem 0.75rem;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+	}
+
+	.dt-button-collection .dropdown-menu {
+		display: block;
+		position: static;
+		float: none;
+	}
+
+	.dt-button {
+		margin-right: 5px;
+	}
+
+	.edades .form-control {
+		padding-left: 0px;
+		padding-right: 0px;
+		text-align: center;
+	}
+
+	.box-form .btn-calculadora {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: #f09000;
+		font-size: 10px;
+		font-weight: bold;
+	}
+
+	.box-form .btn-success {
+		background: #f09000;
+		border-color: #f09000;
+	}
+
+	.modal-header #estadoModalVenta {
+		margin-left: 3rem;
+		/*float:right;*/
+	}
+</style>
+<link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/fixedcolumns.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/vendors/select.datatables.css" rel="stylesheet" />
+
+<div class="page-body">
+	<div id="globalLoader" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+		<div class="spinner"></div>
+		<span style="margin-top: 10px; font-family: sans-serif; font-size: 16px; color: white; font-weight: bold;">Cargando...</span>
+	</div>
+	<div class="container-fluid">
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3>Cotizar</h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashluser">
+								<svg class="stroke-icon">
+									<use href="/assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Procesos</li>
+						<li class="breadcrumb-item active">Cotizar</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- State saving Starts-->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="box-form">
+						<form id="modalDatosVentaResRep" name="modalDatosVentaResRep" action="">
+								<input id="mdHidProductosIds" name="mdHidProductosIds" type="hidden" />
+								<input id="mdHidProductosNombres" name="mdHidProductosNombres" type="hidden" />
+								<input id="mdHidProductosPrecios" name="mdHidProductosPrecios" type="hidden" />
+							<div class="row">
+								<div class="col-6">
+								</div>
+								<div class="col-3">
+									<div id="divVenSelAgenciasCompra">
+										<div class="mb-3">
+											<label class="form-label" for="mdvenSelAgenciasCompra">Agencia de compra: <span class="req">*</span></label>
+												<input type="text" class="form-select form-control-sm typeahead" id="mdvenSelAgenciasCompra" placeholder="---Buscar Agencia---" name="mdvenSelAgencias" />
+										</div>
+									</div>
+								</div>
+								<div class="col-3">									
+									<div class="mb-3">
+											<label class="form-label" for="tipoplan">Modalidad de Viaje: <span class="req">*</span></label>
+										<select class="form-select digits" id="tipoplan" name="tipoplan">										
+											<option value="0">Unico Viaje</option>
+											<option value="2">Multiples viajes</option>
+										</select>
+									</div>
+								</div>
+                            </div>
+
+							
+
+							<div class="row">
+								<div class="col-4">
+									<div class="mb-3">
+											<label class="form-label" for="mdselOrigen">Origen: <span class="req">*</span></label>
+										<select class="form-select digits" id="mdselOrigen" name="mdselOrigen">
+										</select>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="mb-3">
+											<label class="form-label" for="mdselDestino">Destino: <span class="req">*</span></label>
+										<select class="form-select digits" id="mdselDestino" name="mdselDestino">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-4">
+									<div class="form-group">
+										<label for="">Fechas de viaje</label>
+										<div class="input-group mb-3">
+											<div class="input-group-text">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="form-control" type="text" id="rangoFechasLista" name="rangoFechasLista" />
+											<div class="input-group-text">
+												Dias (<span id="numerodias">0</span> )
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<div class="col-sm-3 col-xl-2 px-2 caja-viajeros" style="">
+									<label for="">Numero de Pasajeros</label>
+									<div class="input-group">
+										<div class="input-group-text btn btn-primary edad-menos">
+											<i class="fa  fa-minus"></i>
+										</div>
+										<select name="edades" id="edades" class="form-control valid" aria-invalid="false">
+											<option value="1" selected="">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+										</select>
+										<div class="input-group-text btn btn-primary edad-mas">
+											<i class="fa  fa-plus"></i>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 col-xl-7 caja-viajeros">
+									<label for="">
+										Edades /
+										<button type="button" class="btn-calculadora" data-bs-toggle="modal" data-bs-target="#calculadoraModal">
+											<i class="fa fa-calculator"></i> Calcula la de edad
+										</button>
+									</label>
+									<div class="row">
+										<div class="col-2 col-md-1 px-2 edades" id="edad1" style="">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control" required="">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad2" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad3" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad4" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad5" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad6" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad7" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad8" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad9" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+										<div class="col-2 col-md-1 px-2 edades" id="edad10" style="display:none;">
+											<div class="form-group">
+												<input type="text" name="edad[]" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3 caja-grupos" style="display:none;">
+									<label for="">&nbsp;</label>
+									<div class="input-group">
+										<div class="input-group-text">
+											Pasajeros
+										</div>
+										<input type="number" name="edades" class="form-control">
+									</div>
+								</div>
+								<div class="col-sm-2 form-group">
+									<div class="text-end">
+										<label for="">&nbsp;</label>
+											<a href="javascript:void(0);" onclick="AbrirBusqueda();" class="btn btn-success" id="btnExport" name="btnExport">
+											<i class="fa fa-excel"></i>  Continuar
+										</a>
+									</div>
+								</div>
+								
+							</div>
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- State saving Ends-->
+		</div>
+	</div>
+	<div id="resultados-cotizacion">
+		<br>
+		<div class="categorias-seguros">
+			<a data-id="1" style="display:none;">Low Cost</a>
+			<a data-id="2" style="display:none;">Premium</a>
+			<a data-id="0" class="active" style="display:none;">Todas</a>
+			<a data-id="0" id="descargacotizacion" onclick="clickImprimir()" class="active">Descargar Cotización</a>
+		</div>
+		<div class="row" id="divResultadoInfoPro">
+			
+		</div>
+    </div>
+    <!-- Container-fluid Ends-->
+	<div class="modal fade" id="modalpage" tabindex="-1" aria-labelledby="modalpageTitle" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content ">
+				<div class="modal-header">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body contenido-modal"><div class="text-center"> 
+				<h2 class="title-plan-modal" id="titulo_plan">INTERNATIONAL ANUAL  60 DIAS CONSECUTIVOS</h2> 
+				<table class="table table-info-plan" id="contenido-plan">  
+				<tbody>
+				</tbody>
+				</table></div></div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="calculadoraModal" tabindex="-1" aria-labelledby="calculadoraModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Calculadora de edad</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="ageCalculator" novalidate="novalidate">
+						<div class="row">
+							<div class="col-sm-4"><label for="dob">Fecha de Nacimiento:</label></div>
+							<div class="col-sm-4"><input type="date" class="form-control" id="dob" name="dob" required=""></div>
+							<div class="col-sm-4"><button type="submit" class="btn btn-block btn-success">Calcular Edad</button></div>
+						</div>
+
+
+
+					</form>
+					<div id="result" style="padding: 10px; border:1px solid #CCC; text-align: center; border-radius:0.5em; font-size:20px; font-weight: bold;
+        margin-top:20px;"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Procesar-->
+	<partial name="_VentaPopup" />
+	<!-- popup Venta Procesar-->
+</div>
+@section Script {
+	<!-- Plugins JS start-->
+	<script src="~/assets/js/sidebar-menu.js"></script>
+	<script src="~/assets/js/slick/slick.min.js"></script>
+	<script src="~/assets/js/slick/slick.js"></script>
+	<script src="~/assets/js/header-slick.js"></script>
+	<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+	<script src="~/assets/js/jquery.ui.min.js"></script>
+
+	<script src="~/assets/js/typeahead/typeahead.bundle.js"></script>
+	<script src="~/assets/js/select2/select2.full.min.js"></script>
+	<script src="~/assets/js/select2/select2-custom.js"></script>
+
+	<script src="~/assets/js/datatable/datatablesv2/datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.fixedcolumns.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/fixedcolumns.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.select.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/select.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/dataTables.buttons.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.dataTables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/jszip.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/pdfmake.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/vfs_fonts.js"></script>
+
+	<script src="~/assets/js/datepicker/daterange-picker/moment.min.js"></script>
+	<script src="~/assets/js/datepicker/daterange-picker/daterangepicker.js"></script>
+    
+	<script src="~/assets/js/jquery.validate.js"></script>
+	<script src="~/assets/js/additional-methods.js"></script>
+	<script src="~/assets/js/moment.js"></script>
+	<script src="~/assets/js/sweet-alert/sweetalert.min.js"></script>
+
+	<!-- Plugins JS Ends-->
+	<!-- Theme js-->
+	<script src="~/assets/js/script.js"></script>
+	<script src="~/travel/General.js?v=1.55"></script>
+	<script src="~/travel/Cotizar.js?v=1.56"></script>
+	<script src="~/travel/ventaCotizar.js?v=1.53"></script>
+}

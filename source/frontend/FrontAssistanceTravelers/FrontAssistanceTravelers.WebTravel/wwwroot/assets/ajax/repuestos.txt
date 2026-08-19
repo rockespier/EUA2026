@@ -1,0 +1,52 @@
+{
+  "data": [ 
+    {
+      "id": "1",
+      "name": "11197",
+      "position": "11197",
+      "salary": "GWRGWVW38",     
+      "office": "Juan Perez",
+      "extn": "5421",
+      "sku":"41009-0696",
+      "descripcion":"LLANTA DELANTERA",
+      "stock":"1",
+      "reserva":"0",
+      "solicitado":"2",
+      "moneda":"S/.",
+      "precio":"860.00",
+      "almacen":"Tda Rep Kawasaki"
+    },
+    {
+      "id": "2",
+      "name": "500010",
+      "position": "11197",
+      "salary": "GWRGWVW38",     
+      "office": "Maria Perez",
+      "extn": "5421",
+      "sku":"16097-0008",
+      "descripcion":"FILTRO DE ACEITE",
+      "stock":"1",
+      "reserva":"0",
+      "solicitado":"2",
+      "moneda":"S/.",
+      "precio":"860.00",
+      "almacen":"Tda Rep Kawasaki"
+    },
+     {
+      "id": "3",
+      "name": "500027",
+      "position": "11197",
+      "salary": "GWRGWVW38",     
+      "office": "Renzo Perez",
+      "extn": "5421",
+      "sku":"11013-0767",
+      "descripcion":"ELEMENTO DE FILTRO DE AIRE",
+      "stock":"1",
+      "reserva":"0",
+      "solicitado":"2",
+      "moneda":"S/.",
+      "precio":"860.00",
+      "almacen":"Tda Rep Kawasaki"
+    }
+  ]
+}

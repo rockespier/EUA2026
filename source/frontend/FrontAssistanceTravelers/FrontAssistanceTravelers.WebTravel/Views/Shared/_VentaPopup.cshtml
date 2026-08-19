@@ -1,0 +1,310 @@
+﻿<!-- popup Venta Procesar-->
+<div class="modal fade bd-example-modal-xl" id="popupModalVenta" data-bs-backdrop="static" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="tituloModalVenta" name="tituloModalVenta" class="modal-title"></h5>
+				<span id="estadoModalVenta" name="estadoModalVenta"></span>
+				<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="card">
+					<div class="card-body">
+						<div class="tabbed-card">
+							<ul class="pull-left nav nav-tabs border-tab nav-primary" id="top-tab2" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" id="datos-top-tab2" data-bs-toggle="tab" href="#top-datos" role="tab" aria-controls="top-datos" aria-selected="true">
+										<i class="icofont icofont-clip-board"></i>Datos de venta
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="pasajero-top-tab2" data-bs-toggle="tab" href="#top-pasajero" role="tab" aria-controls="top-pasajero" aria-selected="false">
+										<i class="icofont icofont-man-in-glasses"></i>Pasajeros
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="emergencia-top-tab2" data-bs-toggle="tab" href="#top-emergencia" role="tab" aria-controls="top-pasajero" aria-selected="false">
+										<i class="icofont icofont-doctor"></i>Datos de emergencia
+									</a>
+								</li>
+							</ul>
+							<div class="tab-content" id="top-tabContent2">
+								<div class="tab-pane fade active show" id="top-datos" role="tabpanel" aria-labelledby="datos-top-tab">
+									<form id="modalDatosVenta" name="modalDatosVenta" action="">
+										<div id="divVenSelAgencias" class="row ">
+											<div class="col-6">
+												<div class="mb-3">
+													<label class="form-label" for="mdvenSelAgencias">Agencia: <span class="req">*</span></label>
+													<input type="text" class="form-select form-control-sm typeahead" id="mdvenSelAgencias" placeholder="---Buscar Agencia---" name="mdvenSelAgencias" />
+												</div>
+											</div>
+										</div>
+										<div class="row ">
+											<h6 class="pb-3 mb-0">Vigencia/Destino</h6>
+											<div class="col">
+												<div class="mb-3">
+													<label class="form-label">Fec. Inicio</label>
+													<input type="date" class="form-control" id="mdvenFecIncioVig" name="mdvenFecIncioVig">
+												</div>
+											</div>
+											<div class="col">
+												<div class="mb-3">
+													<label class="form-label">Fec. Termino</label>
+													<input type="date" class="form-control" id="mdvenFecFinalVig" name="mdvenFecFinalVig">
+												</div>
+											</div>
+
+											<div class="col-2">
+												<div class="mb-3">
+													<label class="form-label">Días</label>
+													<input type="text" class="form-control" id="mdvenDiasVig" name="mdvenDiasVig" readonly>
+												</div>
+											</div>
+											<div class="col">
+												<div class="mb-3">
+													<label class="form-label">Destino</label>
+													<input type="text" class="form-control" id="mdvenDestinoVig" name="mdvenDestinoVig">
+												</div>
+											</div>
+											<div class="col">
+												<div class="mb-2">
+													<label class="form-label">Counter</label>
+													<input type="text" class="form-control" id="mdvenCounterVig" name="mdvenCounterVig">
+												</div>
+											</div>
+										</div>
+										<div class="row ">
+											<h6 class="pb-3 mb-0">Producto</h6>
+											<div class="col-3">
+												<div class="mb-3">
+													<input id="mdHidTipoProducto" name="mdHidTipoProducto" type="hidden" />
+													<input id="mdHidPrecioIni" name="mdHidPrecioIni" type="hidden" />
+													<input id="mdHidVenEdadMaxProdAdi" name="mdHidVenEdadMaxProdAdi" type="hidden" value="0" />
+													<input id="mdHidVenEstadoEdadAdi" name="mdHidVenEstadoEdadAdi" type="hidden" value="0" />
+													<label class="form-label" for="mdvenSelProductoProd">Producto <span class="req">*</span></label>
+													<select class="form-select" id="mdvenSelProductoProd" name="mdvenSelProductoProd">
+													</select>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="mb-3">
+													<label class="form-label" for="mdvenSelProductoProdPromo">Promoción</label>
+													<select class="form-select" id="mdvenSelProductoProdPromo" name="mdvenSelProductoProdPromo">
+													</select>
+												</div>
+											</div>
+											<div class="col-2">
+												<div class="mb-3">
+													<label class="form-label">Edad minima</label>
+													<input type="text" class="form-control" id="mdvenEdadMinProd" name="mdvenEdadMinProd" readonly>
+												</div>
+											</div>
+											<div class="col-2">
+												<div class="mb-3">
+													<label class="form-label">Edad maxima</label>
+													<input type="text" class="form-control" id="mdvenEdadMaxProd" name="mdvenEdadMaxProd" readonly>
+												</div>
+											</div>
+											<div class="col-2">
+												<div class="mb-3">
+													<label class="form-label">Tarifa USD</label>
+													<input type="text" class="form-control" id="mdvenTarifaProd" name="mdvenTarifaProd" readonly>
+												</div>
+											</div>
+										</div>
+
+
+									</form>
+								</div>
+								<div class="tab-pane fade" id="top-pasajero" role="tabpanel" aria-labelledby="pasajero-top-tab">
+									<form id="modalDatosVentaPasajero" name="modalDatosVentaPasajero" action="">
+										<div id="mdDivVenPasajeros" name="mdDivVenPasajeros">
+											<div class="row">
+												<h6 class="pb-3 mb-0">Aquí puede agregar uno o más pasajeros</h6>
+												<div class="col-12 col-sm-12 col-lg-2">
+													<div class="mb-3">
+														<label class="form-label" for="selMarca">Tipo Documento <span class="req">*</span></label>
+														<select class="form-select digits" id="mdvenSelTipoDoc" name="mdvenSelTipoDoc">
+														</select>
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-3">
+													<div class="mb-3">
+														<label class="form-label">N° Documento <span class="req">*</span></label>
+														<div class="input-group">
+															<input type="text" class="form-control" id="mdvenTxtNumDocumento" name="mdvenTxtNumDocumento" placeholder="Buscar">
+															<div class="input-group-append">
+																<button class="btn btn-secondary" type="button" id="mdvenBtnBuscarDoc" name="mdvenBtnBuscarDoc">
+																	<i class="fa fa-search"></i>
+																</button>
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-3">
+													<div class="mb-3">
+														<label class="form-label" for="selMarca">Nombres <span class="req">*</span></label>
+														<input class="form-control" type="text" id="mdvenTxtNombres" name="mdvenTxtNombres" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-4">
+													<div class="mb-3">
+														<label class="form-label" for="selMarca">Apellidos <span class="req">*</span></label>
+														<input class="form-control" type="text" id="mdvenTxtApellidos" name="mdvenTxtApellidos" placeholder="">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 col-sm-12 col-lg-3">
+													<div class="mb-3">
+														<label class="form-label">Nacimiento <span class="req">*</span></label>
+														<input class="form-control" type="date" id="mdvenTxtFecNac" name="mdvenTxtFecNac">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-1">
+													<div class="mb-3">
+														<label class="form-label">Edad</label>
+														<input class="form-control" type="text" id="mdvenTxtEdad" name="mdvenTxtEdad" placeholder="" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-5">
+													<div class="mb-3">
+														<label class="form-label">Email </label>
+														<input class="form-control" type="email" id="mdvenTxtCorreo" name="mdvenTxtCorreo" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-3">
+													<div class="mb-3">
+														<label class="form-label">Telefono <span class="req">*</span></label>
+														<input class="form-control" type="text" id="mdvenTxtMovil" name="mdvenTxtMovil" placeholder="">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 col-sm-12 col-lg-4">
+													<div class="mb-3">
+														<label class="form-label">Direccion</label>
+														<input class="form-control" type="text" id="mdvenTxtDireccion" name="mdvenTxtDireccion" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-2">
+													<div class="mb-3">
+														<label class="form-label">Distrito</label>
+														<input class="form-control" type="text" id="mdvenTxtDistrito" name="mdvenTxtDistrito" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-2">
+													<div class="mb-3">
+														<label class="form-label">Ciudad</label>
+														<input class="form-control" type="text" id="mdvenTxtCiudad" name="mdvenTxtCiudad" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-2">
+													<div class="mb-3">
+														<label class="form-label">Pais</label>
+														<input class="form-control" type="text" id="mdvenTxtPais" name="mdvenTxtPais" placeholder="">
+													</div>
+												</div>
+												<div class="col-12 col-sm-12 col-lg-2">
+													<div class="mb-3">
+														<label class="form-label">Nacionalidad</label>
+														<!-- <select class="form-select digits" id="mdvenSelNacionalidad" name="mdvenSelNacionalidad">
+														</select> -->
+														<input class="form-control" type="text" id="mdvenTxtNacionalidad" name="mdvenTxtNacionalidad" placeholder="">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 col-sm-12 col-lg-12 text-end">
+													<div class="mt-4 ">
+														<button class="btn btn-primary" type="button" id="mdvenBtnAgregarPasajero" onclick="clickValidarPasajero();" name="mdvenBtnAgregarPasajero">
+															<i class="fa fa-plus"></i> Agregar
+														</button>
+													</div>
+												</div>
+												<div class="col">
+													<h6 class="pb-3 mb-0">Pasajeros agregados</h6>
+													<div class="table-responsive user-datatable">
+														<table class="display" id="dtPasajeros" name="dtPasajeros">
+															<thead>
+																<tr>
+																	<th>Tipo</th>
+																	<th>Documento</th>
+																	<th>Nombres</th>
+																	<th>Apellidos</th>
+																	<th>Nacimiento</th>
+																	<th>Edad</th>
+																	<th>Email</th>
+																	<th>Teléfono</th>
+																	<th>Acciones</th>
+																</tr>
+															</thead>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="tab-pane fade" id="top-emergencia" role="tabpanel" aria-labelledby="emergencia-top-tab">
+									<form id="modalDatosEmergencia" name="modalDatosEmergencia" action="">
+										<div class="row">
+											<h6 class="pb-3 mb-0">
+												Datos de emergencia (<span class="red-text">OPCIONAL</span>)
+											</h6>
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Nombres</label>
+													<input class="form-control" type="text" id="mdvenTxtNombresEmer" name="mdvenTxtNombresEmer" placeholder="">
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Correo</label>
+													<input class="form-control" type="text" id="mdvenTxtCorreoEmer" name="mdvenTxtCorreoEmer" placeholder="">
+												</div>
+											</div>
+
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Dirección</label>
+													<input class="form-control" type="text" id="mdvenTxtDireccEmer" name="mdvenTxtDireccEmer" placeholder="">
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Distrito</label>
+													<input class="form-control" type="text" id="mdvenTxtDistritoEmer" name="mdvenTxtDistritoEmer" placeholder="">
+												</div>
+											</div>
+
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Telefonos</label>
+													<input class="form-control" type="text" id="mdvenTxtMovilEmer" name="mdvenTxtMovilEmer" placeholder="">
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="mb-3">
+													<label class="form-label">Pais</label>
+													<input class="form-control" type="text" id="mdvenTxtPaisEmer" name="mdvenTxtPaisEmer" placeholder="">
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" id="btnCerrar" name="btnCerrar" data-bs-dismiss="modal">Cerrar</button>
+				<button class="btn btn-primary" type="button" id="GuardarVenta" name="GuardarVenta" onclick="clickValidarDatos();"></button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- popup Venta Procesar-->

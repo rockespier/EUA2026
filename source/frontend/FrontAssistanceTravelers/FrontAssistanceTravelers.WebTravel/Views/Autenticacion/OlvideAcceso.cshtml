@@ -1,0 +1,58 @@
+﻿<partial name="_Loader" />
+@model FrontAssistanceTravelers.WebTravel.Models.VMLogin;
+<div class="tap-top"><i data-feather="chevrons-up"></i></div>
+@{
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+<div class="page-wrapper">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-12">
+                <div class="login-card">
+                    <div>
+                        <div><a class="logo" asp-controller="Dashboard" asp-action="Index"><img class="img-fluid for-light" src="~/assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-dark" src="~/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
+                        <div class="login-main">
+                            <form class="theme-form" asp-controller="Autenticacion" asp-action="OlvideAcceso" method="post">
+                                <h4>Olvidaste tu contraseña</h4>
+                                <div class="form-group">
+                                    <label class="col-form-label">Ingrese su usuario</label>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12">
+                                            <input class="form-control mb-1" type="text" asp-for="inpAccesoAcceso" value="">
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="text-end">
+                                                <button class="btn btn-primary btn-block m-t-10" type="submit">Enviar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="mt-4 mb-0 text-center">¿Recordaste tu contraseña?<a class="ms-2" asp-controller="Autenticacion" asp-action="Acceso">Ingresar</a></p>
+                                @if (ViewData["ValidarError"] != null)
+                                {
+                                    <div class="alert alert-danger dark alert-dismissible fade show" role="alert">
+                                        @ViewData["ValidarError"]
+                                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                }
+                                @if (ViewData["ValidarOK"] != null)
+                                {
+                                    <div class="alert alert-success dark alert-dismissible fade show" role="alert">
+                                        @ViewData["ValidarOK"]
+                                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Script {
+    <!-- Theme js-->
+    <script src="../assets/js/script.js"></script>
+}

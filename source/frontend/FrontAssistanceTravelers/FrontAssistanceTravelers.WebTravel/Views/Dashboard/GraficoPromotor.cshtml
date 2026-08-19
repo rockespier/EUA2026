@@ -1,0 +1,173 @@
+﻿@using System.Security.Claims;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var indexDashItec = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
+}
+<style>
+    .dropdown .dropdown-toggle {
+        width: 150px !important;
+    }
+
+    select {
+        background: #fff;
+    }
+
+    option {
+        color: #2b2b2b;
+        opacity: 0.6;
+        font-size: 13px;
+        padding: 6px 12px;
+        border-top: 1px solid #efefef;
+    }
+
+    .balance-data {
+        display: flex;
+        gap: 15px;
+        position: inherit !important;
+        top: -50px;
+        right: 2%;
+    }
+
+    #globalLoader {
+        display: none; /* Initially hidden */
+        position: fixed; /* Fixed to cover entire screen */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        z-index: 9999; /* Ensure it's on top */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        border: 4px solid #f3f3f3; /* Light grey */
+        border-top: 4px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+    }
+
+</style>
+<div class="page-body">
+    <div id="globalLoader" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="spinner"></div>
+        <span style="margin-top: 10px; font-family: sans-serif; font-size: 16px; color: white; font-weight: bold;">Cargando...</span>
+    </div>
+    <div class="container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-6">
+                    <h3></h3>
+                </div>
+                <div class="col-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Dashboard" asp-action="@indexDashItec">
+                                <svg class="stroke-icon">
+                                    <use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header card-no-border">
+                        <div class="header-top">
+                            <h5 class="m-0">Grafico Promotor</h5>
+                            <div class="dropdown">
+                                <select class="dropdown-toggle" id="idopcionesmes" name="idopcionesmes" onchange="cambiarValoresChart();return false;" aria-label="viewButton">
+                                    <option value=1 selected>Mes Actual</option>
+                                    <option value=2>Mes Anterior</option>
+                                    <option value=3>Año Actual</option>
+                                    <option value=4>Año Anterior</option>
+                                    <option value=5>Rango</option>
+                                </select>
+                                <input type="date" class="dropdown-toggle" id="mdvenFecIni" name="mdvenFecIni">
+                                <input type="date" class="dropdown-toggle" id="mdvenFecFin" name="mdvenFecFin">
+                                <button type="button" class="dropdown-toggle" id="btonFechas" name="btonFechas">
+                                    <i class="fa fa-refresh" style="margin-right: 5px;"></i> Actualizar
+                                </button>
+                                <select class="dropdown-toggle" id="mdSelPais" name="mdSelPais" onchange="cambiarValoresChart();return false;" aria-label="viewButton">
+                                </select>
+                                <select class="dropdown-toggle" id="mdselPromotor" name="mdselPromotor">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container-fluid starts-->
+    <div id="graficosjefes" class="container-fluid">
+
+        <div class="row">
+            <div class="col-6" id="chart_DashboardGraficoObtener_95" name="chart_DashboardGraficoObtener_95">
+                <div class="card">
+                    <div class="card-header card-no-border">
+                        <div class="header-top">
+                            <h5 class="m-0">
+                                Ventas por Promotor Actual
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="visitors-container">
+                            <div id="c95"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6" id="chart_DashboardGraficoObtener_97" name="chart_DashboardGraficoObtener_97">
+                <div class="card">
+                    <div class="card-header card-no-border">
+                        <div class="header-top">
+                            <h5 class="m-0">
+                                Ventas por Promotor Anterior
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="visitors-container">
+                            <div id="c97"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>           
+        </div>
+    </div>
+</div>
+@section Script {
+
+    <!-- Plugins JS start-->
+    <script src="../assets/js/sidebar-menu.js"></script>
+    <script src="../assets/js/slick/slick.min.js"></script>
+    <script src="../assets/js/slick/slick.js"></script>
+    <script src="../assets/js/header-slick.js"></script>
+    <script src="../assets/js/chart/apex-chart/apex-chart.js"></script>
+
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="~/assets/js/jquery.ui.min.js"></script>
+   
+    <script src="~/assets/js/jquery.validate.js"></script>
+    <script src="~/assets/js/additional-methods.js"></script>
+    <script src="~/assets/js/moment.js"></script>
+    <script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+    <!-- Plugins JS Ends-->
+    <!-- Theme js-->
+    <script src="../assets/js/script.js"></script>
+    <script src="~/travel/General.js?v=1.55"></script>
+    <script src="~/travel/DashboardPromotor.js?v=3.26"></script>
+}

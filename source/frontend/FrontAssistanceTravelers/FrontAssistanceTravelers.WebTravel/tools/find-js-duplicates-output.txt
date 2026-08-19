@@ -1,0 +1,602 @@
+CargarTodo -> 32 occorrenze (32 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:168
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:129
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:14
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizar.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ImportarVenta.js:186
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:900
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:188
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:60
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:248
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:50
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:166
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:61
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:61
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:54
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:54
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:59
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:61
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:61
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:61
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:49
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:139
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:43
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:62
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:13
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:46
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:221
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:482
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:224
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:256
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:342
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\UsuarioRelacion.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2342
+
+showLoader -> 23 occorrenze (23 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:29
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:6
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizar.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:59
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:59
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:59
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ImportarVenta.js:6
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:14
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaResumenCobranzaReporte.js:4
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:15
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:15
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:14
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:24
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2023
+
+hideLoader -> 23 occorrenze (23 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:32
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:9
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizar.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:62
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:62
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:62
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ImportarVenta.js:39
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:17
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaResumenCobranzaReporte.js:7
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:18
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:18
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:17
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:27
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2026
+
+cargarAcciones -> 20 occorrenze (20 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:7
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:3
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:3
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:3
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:14
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:5
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:6
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:7
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:7
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:4
+
+limpiarModalBuqueda -> 20 occorrenze (20 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:32
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:38
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:244
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:833
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:24
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:116
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:15
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:272
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:262
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:245
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:235
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:269
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:257
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:251
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:258
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:286
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:35
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:216
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:875
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2809
+
+AbrirModalBusqueda -> 20 occorrenze (20 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:414
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:35
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:237
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:816
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:21
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:471
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:265
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:256
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:242
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:232
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:266
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:254
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:248
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:255
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:283
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:31
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:213
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:753
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2786
+
+clickBuscarLimpiar -> 17 occorrenze (17 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:39
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:112
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:247
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:843
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:127
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:280
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:269
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:248
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:238
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:272
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:260
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:254
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:261
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:289
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:219
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:886
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2825
+
+clickBuscarVentas -> 15 occorrenze (15 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:27
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:107
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:250
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:846
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:417
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:111
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:269
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:251
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:241
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:275
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:292
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:134
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:222
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:889
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2828
+
+cargarCombosBusqueda -> 14 occorrenze (14 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:273
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:591
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:319
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:307
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:256
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:246
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:280
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:296
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:290
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:297
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:297
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:40
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:756
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2233
+
+AbrirModal -> 13 occorrenze (13 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:494
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:404
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:551
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:349
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:205
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:229
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:214
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:467
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:138
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:167
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:168
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\UsuarioRelacion.js:86
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:95
+
+clickValidar -> 11 occorrenze (11 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:478
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:20
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:536
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:26
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:277
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:373
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:247
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:15
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:16
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:17
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:304
+
+IniciarFechasBsuqueda -> 11 occorrenze (11 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:254
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:12
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:851
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:423
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:83
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:275
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pasajeros.js:226
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:894
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2833
+
+intVal -> 11 occorrenze (11 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:301
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:205
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:164
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:162
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:157
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:153
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:162
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:165
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:161
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:161
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:182
+
+getDate -> 10 occorrenze (10 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:404
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:324
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:461
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:282
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:171
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:398
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:294
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:384
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:508
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\UsuarioRelacion.js:53
+
+ProcesarEntidad -> 10 occorrenze (10 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:631
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:39
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:637
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:41
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:292
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:389
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:262
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:37
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:84
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:119
+
+postProcesar -> 10 occorrenze (10 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:719
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:105
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:685
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:80
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:345
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:417
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:282
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:106
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:117
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:146
+
+<obj>.updateContext -> 10 occorrenze (1 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2485
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2497
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2502
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2507
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2513
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2517
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2528
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2533
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2541
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:2552
+
+CargarCombos -> 9 occorrenze (9 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:69
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:949
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:958
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:948
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:126
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:132
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:102
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:31
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:32
+
+drawTable -> 9 occorrenze (9 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:22
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:22
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:21
+
+<obj>.get -> 9 occorrenze (1 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:605
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:607
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:609
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:611
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:621
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:627
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:629
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:631
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\node_modules\acorn\dist\acorn.js:641
+
+format -> 7 occorrenze (7 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:53
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:53
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:53
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:585
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:8
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:133
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:19
+
+join -> 7 occorrenze (7 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:52
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:52
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:52
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:584
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:7
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:132
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:18
+
+ReseteoLocalStorage -> 7 occorrenze (7 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:13
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:107
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:10
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:238
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:389
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:20
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:14
+
+BuscarLista -> 5 occorrenze (5 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:164
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:185
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:244
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:162
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Productos.js:218
+
+IniciarTablaClick -> 5 occorrenze (5 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:115
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:869
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:45
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:118
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2325
+
+clickValidarBuscar -> 5 occorrenze (5 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:312
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:300
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:289
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:283
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:290
+
+getAgencia -> 4 occorrenze (4 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\General.js:582
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:1391
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:853
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2210
+
+getProducto -> 4 occorrenze (4 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\General.js:606
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasProducto.js:366
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasRangoEdad.js:383
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2188
+
+reader.onload -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:26
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ImportarVenta.js:96
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:30
+
+toBase64 -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:23
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ImportarVenta.js:93
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:27
+
+cargarCombosCancelar -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:45
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:275
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:528
+
+AbrirComprobante -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:512
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:19
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:81
+
+getVentas -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cotizaciones.js:214
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:1369
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2655
+
+mostrarFecha -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:28
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:28
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:28
+
+cambiarValoresChart -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:65
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:65
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:65
+
+DivNoVisible -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:126
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:126
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:126
+
+numberWithCommas -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:130
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:134
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:130
+
+getMenuDashBoradJefe -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:134
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:138
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:134
+
+getObetenerLineas -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:157
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:161
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:157
+
+getRandomColor -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:299
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:308
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:299
+
+getObetenerBarras -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:311
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:320
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:311
+
+getObetenerPie -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:614
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:623
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:613
+
+radialCommonOption -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:849
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:858
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:848
+
+fnReturnaMes -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardAgencia.js:904
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardJefe.js:913
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\DashboardPromotor.js:903
+
+AbrirModalConsulta -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:1281
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:139
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:2700
+
+getVentasPromotor -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotor.js:231
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorAnual.js:225
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPromotorDiario.js:231
+
+innactivarEntidad -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:366
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:439
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:303
+
+deleteAnular -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:391
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:464
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:328
+
+cargarCombos -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Permiso.js:27
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Usuario.js:598
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:62
+
+getSolicitudTipo -> 3 occorrenze (3 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Solicitud.js:831
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\SolicitudTipo.js:304
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:158
+
+innactivarAgencia -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:741
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:707
+
+deleteAnularAgencia -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Agencia.js:766
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:732
+
+getCobranza -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:360
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:505
+
+clickValidarPasajero -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Cobranza.js:600
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:921
+
+getPerfil -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\General.js:389
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Permiso.js:39
+
+getPais -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\General.js:412
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pais.js:181
+
+getUbigeo -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\General.js:548
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Ubigeo.js:394
+
+clickValidarCancelacion -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:37
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:567
+
+procesarCancelcacion -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:161
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:613
+
+postLiquidacionCancelar -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:217
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:737
+
+AbrirModalCancelar -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Liquidacion.js:314
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaCobranzaReporte.js:465
+
+innactivarPromocion -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:446
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:381
+
+deleteAnularPromocion -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaAgenciaProducto.js:470
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:406
+
+limpiarModalPasajero -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:28
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:593
+
+buscarPorDocumento -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaFacturaAgencia.js:44
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:717
+
+aprobarPago -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:25
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:110
+
+getPago -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:294
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:396
+
+updatePagoEstado -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPagoIncentivos.js:317
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Pago.js:419
+
+getPaisPromocion -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaPaisPromocion.js:292
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:570
+
+iniciarPredeterminado -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaResumenCobranzaReporte.js:10
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\VentaCotizar.js:5
+
+IniciarFechaDatosVigencia -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaResumenCobranzaReporte.js:49
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Venta.js:483
+
+getVentasAgencia -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgencia.js:241
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasAgenciaAnual.js:232
+
+getVentasPais -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPais.js:218
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\ListaVentasPaisAnual.js:208
+
+getEntidad -> 2 occorrenze (2 file):
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Parametro.js:204
+  - C:\repo\rtres-net\AT\source\frontend\FrontAssistanceTravelers\FrontAssistanceTravelers.WebTravel\wwwroot\Travel\Perfil.js:189

@@ -1,0 +1,1268 @@
+﻿@using System.Security.Claims;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
+}
+<style>
+
+	.red-text {
+		  color: red;
+	}
+
+	.tab-content > .tab-pane {
+		padding-top: 70px !important;
+	}
+
+	div .action {
+		position: static !important;
+	}
+
+	.action {
+		display: flex;
+		justify-content: center; /* Center horizontally */
+		align-items: center; /* Center vertically */
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.btn {
+		padding: 0.375rem 0.75rem !important;
+		font-size: 1rem !important;
+	}
+
+	.modal-title {
+		white-space: nowrap;
+	}
+
+	.modal-header #estadoModalVenta {
+		margin-left: 3rem;
+		/*float:right;*/
+	}
+
+	.modal-header #estadoModalVentaRead {
+		margin-left: 3rem;
+		/*float:right;*/
+	}
+
+	.form-switch .form-check-input {
+		width: 3em;
+		height: 2em;
+	}
+
+	.grid-divider {
+		overflow-x: hidden;
+		position: relative;
+	}
+
+		.grid-divider > [class*="col-"]:nth-child(n + 2):after {
+			content: "";
+			background-color: black;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+
+			@@media (max-width: 767px) {
+				width: 100%;
+				height: 1px;
+				left: 0;
+				top: -4px;
+			}
+
+			@@media (min-width: 768px) {
+				width: 1px;
+				height: auto;
+				left: -1px;
+			}
+		}
+
+	#globalLoader {
+		display: none; /* Initially hidden */
+		position: fixed; /* Fixed to cover entire screen */
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+		z-index: 9999; /* Ensure it's on top */
+		justify-content: center;
+		align-items: center;
+	}
+
+	.spinner {
+		border: 4px solid #f3f3f3; /* Light grey */
+		border-top: 4px solid #3498db; /* Blue */
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		animation: spin 2s linear infinite;
+	}
+
+
+	@@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.typeahead {
+		width: 100%;
+		padding: 0.375rem 0.75rem;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+	}
+
+	.loading-state {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 9999;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.loader {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		display: inline-block;
+		position: relative;
+		border: 3px solid;
+		border-color: #FFF #FFF transparent;
+		box-sizing: border-box;
+		animation: rotation 1s linear infinite;
+	}
+
+		.loader::after {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 3px solid;
+			border-color: transparent #FF3D00 #FF3D00;
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			animation: rotationBack 0.5s linear infinite;
+			transform-origin: center center;
+		}
+
+	@@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@@keyframes rotationBack {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(-360deg);
+		}
+	}
+
+	.dt-button-collection .dropdown-menu {
+		display: block;
+		position: static;
+		float: none;
+	}
+
+	.dt-button {
+		margin-right: 5px;
+	}
+
+	tr.group,
+	tr.group:hover {
+		background-color: rgba(0, 0, 0, 0.1) !important;
+	}
+
+	:root.dark tr.group,
+	:root.dark tr.group:hover {
+		background-color: rgba(0, 0, 0, 0.75) !important;
+	}
+</style>
+<link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/datatablev2/fixedcolumns.datatables.css" rel="stylesheet" />
+<link href="~/assets/css/vendors/select.datatables.css" rel="stylesheet" />
+<div class="page-body">
+	<div id="globalLoader" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+		<div class="spinner"></div>
+		<span style="margin-top: 10px; font-family: sans-serif; font-size: 16px; color: white; font-weight: bold;">Cargando...</span>
+	</div>
+	<div class="container-fluid">
+		<div class="page-title">
+			<div class="row">
+				<div class="col-6">
+					<h3>Ventas</h3>
+				</div>
+				<div class="col-6">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a asp-controller="Dashboard" asp-action="@indexDashluser">
+								<svg class="stroke-icon">
+									<use href="/assets/svg/icon-sprite.svg#stroke-home"></use>
+								</svg>
+							</a>
+						</li>
+						<li class="breadcrumb-item">Ventas</li>
+						<li class="breadcrumb-item active">Ventas</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="display:none" name="cargar" id="cargar" class="loading-state">
+		<div class="loader"></div>
+	</div>
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- State saving Starts-->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<p>
+							<!--Filtros-->
+							<a href="javascript:void(0);" onclick="AbrirModal(0,0,'');" class="btn btn-success mb-3" id="lnkNueva1" name="lnkNueva1">
+								<i class="fa fa-plus"></i>  Nueva Venta
+							</a>
+							<a href="javascript:void(0);" onclick="AbrirModalBusqueda();" class="btn btn-dark mb-3" id="lnkNueva2" name="lnkNueva2">
+								<i class="fa fa-binoculars"></i>  Busqueda Avanzada
+							</a>
+							<a href="javascript:void(0);" onclick="AbrirModaImprimirVentas();" class="btn btn-primary mb-3" id="lnkNueva3" name="lnkNueva3">
+								<i class="fa fa-print"></i>  Imprimir Ventas
+							</a>
+							<a href="javascript:void(0);" onclick="exportaReporteVenta();" class="btn btn-info mb-3" id="lnkNueva4" name="lnkNueva4">
+								<i class="fa fa-file-excel-o"></i>  Reporte ventas
+							</a>
+							<a href="javascript:void(0);" onclick="exportaExcelVenta();" class="btn btn-light mb-3" id="lnkNueva5" name="lnkNueva5">
+								<i class="fa fa-file-excel-o"></i>  Excel Listado
+							</a>
+							
+						</p>
+						<div class="table-responsive user-datatable">
+							<table class="display" id="dtVenta">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Tarjeta</th>
+										<th>Codigo Externo</th>
+										<th>Emisión</th>
+										<th>Inicio</th>
+										<th>Fin</th>
+										<th>Producto</th>
+										<th>Pasajero</th>
+										<th>Precio</th>
+										<th>Estado</th>
+										<th>Situación</th>
+										<th>Registrador</th>
+										<th>Documento</th>
+										<th>Pais</th>
+										<th>Agencia</th>
+										<th>Comisiòn</th>
+										<th>Incentivo</th>
+										<th>Por Pagar</th>
+										<th>Fch.Cancelación</th>
+										<th>Documento</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- State saving Ends-->
+		</div>
+	</div>
+	<!-- popup Venta Procesar-->
+	<partial name="_VentaPopup" />
+	<!-- popup Venta Procesar-->
+	<!-- popup Venta Consulta-->
+	<div class="modal fade bd-example-modal-xl" id="popupModalVentaRead" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaRead" name="tituloModalVentaRead" class="modal-title"></h5>
+					<span id="estadoModalVentaRead" name="estadoModalVentaRead"></span>
+					<span id="situacionModalVentaRead" name="situacionModalVentaRead"></span>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosVentaRead" name="modalDatosVentaRead" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row">
+
+								<h6 class="pb-3 mb-0">Vigencia/Destino</h6>
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Fec. Inicio</label>
+										<input type="date" class="form-control" id="mdvenFecIncioVigRead" name="mdvenFecIncioVigRead" readonly>
+									</div>
+								</div>
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Fec. Termino</label>
+										<input type="date" class="form-control" id="mdvenFecFinalVigRead" name="mdvenFecFinalVigRead" readonly>
+										<span style="visibility:hidden" id="numerodias">0</span>
+									</div>
+								</div>
+								<div class="col-2">
+									<div class="mb-3">
+										<label class="form-label">Días</label>
+										<input type="text" class="form-control" id="mdvenDiasVigRead" name="mdvenDiasVigRead" readonly>
+									</div>
+								</div>
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Destino</label>
+										<input type="text" class="form-control" id="mdvenDestinoVigRead" name="mdvenDestinoVigRead" readonly>
+									</div>
+								</div>
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Counter</label>
+										<input type="text" class="form-control" id="mdvenCounterVigRead" name="mdvenCounterVigRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<h6 class="pb-3 mb-0">Producto</h6>
+								<div class="col-sm-3">
+									<div class="mb-3">
+										<label class="form-label" for="mdvenSelProductoProdRead">Producto</label>
+										<input type="text" class="form-control" id="mdvenSelProductoProdRead" name="mdvenSelProductoProdRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="mb-3">
+										<label class="form-label" for="mdvenSelProductoProdRead">Promoción</label>
+										<input type="text" class="form-control" id="mdvenSelProductoProdPromoRead" name="mdvenSelProductoProdPromoRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label">Edad minima</label>
+										<input type="text" class="form-control" id="mdvenEdadMinProdRead" name="mdvenEdadMinProdRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label">Edad maxima</label>
+										<input type="text" class="form-control" id="mdvenEdadMaxProdRead" name="mdvenEdadMaxProdRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label">Tarifa USD</label>
+										<input type="text" class="form-control" id="mdvenTarifaProdRead" name="mdvenTarifaProdRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">								
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label" for="mdvenSelComisionRead">Comisión</label>
+										<input type="text" class="form-control" id="mdvenSelComisionRead" name="mdvenSelComisionRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label" for="mdvenSelIncentivoRead">Incentivo</label>
+										<input type="text" class="form-control" id="mdvenSelIncentivoRead" name="mdvenSelIncentivoRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="mb-3">
+										<label class="form-label">Por pagar</label>
+										<input type="text" class="form-control" id="mdvenPorPagarRead" name="mdvenPorPagarRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="mb-3">
+										<label class="form-label">Fecha Cancelación</label>
+										<input type="date" class="form-control" id="mdvenFechaCancelacionRead" name="mdvenFechaCancelacionRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="mb-3">
+										<label class="form-label">Documento</label>
+										<input type="text" class="form-control" id="mdvenDocumentoRead" name="mdvenDocumentoRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="mb-3">
+										<label class="form-label" for="mdvenTxtObsVenta">Observacion</label>
+										<textarea cols="100" rows="2" class="form-control form-control-sm" id="mdvenTxtObsVenta" name="mdvenTxtObsVenta" readonly style="width:100%"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<h6 class="pb-3 mb-0">Datos de emergencia</h6>
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Nombres</label>
+										<input class="form-control" type="text" id="mdvenTxtNombresEmerRead" name="mdvenTxtNombresEmerRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Correo</label>
+										<input class="form-control" type="text" id="mdvenTxtCorreoEmerRead" name="mdvenTxtCorreoEmerRead" readonly>
+									</div>
+								</div>
+
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Dirección</label>
+										<input class="form-control" type="text" id="mdvenTxtDireccEmerRead" name="mdvenTxtDireccEmerRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Distrito</label>
+										<input class="form-control" type="text" id="mdvenTxtDistritoEmerRead" name="mdvenTxtDistritoEmerRead" readonly>
+									</div>
+								</div>
+
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Telefonos</label>
+										<input class="form-control" type="text" id="mdvenTxtMovilEmerRead" name="mdvenTxtMovilEmerRead" readonly>
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div class="mb-3">
+										<label class="form-label">Pais</label>
+										<input class="form-control" type="text" id="mdvenTxtPaisEmerRead" name="mdvenTxtPaisEmerRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<h6 class="pb-3 mb-0">Pasajero</h6>
+								<div class="col-12 col-sm-12 col-lg-1">
+									<div class="mb-3">
+										<input id="mdHidIdVentaTarjeta" name="mdHidIdVentaTarjeta" type="hidden" />
+										<input id="mdHidIdVentaTarjetaAll" name="mdHidIdVentaTarjetaAll" type="hidden" />
+										<label class="form-label" for="selMarca">Tipo</label>
+										<input class="form-control" type="text" id="mdvenSelTipoDocClienRead" name="mdvenSelTipoDocClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-2  col-lg-2">
+
+									<div class="mb-3">
+										<label class="form-label" for="selMarca">N° Documento</label>
+										<input class="form-control" type="text" id="mdvenTxtNumDocumentoClienRead" name="mdvenTxtNumDocumentoClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div class="mb-3">
+										<label class="form-label" for="selMarca">Nombres</label>
+										<input class="form-control" type="text" id="mdvenTxtNombresClienRead" name="mdvenTxtNombresClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3 col-lg-3">
+									<div class="mb-3">
+										<label class="form-label" for="selMarca">Apellidos</label>
+										<input class="form-control" type="text" id="mdvenTxtApellidosClienRead" name="mdvenTxtApellidosClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-2 col-lg-2">
+									<div class="mb-3">
+										<label class="form-label">Nacimiento</label>
+										<input class="form-control" type="date" id="mdvenTxtFecNacClienRead" name="mdvenTxtFecNacClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-1 col-lg-1">
+									<div class="mb-3">
+										<label class="form-label">Edad</label>
+										<input class="form-control" type="text" id="mdvenTxtEdadClienRead" name="mdvenTxtEdadClienRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div class="mb-3">
+										<label class="form-label">Email</label>
+										<input class="form-control" type="email" id="mdvenTxtCorreoClienRead" name="mdvenTxtCorreoClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div class="mb-3">
+										<label class="form-label">Telefono</label>
+										<input class="form-control" type="text" id="mdvenTxtMovilClienRead" name="mdvenTxtMovilClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-6  col-lg-6">
+									<div>
+										<label class="form-label">Direccion</label>
+										<input class="form-control" type="text" id="mdvenTxtDireccionClienRead" name="mdvenTxtDireccionClienRead" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div>
+										<label class="form-label">Distrito</label>
+										<input class="form-control" type="text" id="mdvenTxtDistritoClienRead" name="mdvenTxtDistritoClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div>
+										<label class="form-label">Ciudad</label>
+										<input class="form-control" type="text" id="mdvenTxtCiudadClienRead" name="mdvenTxtCiudadClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div>
+										<label class="form-label">Pais</label>
+										<input class="form-control" type="text" id="mdvenTxtPaisClienRead" name="mdvenTxtPaisClienRead" readonly>
+									</div>
+								</div>
+								<div class="col-12 col-sm-3  col-lg-3">
+									<div>
+										<label class="form-label">Nacionalidad</label>
+										<input class="form-control" type="text" id="mdvenTxtNacionalidadRead" name="mdvenTxtNacionalidadRead" readonly>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-info" type="button" id="btnSolicitarCambio" name="btnSolicitarCambio" onclick="AbrirModaSolicitud();">
+							<i class="fa fa-briefcase"></i>  Solicitar Cambio
+						</button>
+						<button class="btn btn-primary" type="button" id="btnImprimirVenta" name="btnImprimirVenta" onclick="AbrirModaImprimir();">
+							<i class="fa fa-print"></i>  Imprimir Venta
+						</button>
+						<button class="btn btn-warning" type="button" id="btnActualizarVenta" name="btnActualizarVenta" onclick="clickValidarActualizar();">
+							<i class="fa fa-file-excel-o"></i> Actualizar Venta
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarRead" name="btnCerrarRead" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Consulta-->
+	<!-- popup Venta Busqueda-->
+	<div class="modal fade bd-example-modal-l" id="popupModalVentaSearch" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-l" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaSearch" name="tituloModalVentaSearch" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosVentaSearch" name="modalDatosVentaSearch" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-6 ">
+									<div class="mb-2">
+										<label class="form-label">Ingresado el:</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecIncioVigSearch" name="mdvenFecIncioVigSearch">
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div class="mb-2">
+										<label class="form-label">Hasta:</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecFinalVigSearch" name="mdvenFecFinalVigSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6 ">
+									<div>
+										<label class="form-label">Nº Tarjeta:</label>
+										<input type="number" class="form-control form-control-sm" id="mdvenNumTarjetaSearch" name="mdvenNumTarjetaSearch">
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div>
+										<label class="form-label">Código Externo:</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenCodExternoSearch" name="mdvenCodExternoSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label">Nombres Cliente:</label>
+										<input class="form-control form-control-sm" type="text" id="mdvenTxtNombresSearch" name="mdvenTxtNombresSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label">Apellidos Cliente:</label>
+										<input class="form-control form-control-sm" type="text" id="mdvenTxtApellidosSearch" name="mdvenTxtApellidosSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6 ">
+									<div class="mb-2">
+										<label class="form-label">Tipo DNI:</label>
+										<select class="form-select form-select-sm" id="mdvenSelTipoDocSearch" name="mdvenSelTipoDocSearch">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-6 ">
+									<div class="mb-2">
+										<label class="form-label">Documento:</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtDocumentoSearch" name="mdvenTxtDocumentoSearch">
+									</div>
+								</div>
+							</div>
+							<div class="row" name="divVenSelPaisSearch" id="divVenSelPaisSearch">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">País:</label>
+										<select class="form-select form-select-sm" id="mdvenSelPaisSearch" name="mdvenSelPaisSearch">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row" name="divVenSelAgenciaSearch" id="divVenSelAgenciaSearch">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="txtAgencia">Agencia:</label>
+										<input type="text" class="form-select form-control-sm typeahead" id="txtAgencia" placeholder="---Buscar Agencia---" name="txtAgencia" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">Usuario:</label>
+										<select class="form-select form-select-sm" id="mdvenSelUsuarioSearch" name="mdvenSelUsuarioSearch">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">Estado:</label>
+										<select class="form-select form-select-sm" id="mdvenSelEstadoSearch" name="mdvenSelProductoProd">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-6-12">
+									<div>
+										<label class="form-label" for="selMarca">Situación:</label>
+										<select class="form-select form-select-sm" id="mdvenSelSituacionSearch" name="mdvenSelSituacionSearch">
+										</select>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-info" type="button" id="btnLimpiarBsq" name="btnLimpiarBsq" onclick="clickBuscarLimpiar();">
+							<i class="fa fa-eraser"></i>  Limpiar
+						</button>
+						<button class="btn btn-primary" type="button" id="btnBuscarVentas" name="btnBuscarVentas" onclick="clickBuscarVentas();">
+							<i class="fa fa-search"></i>  Buscar
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarSearch" name="btnCerrarSearch" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Busqueda-->
+	<!-- popup Venta Solicitud-->
+	<div class="modal fade bd-example-modal-l" id="popupModalVentaSolicitud" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-l" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaSolicitud" name="tituloModalVentaSolicitud" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								<div class="mb-3">
+									<input id="mdHidIdSolicitudObjeto" name="mdHidIdSolicitudObjeto" type="hidden" />
+									<label class="form-label" for="mdvenSelTipoSolicitud">Listado de tipo de solicitud</label>
+									<select class="form-select form-select-sm" id="mdvenSelTipoSolicitud" name="mdvenSelTipoSolicitud">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<form id="modalAnularVentaSolicitud" name="modalAnularVentaSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenSelAnularMotivoSolicitud">Motivo</label>
+										<select id="mdvenSelAnularMotivoSolicitud" name="mdvenSelAnularMotivoSolicitud" class="form-select form-select-sm">
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label id="lblFilAnularArchivoSolicitud" name="lblFilAnularArchivoSolicitud">Archivo</label>
+										<div class="input-group">
+											<input type="file" class="form-control" id="mdvenFilAnularArchivoSolicitud" name="mdvenFilAnularArchivoSolicitud" multiple="multiple" accept="image/png, image/gif, image/jpeg, application/pdf, video/mp4,video/x-m4v" aria-describedby="mdBotOtEvidencia" aria-label="Upload">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="inputZip">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtAnularObserSolicitud" name="mdvenTxtAnularObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 02 MODIFICAR VIGENCIA-->
+							<form id="modalModVentaSolicitud" name="modalModVentaSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdventextModVigProductoSolicitudOri">Producto Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdventextModVigProductoSolicitudOri" name="mdventextModVigProductoSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaInicialSolicitudOri">Vigencia inicial Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaInicialSolicitudOri" name="mdvenFecModVigFechaInicialSolicitudOri" readonly />
+									</div>
+									<div class="col">
+										<label for="mdvenFecModVigFechaFinalSolicitudOri">Vigencia final Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaFinalSolicitudOri" name="mdvenFecModVigFechaFinalSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenFecModVigDiaslSolicitudOri">Días Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenFecModVigDiaslSolicitudOri" name="mdvenFecModVigDiaslSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaInicialSolicitud">Vigencia inicial</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaInicialSolicitud" name="mdvenFecModVigFechaInicialSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaFinalSolicitud">Vigencia final</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaFinalSolicitud" name="mdvenFecModVigFechaFinalSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModVigDiasSolicitud">Días</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModVigDiasSolicitud" name="mdvenTxtModVigDiasSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModVigObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModVigObserSolicitud" name="mdvenTxtModVigObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 03 REACTIVACION DE VENTA-->
+							<form id="modalReaVentaSolicitud" name="modalReaVentaSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtReacVentObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtReacVentObserSolicitud" name="mdvenTxtReacVentObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 04 TRANSLADO DE VENTA-->
+							<form id="modalTraVentaSolicitud" name="modalTraVentaSolicitud" action="">
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenSelTrasVentAgenciaSolicitudOri">Agencia Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenSelTrasVentAgenciaSolicitudOri" name="mdvenSelTrasVentAgenciaSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenSelTrasVentAgenciaSolicitud">Agencia</label>
+										<select id="mdvenSelTrasVentAgenciaSolicitud" name="mdvenSelTrasVentAgenciaSolicitud" class="form-select form-select-sm">
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenSelTrasVentUsuarioSolicitud">Usuario</label>
+										<select id="mdvenSelTrasVentUsuarioSolicitud" name="mdvenSelTrasVentUsuarioSolicitud" class="form-select form-select-sm">
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtTrasVentObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtTrasVentObserSolicitud" name="mdvenTxtTrasVentObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 05 MODIFICAR DATOS DEL CLIENTE-->
+							<form id="modalModClienteSolicitud" name="modalModClienteSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenSelModClieTipoDocSolicitud">Documento</label>
+										<select id="mdvenSelModClieTipoDocSolicitud" name="mdvenSelModClieTipoDocSolicitud" class="form-select form-select-sm">
+										</select>
+									</div>
+									<div class="col">
+										<label for="mdvenTxtModClieNumDocSolicitud">Nro. documento</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieNumDocSolicitud" name="mdvenTxtModClieNumDocSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieNombresSolicitud">Nombres</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieNombresSolicitud" name="mdvenTxtModClieNombresSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieApellidosSolicitud">Apellidos</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieApellidosSolicitud" name="mdvenTxtModClieApellidosSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenDetModClieFecNacSolicitud">Fch.Nacimiento</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenDetModClieFecNacSolicitud" name="mdvenDetModClieFecNacSolicitud" />
+									</div>
+									<div class="col">
+										<label for="mdvenTxtModClieEdadSolicitud">Edad</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieEdadSolicitud" name="mdvenTxtModClieEdadSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieCorreoSolicitud">Email</label>
+										<input type="email" class="form-control form-control-sm" id="mdvenTxtModClieCorreoSolicitud" name="mdvenTxtModClieCorreoSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieDireccSolicitud">Direccion</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieDireccSolicitud" name="mdvenTxtModClieDireccSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieMovilSolicitud">Telefono</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieMovilSolicitud" name="mdvenTxtModClieMovilSolicitud" />
+									</div>
+									<div class="col">
+										<label for="mdvenTxtModClieDistritoSolicitud">Distrito</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieDistritoSolicitud" name="mdvenTxtModClieDistritoSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieCiudadSolicitud">Ciudad</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModClieCiudadSolicitud" name="mdvenTxtModClieCiudadSolicitud" />
+									</div>
+									<div class="col">
+										<label for="mdvenTxtModCliePaisSolicitud">País</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModCliePaisSolicitud" name="mdvenTxtModCliePaisSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModClieObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModClieObserSolicitud" name="mdvenTxtModClieObserSolicitud"></textarea>
+									</div>
+								</div>
+
+							</form>
+							<!-- 06 MODIFICAR DATOS DE EMERGENCIA-->
+							<form id="modalModEmerSolicitud" name="modalModEmerSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModEmerNombresSolicitud">Nombre</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModEmerNombresSolicitud" name="mdvenTxtModEmerNombresSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModEmerDireccSolicitud">Direccion</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModEmerDireccSolicitud" name="mdvenTxtModEmerDireccSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="inputZip">Distrito</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModEmerDistritoSolicitud" name="mdvenTxtModEmerDistritoSolicitud" />
+									</div>
+									<div class="col">
+										<label for="mdvenTxtModEmerPaisSolicitud">Pais</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModEmerPaisSolicitud" name="mdvenTxtModEmerPaisSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModEmerMovilSolicitud">Teléfono</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModEmerMovilSolicitud" name="mdvenTxtModEmerMovilSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModEmerCorreoSolicitud">Email</label>
+										<input type="email" class="form-control form-control-sm" id="mdvenTxtModEmerCorreoSolicitud" name="mdvenTxtModEmerCorreoSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModEmerObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModEmerObserSolicitud" name="mdvenTxtModEmerObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 07 MODIFICAR IMPORTE DE VENTA-->
+							<form id="modalModImporteSolicitud" name="modalModImporteSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModImpProductoSolicitud">Producto</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModImpProductoSolicitud" name="mdvenTxtModImpProductoSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModImpCostoSolicitud">Costo</label>
+										<input type="number" class="form-control form-control-sm" id="mdvenTxtModImpCostoSolicitud" name="mdvenTxtModImpCostoSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModImpObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModImpObserSolicitud" name="mdvenTxtModImpObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 08 CANCELA TARJETAS FREE-->
+							<form id="modalCanTarjetaSolicitud" name="modalCanTarjetaSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtCanTarjetaProductoSolicitud">Producto</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtCanTarjetaProductoSolicitud" name="mdvenTxtCanTarjetaProductoSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtCanTarjetaCostoSolicitud">Costo</label>
+										<input type="number" class="form-control form-control-sm" id="mdvenTxtCanTarjetaCostoSolicitud" name="mdvenTxtCanTarjetaCostoSolicitud" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtCanTarjetaObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtCanTarjetaObserSolicitud" name="mdvenTxtCanTarjetaObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 10 CAMBIO DE PRODUCTO-->
+							<form id="modalModProdSolicitud" name="modalModProdSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdventextModProProductoSolicitudOri">Producto Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdventextModProProductoSolicitudOri" name="mdventextModProProductoSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenTxtModProTarifaSolicitudOri">Tarifa Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModProTarifaSolicitudOri" name="mdvenTxtModProTarifaSolicitudOri" readonly />
+									</div>
+									<div class="col mb-3">
+										<label for="mdvenTxtModProDiasSolicitudOri">Días Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModProDiasSolicitudOri" name="mdvenTxtModProDiasSolicitudOri" readonly />
+									</div>
+									<div class="col mb-3">
+										<label for="mdvenTxtModProEdadSolicitudOri">Edad</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModProEdadSolicitudOri" name="mdvenTxtModProEdadSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenFecModProFechaInicialSolicitudOri">Vigencia inicial Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModProFechaInicialSolicitudOri" name="mdvenFecModProFechaInicialSolicitudOri" readonly />
+									</div>
+									<div class="col mb-3">
+										<label for="mdvenFecModProFechaFinalSolicitudOri">Vigencia final Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModProFechaFinalSolicitudOri" name="mdvenFecModProFechaFinalSolicitudOri" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdventextModProNewProductoSolicitud">Producto</label>
+										<select id="mdventextModProNewProductoSolicitud" name="mdventextModProNewProductoSolicitud" class="form-select form-select-sm">
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenTxtModProTarifaSolicitud">Tarifa Nueva</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModProTarifaSolicitud" name="mdvenTxtModProTarifaSolicitud" readonly />
+									</div>
+
+									<div class="col mb-3">
+										<label for="mdvenTxtModProDiasSolicitud">Días Nueva</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModProDiasSolicitud" name="mdvenTxtModProDiasSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenFecModProFechaInicialSolicitud">Vigencia inicial Nueva</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModProFechaInicialSolicitud" name="mdvenFecModProFechaInicialSolicitud" readonly />
+									</div>
+									<div class="col mb-3">
+										<label for="mdvenFecModProFechaFinalSolicitud">Vigencia final Nueva</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModProFechaFinalSolicitud" name="mdvenFecModProFechaFinalSolicitud" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModProObserSolicitud">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModProObserSolicitud" name="mdvenTxtModProObserSolicitud"></textarea>
+									</div>
+								</div>
+							</form>
+							<!-- 11 CAMBIO DE VIGENCIA ESPECIAL-->
+							<form id="modalModEspecialVentaSolicitud" name="modalModEspecialVentaSolicitud" action="">
+								<div class="row">
+									<div class="col">
+										<label for="mdventextModVigProductoSolicitudOriEsp">Producto Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdventextModVigProductoSolicitudOriEsp" name="mdventextModVigProductoSolicitudOriEsp" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaInicialSolicitudOriEsp">Vigencia inicial Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaInicialSolicitudOriEsp" name="mdvenFecModVigFechaInicialSolicitudOriEsp" readonly />
+									</div>
+									<div class="col">
+										<label for="mdvenFecModVigFechaFinalSolicitudOriEsp">Vigencia final Origen</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaFinalSolicitudOriEsp" name="mdvenFecModVigFechaFinalSolicitudOriEsp" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-3">
+										<label for="mdvenFecModVigDiaslSolicitudOriEsp">Días Origen</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenFecModVigDiaslSolicitudOriEsp" name="mdvenFecModVigDiaslSolicitudOriEsp" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaInicialSolicitudEsp">Vigencia inicial</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaInicialSolicitudEsp" name="mdvenFecModVigFechaInicialSolicitudEsp" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenFecModVigFechaFinalSolicitudEsp">Vigencia final</label>
+										<input type="date" class="form-control form-control-sm" id="mdvenFecModVigFechaFinalSolicitudEsp" name="mdvenFecModVigFechaFinalSolicitudEsp" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModVigDiasSolicitudEsp">Días</label>
+										<input type="text" class="form-control form-control-sm" id="mdvenTxtModVigDiasSolicitudEsp" name="mdvenTxtModVigDiasSolicitudEsp" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="mdvenTxtModVigObserSolicitudEsp">Observación</label>
+										<textarea cols="40" rows="2" class="form-control form-control-sm" id="mdvenTxtModVigObserSolicitudEsp" name="mdvenTxtModVigObserSolicitudEsp"></textarea>
+									</div>
+								</div>
+							</form>
+							
+						</div>
+					</div>
+				</div>
+				<div name="modFootVentSoli" id="modFootVentSoli" class="modal-footer">
+					<button class="btn btn-primary" type="button" id="btnGuardarSolicitud" name="btnGuardarSolicitud">
+						<i class="fa fa-floppy-o"></i>  Guardar
+					</button>
+					<button class="btn btn-secondary" type="button" id="btnCerrarSolicitud" name="btnCerrarSolicitud" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Solicitud-->
+	<!-- popup Venta Imprimir-->
+	<div class="modal fade bd-example-modal-l " id="popupModalVentaPrint" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered modal-l" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaPrint" name="tituloModalVentaPrint" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosVentaPrint" name="modalDatosVentaPrint" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row">
+								<h6 class="pb-3 mb-0">Utilize una hoja bond A4</h6>
+								<div class="col-sm-12 col-6-12">
+									<div class="mb-3">
+										<label class="form-label">Tipo de hoja</label>
+										<select class="form-select form-select-sm" id="mdvenSelTipoHojaPrint" name="mdvenSelTipoHojaPrint">
+											<option value="">---Seleccione---</option>
+											<option value="3">Hoja A4</option>
+											<option value="4">Hoja Ingles</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-12 col-6-12">
+									<div class="mb-3">
+										<label class="form-label">Precio</label>
+										<select class="form-select form-select-sm" id="mdvenSelPrecioPrint" name="mdvenSelPrecioPrint">
+											<option value="">---Seleccione---</option>
+											<option value="1">Con Precio</option>
+											<option value="2">Sin Precio</option>
+										</select>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" type="button" id="btnGenerarPDF" name="btnGenerarPDF" onclick="clickValidarImpirmir();">
+							<i class="fa fa-file-pdf-o"></i>  Generar PDF
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarPrint" name="btnCerrarPrint" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta Imprimir-->
+	<!-- popup Venta masiva Imprimir-->
+	<div class="modal fade bd-example-modal-l " id="popupModalVentaPrintAll" data-bs-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered modal-l" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="tituloModalVentaPrintAll" name="tituloModalVentaPrintAll" class="modal-title"></h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="modalDatosVentaPrintAll" name="modalDatosVentaPrintAll" action="">
+					<div class="modal-body">
+						<div class="card-body">
+							<div class="row">
+								<h6 class="pb-3 mb-0">Utilize una hoja bond A4</h6>
+								<div class="col-sm-12 col-6-12">
+									<div class="mb-3">
+										<label class="form-label">Tipo de hoja</label>
+										<select class="form-select form-select-sm" id="mdvenSelTipoHojaPrintAll" name="mdvenSelTipoHojaPrintAll">
+											<option value="">---Seleccione---</option>
+											<option value="3">Hoja A4</option>
+											<option value="4">Hoja Ingles</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-12 col-6-12">
+									<div class="mb-3">
+										<label class="form-label">Precio</label>
+										<select class="form-select form-select-sm" id="mdvenSelPrecioPrintAll" name="mdvenSelPrecioPrintAll">
+											<option value="">---Seleccione---</option>
+											<option value="1">Con Precio</option>
+											<option value="2">Sin Precio</option>
+										</select>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" type="button" id="btnGenerarPDFAll" name="btnGenerarPDFAll" onclick="clickValidarImpirmirAll();">
+							<i class="fa fa-file-pdf-o"></i>  Generar PDF
+						</button>
+						<button class="btn btn-secondary" type="button" id="btnCerrarPrintAll" name="btnCerrarPrintAll" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- popup Venta masiva Imprimir-->
+</div>
+@section Script {
+	<!-- Plugins JS start-->
+	<script src="../assets/js/sidebar-menu.js"></script>
+	<script src="../assets/js/slick/slick.min.js"></script>
+	<script src="../assets/js/slick/slick.js"></script>
+	<script src="../assets/js/header-slick.js"></script>
+
+	<script src="~/assets/js/jquery-3.6.0.min.js"></script>
+	<script src="~/assets/js/jquery.ui.min.js"></script>
+	<script src="~/assets/js/typeahead/typeahead.bundle.js"></script>
+	<script src="../assets/js/select2/select2.full.min.js"></script>
+	<script src="../assets/js/select2/select2-custom.js"></script>
+
+	<script src="~/assets/js/datatable/datatablesv2/datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.fixedcolumns.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/fixedcolumns.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/datatables.select.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/select.datatables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/dataTables.buttons.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.dataTables.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/jszip.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/pdfmake.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/vfs_fonts.js"></script>
+
+	<script src="~/assets/js/datepicker/daterange-picker/moment.min.js"></script>
+	<script src="~/assets/js/datepicker/daterange-picker/daterangepicker.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.html5.min.js"></script>
+	<script src="~/assets/js/datatable/datatablesv2/buttons.print.min.js"></script>
+
+	
+	<script src="~/assets/js/jquery.validate.js"></script>
+	<script src="~/assets/js/additional-methods.js"></script>
+	<script src="~/assets/js/moment.js"></script>
+	<script src="../assets/js/sweet-alert/sweetalert.min.js"></script>
+	
+	<!-- Plugins JS Ends-->
+	<!-- Theme js-->
+	<script src="../assets/js/script.js"></script>
+	<script src="~/travel/General.js?v=1.55"></script>
+	<script src="~/travel/venta.js?v=5.99"></script>
+	<script src="~/travel/ventaCotizar.js?v=1.71"></script>
+
+
+}
+
+
+
+
+
+

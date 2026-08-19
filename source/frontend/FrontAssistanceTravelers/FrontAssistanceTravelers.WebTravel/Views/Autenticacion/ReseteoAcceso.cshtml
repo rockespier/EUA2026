@@ -1,0 +1,59 @@
+﻿@model FrontAssistanceTravelers.WebTravel.Models.VMLogin;
+@{
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+<div class="page-wrapper">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-12">
+                <div class="login-card">
+                    <div>
+                        <div><a class="logo" asp-controller="Dashboard" asp-action="Index"><img class="img-fluid for-light" src="~/assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-dark" src="~/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
+                        <div class="login-main">
+                            <form class="theme-form" asp-controller="Autenticacion" asp-action="ReseteoAcceso" method="post">
+                                <h4>Restablecer contraseña</h4>
+                                <div class="form-group">
+                                    <label class="col-form-label">Nueva contraseña</label>
+                                    <div class="form-input position-relative">
+                                        <input class="form-control" type="password" asp-for="inpAccesoPassword" required="" placeholder="*********">
+                                        <div class="show-hide"><span class="show"></span></div>
+                                        @Html.ValidationMessageFor(model => model.inpAccesoPassword, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Repita contraseña</label>
+                                    <input class="form-control" type="password" asp-for="inpAccesoRepetirPassword" required="" placeholder="*********">
+                                    @Html.ValidationMessageFor(model => model.inpAccesoRepetirPassword, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button class="btn btn-primary btn-block w-100" type="submit">Enviar </button>
+                                </div>
+                                @if (ViewData["ValidarError"] != null)
+                                {
+                                    <div class="alert alert-danger dark alert-dismissible fade show" role="alert">
+                                        @ViewData["ValidarError"]
+                                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                }
+                                @if (ViewData["ValidarOK"] != null)
+                                {
+                                    <div class="alert alert-success dark alert-dismissible fade show" role="alert">
+                                        @ViewData["ValidarOK"]
+                                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Script {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -523,7 +523,7 @@ async function AbrirModal(id) {
         } else {
             const elEntidad = await getAgencia(id, -1, 0, 0, '', '');
             if (elEntidad.length > 0) {
-                debugger;
+                //debugger;
                 idEntidad = id;
                 document.getElementById('mdchkCambiaPwd').removeAttribute("disabled");
                 document.getElementById('mdtxtPass').setAttribute("disabled", "disabled");
@@ -679,6 +679,10 @@ const ProcesarEntidad = async () => {
     const valorelcboProm = await $("#mdselPromotor option:selected").val();
     const valorelcboPais = await $("#mdSelPaisAgencia option:selected").val();
     const valorelcboDistrito = await $("#mdselDistDire option:selected").val();
+    const elchkVip = document.getElementById("mdchkVIP");
+
+    const eltxtEjecutivoCobrador = await $("#mdSelEjecutivoCobrador option:selected").val();
+
     let valorAgenciaUbigeoId = 0;
     let valorCredito = 0;
 
@@ -696,6 +700,11 @@ const ProcesarEntidad = async () => {
     let cambioPssCheck = 0;
     if (elchkCambioPass.checked == true) {
         cambioPssCheck = 1
+    }
+
+    let valorVipCheck = 0;
+    if (elchkVip.checked == true) {
+        valorVipCheck = 1
     }
 
     if (valorelcboDistrito == "") {
@@ -738,7 +747,9 @@ const ProcesarEntidad = async () => {
         agenciaYcoord: 0,
         agenciaUbigeoId: valorAgenciaUbigeoId,
         agenciaObservacionCobranzas: eltxtCobranza.value,
-        agencia_ActualizarContrasena: cambioPssCheck
+        agencia_ActualizarContrasena: cambioPssCheck,
+        agenciaVip: valorVipCheck,
+        agenciaEjecutivoCobrador: parseInt(eltxtEjecutivoCobrador)
     };
     console.log(dataEnviar);
     const resultado = await postProcesar(dataEnviar);

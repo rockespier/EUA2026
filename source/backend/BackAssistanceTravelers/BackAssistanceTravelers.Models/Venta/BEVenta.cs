@@ -52,6 +52,7 @@ namespace BackAssistanceTravelers.Models.Venta
 		public string? ventaAgenciaCorreo { get; set; }
 		public string? ventaAgenciaRUC { get; set; }
 		public string? ventaAgenciaIdExterno { get; set; }
+		public int ventaAgenciaVip { get; set; }
 		public string? ventaPagoFecha { get; set; }
 		public string? ventaPagoDocumento { get; set; }
 		public string? ventaCupon { get; set; }

@@ -2524,6 +2524,7 @@ async function CargarTodo() {
         drawCallback: function (settings) {
             var api = this.api();
             var rows = api.rows({ page: 'current' }).nodes();
+            var rowsData = api.rows({ page: 'current' }).data();
             var last = null;
             var storedIndexArray = [];
             api.column(groupColumn, { page: 'current' })
@@ -2531,11 +2532,13 @@ async function CargarTodo() {
                 .each(function (group, i) {
                     if (last !== group) {
                         storedIndexArray.push(i);
+                        var esAgenciaVip = rowsData[i] && rowsData[i].ventaAgenciaVip == 1;
+                        var iconoVip = esAgenciaVip ? '<i class="fa fa-star font-warning" title="Agencia VIP"></i> ' : '';
                         $(rows)
                             .eq(i)
                             .before(
                                 '<tr class="group"><td colspan="20">' +
-                                group +
+                                iconoVip + group +
                                 ' (<span class="group-count"></span>) </td></tr>'
                             );
 

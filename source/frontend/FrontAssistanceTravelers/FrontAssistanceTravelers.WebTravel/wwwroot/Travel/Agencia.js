@@ -80,13 +80,21 @@ async function CargarCombos() {
     const elcomboTipo4 = await getPais(paisFiltro, 1);
     let cantElementos04 = elcomboTipo4.length;
     if (cantElementos04 > 0) {
-        $('#mdSelPais').append($('<option/>').attr("value", "").text('---Seleccione---'));       
+        $('#mdSelPais').append($('<option/>').attr("value", "").text('---Seleccione---'));
         for (const cboobj of elcomboTipo4) {
             const valorId = cboobj.paisId;
             const valorNombre = cboobj.paisNombre;
             $('#mdSelPais').append($('<option/>').attr("value", valorId).text(valorNombre));
-        }        
+        }
         $("#mdSelPais").val(menuPaisId);
+
+        $('#mdSelPaisAgencia').append($('<option/>').attr("value", "").text('---Seleccione---'));
+        for (const cboobj of elcomboTipo4) {
+            const valorId = cboobj.paisId;
+            const valorNombre = cboobj.paisNombre;
+            $('#mdSelPaisAgencia').append($('<option/>').attr("value", valorId).text(valorNombre));
+        }
+        $("#mdSelPaisAgencia").val(menuPaisId);
     }
 
     //const PaisSelId = await $("#mdSelPais option:selected").val();  
@@ -178,6 +186,41 @@ async function CargarCombos() {
 async function BuscarLista() {
     CargarTodo();
 }
+
+async function cargarPromotorDistritoAgencia(paisId) {
+    const elcomboPromotor = await getPromotoresPais(parseInt(menuUserId), paisId);
+    $('#mdselPromotor').empty();
+    if (elcomboPromotor != undefined) {
+        if (elcomboPromotor.length > 0) {
+            $('#mdselPromotor').append($('<option/>').attr("value", "").text('---Seleccione---'));
+            for (const cboobj of elcomboPromotor) {
+                const valorId = cboobj.usuarioId;
+                const valorNombre = cboobj.usuarioNombre;
+                $('#mdselPromotor').append($('<option/>').attr("value", valorId).text(valorNombre));
+            }
+        }
+    }
+
+    const elcomboDistrito = await getUbigeo(0, paisId, -1);
+    $('#mdselDistDire').empty();
+    if (elcomboDistrito !== undefined) {
+        if (elcomboDistrito.length > 0) {
+            $('#mdselDistDire').append($('<option/>').attr("value", "").text('---Seleccione---'));
+            for (const cboobj of elcomboDistrito) {
+                const valorId = cboobj.ubigeoId;
+                const valorNombre = cboobj.ubigeoDistrito;
+                $('#mdselDistDire').append($('<option/>').attr("value", valorId).text(valorNombre));
+            }
+        }
+    }
+}
+
+$('#mdSelPaisAgencia').change(async function () {
+    const valorPaisId = $(this).val();
+    if (valorPaisId !== undefined && valorPaisId !== null && valorPaisId !== '') {
+        await cargarPromotorDistritoAgencia(parseInt(valorPaisId));
+    }
+});
 
 
 
@@ -410,7 +453,8 @@ let elvalidar = $("#" + nombreFormulario).validate({
             minlength: 3,
             maxlength: 250,
         },
-        mdselPromotor: "required",        
+        mdselPromotor: "required",
+        mdSelPaisAgencia: "required",
     },
     messages: {
         mdtxtNombreCompleto: {
@@ -419,6 +463,7 @@ let elvalidar = $("#" + nombreFormulario).validate({
             maxlength: "No debe pasar de los 250 caracteres.",
         },
         mdselPromotor: "Por favor, seleccione el promotor.",
+        mdSelPaisAgencia: "Por favor, seleccione el país.",
     },
     errorElement: "em",
     errorPlacement: function (error, element) {
@@ -471,6 +516,8 @@ async function AbrirModal(id) {
         if (id == 0) {
             eltitulo.innerHTML = "Nuevo " + nombreEntidad;
             idEntidad = 0;
+            document.getElementById("mdSelPaisAgencia").value = menuPaisId;
+            await cargarPromotorDistritoAgencia(menuPaisId);
             $('#' + nombreModal).modal('show');
             return false;
         } else {
@@ -483,6 +530,10 @@ async function AbrirModal(id) {
                 document.getElementById('mdtxtPassVal').setAttribute("disabled", "disabled");
                 eltitulo.innerHTML = "Actualizar " + nombreEntidad;
                 document.getElementById("mdtxtNombreCompleto").value = elEntidad[0].agenciaNombre;
+
+                document.getElementById("mdSelPaisAgencia").value = elEntidad[0].agenciaPaisId;
+                await cargarPromotorDistritoAgencia(elEntidad[0].agenciaPaisId);
+
                 if (elEntidad[0].agenciaPromotorId !== null && elEntidad[0].agenciaPromotorId !== undefined && elEntidad[0].agenciaPromotorId !== 0) {
                     document.getElementById('mdselPromotor').value = elEntidad[0].agenciaPromotorId;
                 }
@@ -626,7 +677,7 @@ const ProcesarEntidad = async () => {
     const eltxtLogin = document.getElementById("mdtxtLogin");
       
     const valorelcboProm = await $("#mdselPromotor option:selected").val();
-    const valorelcboPais = await $("#mdSelPais option:selected").val();
+    const valorelcboPais = await $("#mdSelPaisAgencia option:selected").val();
     const valorelcboDistrito = await $("#mdselDistDire option:selected").val();
     let valorAgenciaUbigeoId = 0;
     let valorCredito = 0;

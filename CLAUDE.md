@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This repo hosts **EuroAmerican Assistance**, a travel-insurance sales & operations platform (agencies, policies/"ventas", quoting, billing/"cobranza", commissions/"liquidacion"). It contains two parallel systems:
 
 - **`source/`** — the active .NET 8 rewrite. This is where new work happens.
-- **`documentacion/`** — planning docs (Word).
+- **`documentacion/`** — planning docs (currently empty).
 
 All application/domain text (models, routes, UI) is in **Spanish** — keep new code consistent with that (e.g. `Venta`, `Solicitud`, `Cobranza`, `Liquidacion`, `Agencia`, `Pasajero`, `Promocion`).
 
@@ -32,6 +32,11 @@ source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln
 - **Auth flow**: frontend `AutenticacionController.Acceso` POSTs credentials to the API (`accesos/token`, `accesos/Login`), gets a JWT + user info back, then mints its own cookie (`CookieAuthenticationDefaults`) with claims copied from the API response (`IdUsuario`, `IdPais`, `IdAgenciaUsuario`, the raw JWT under claim `Token`, etc.). Frontend→API calls that need auth attach that stored JWT as a Bearer token.
 - View models in the frontend are prefixed `VM` (e.g. `VMLogin`); backend DTOs are prefixed `BE`.
 - Config secrets (DB connection string, JWT signing key, SMTP) live in `appsettings*.json` per project — no secrets manager is in use. Be careful about not weakening/removing the `TrustServerCertificate`/CORS/JWT settings in `Program.cs` without being asked.
+- The frontend has a `package.json`/`node_modules` (only `acorn`/`acorn-walk` as devDeps, no bundler) — its `npm test` script is a placeholder that always fails; there's no real JS build step, consistent with the one-file-per-screen static JS under `wwwroot/Travel/`.
+
+## Coding style
+
+Follow `.editorconfig`: UTF-8, LF endings, final newline, 4-space indent for C# (2 spaces for JSON/YAML/Markdown). Use `BE` prefix for backend entities, `VM` for frontend view models, `I*Repository` for repository interfaces, and keep domain/UI terms in Spanish. Commits use short, imperative Spanish summaries (e.g. `agregar telefono al listado de agencias`), scoped to one change.
 
 ## Build & run
 
@@ -53,6 +58,8 @@ There are **no automated test projects** in the solution (CI's `dotnet test` ste
 
 ## Deployment
 
-GitHub Actions workflows (`.github/workflows/deploy-back-iis.yml`, `deploy-front-iis.yml`) are `workflow_dispatch`-only, run on a **self-hosted Windows runner**, and deploy straight to IIS: stop app pool → zip-backup current deployment (keeps last 5) → `dotnet publish` → copy to `C:\inetpub\wwwroot\...` → start app pool → poll the public URL. Backend goes to `webapi.euroamericanassistance.com`, frontend to `sistema.euroamericanassistance.com`. These are manually triggered, not on every push — don't assume merging to `master` deploys anything.
+GitHub Actions workflows (`.github/workflows/deploy-back-iis.yml`, `deploy-front-iis.yml`) are `workflow_dispatch`-only, run on a **self-hosted Windows runner**, and deploy straight to IIS: stop app pool → zip-backup current deployment (keeps last 5) → `dotnet publish` → copy to `C:\inetpub\wwwroot\...` → start app pool → poll the public URL. Backend goes to `webapi.euroamericanassistance.com`, frontend to `sistema.euroamericanassistance.com`. These have no push/branch trigger at all — don't assume merging to `main` deploys anything.
 
-`.github/workflows/copilot-code-review-back.yml` / `-front.yml` run a scheduled Copilot issue-suggestion job against `source/backend` and `source/frontend` respectively (monthly cron + manual dispatch), separate from PR review.
+`.github/workflows/copilot-code-review-back.yml` / `-front.yml` run a scheduled Copilot issue-suggestion job against `source/backend` and `source/frontend` respectively (monthly cron + manual dispatch), separate from PR review. `.github/workflows/validate-issue-ready.yml` validates issues on label events.
+
+`.github/scripts/` holds one-off `gh`-CLI PowerShell scripts for repo/project administration (not part of build/deploy): `create-project.ps1` and `create-labels.ps1` set up a GitHub Project/labels for `rockespier/EUA2026`, `transfer-issues.ps1` copies issues in from `rtres-net/AssistanceTravelers`. `readme.txt` there notes you need `gh auth refresh -s project,read:project` first.

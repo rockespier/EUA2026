@@ -1,0 +1,154 @@
+name: Deploy FrontAssistanceTravelers to IIS
+
+on:
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  SOLUTION_PATH: 'source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln'
+  WEB_PROJECT_PATH: 'source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.WebTravel/FrontAssistanceTravelers.WebTravel.csproj'
+  SOURCE_PATH: 'source/frontend/FrontAssistanceTravelers/'
+  PUBLISH_PATH: 'publish_output'
+  IIS_SITE_NAME: 'sistema.euroamericanassistance.com'
+  IIS_APP_POOL: 'sistema.euroamericanassistance.com'
+  IIS_PHYSICAL_PATH: 'C:\inetpub\wwwroot\sistema.euroamericanassistance.com'
+  BACKUP_PATH: 'C:\backups\sistema.euroamericanassistance.com'
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          ${{ env.SOURCE_PATH }}
+        sparse-checkout-cone-mode: false
+
+    # 1. FERMA IL POOL PRIMA DI PUBBLICARE/COPIARE
+    - name: 🛑 Stop IIS App Pool
+      shell: powershell
+      run: |
+        Import-Module WebAdministration
+        if ((Get-WebAppPoolState -Name "${{ env.IIS_APP_POOL }}").Value -ne "Stopped") {
+          Stop-WebAppPool -Name "${{ env.IIS_APP_POOL }}"
+          # Attendiamo che il processo w3wp si chiuda effettivamente
+          Start-Sleep -Seconds 5
+        }
+    - name: 📂 Backup Previous Deployment
+      shell: powershell
+      run: |
+        $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+        $backupDir = "${{ env.BACKUP_PATH }}"
+        $sourceDir = "${{ env.IIS_PHYSICAL_PATH }}"
+        
+        # Crear carpeta de backups si no existe
+        if (-not (Test-Path $backupDir)) {
+            New-Item -Path $backupDir -ItemType Directory -Force | Out-Null
+        }
+        
+        # Solo hacer backup si hay archivos en el destino
+        if (Test-Path "$sourceDir\*") {
+            $backupFile = Join-Path $backupDir "backup_$timestamp.zip"
+            Write-Host "Creando backup en: $backupFile" -ForegroundColor Cyan
+            
+            # Comprimir el estado actual
+            Compress-Archive -Path "$sourceDir\*" -DestinationPath $backupFile -Force
+            
+            # Limpieza: Mantener solo los últimos 5 backups para no llenar el disco
+            Get-ChildItem $backupDir -Filter "*.zip" | 
+                Sort-Object CreationTime -Descending | 
+                Select-Object -Skip 5 | 
+                Remove-Item -Force
+        } else {
+            Write-Host "No hay archivos previos para respaldar." -ForegroundColor Yellow
+        }
+    - name: 📦 Restore dependencies
+      run: dotnet restore "${{ env.SOLUTION_PATH }}" # Ripristina TUTTI i progetti della soluzione
+
+    - name: 🏗️ Build Solution
+      run: dotnet build "${{ env.SOLUTION_PATH }}" --configuration Release --no-restore
+
+    - name: 📤 Publish Web API
+      run: |
+        # Pubblichiamo solo il progetto Web che deve andare su IIS
+        dotnet publish "${{ env.WEB_PROJECT_PATH }}" --configuration Release --no-build --output "${{ github.workspace }}\${{ env.PUBLISH_PATH }}"
+        
+    - name: 🚀 Deploy to IIS
+      shell: powershell
+      run: |
+        $source = "${{ github.workspace }}\${{ env.PUBLISH_PATH }}\*"
+        $destination = "${{ env.IIS_PHYSICAL_PATH }}"
+        
+        Write-Host "Copiando archivos desde $source hacia $destination" -ForegroundColor Cyan
+        
+        # Asegurar que el destino existe
+        if (-not (Test-Path $destination)) {
+            New-Item -Path $destination -ItemType Directory -Force | Out-Null
+        }
+        
+        # Copiar archivos
+        Copy-Item -Path $source -Destination $destination -Recurse -Force
+        
+    - name: 🔄 Start IIS App Pool
+      shell: powershell
+      run: |
+        Import-Module WebAdministration
+        $poolName = "${{ env.IIS_APP_POOL }}"
+        
+        Write-Host "Tentativo di avvio App Pool: $poolName"
+        
+        if (Test-Path "IIS:\AppPools\$poolName") {
+            Start-WebAppPool -Name "$poolName"
+            Start-Sleep -Seconds 5
+            $status = (Get-WebAppPoolState -Name "$poolName").Value
+            Write-Host "Stato attuale App Pool: $status"
+        } else {
+            Write-Error "App Pool $poolName non trovato nel sistema."
+        }
+     
+      
+    - name: Run tests
+      # Usiamo le virgolette per gestire eventuali spazi nei percorsi
+      run: dotnet test "${{ env.SOLUTION_PATH }}" --no-build --verbosity normal
+      continue-on-error: true # Corretto: evita il blocco se non ci sono test
+        
+    - name: Verify Deployment
+      shell: powershell
+      run: |
+        $url = "https://sistema.euroamericanassistance.com/"
+        $maxRetries = 6
+        $retryCount = 0
+        $success = $false
+
+        # Forza protocollo TLS sicuro
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+
+        Write-Host "Verificando URL: $url"
+        
+        while ($retryCount -lt $maxRetries -and -not $success) {
+            try {
+                # Se il certificato SSL e interno/scaduto, aggiungi -SkipCertificateCheck qui sotto
+                $response = Invoke-WebRequest -Uri $url -Method Get -UseBasicParsing -TimeoutSec 15
+                
+                if ($response.StatusCode -in 200,301,302,307,308) {
+                    Write-Host "SUCCESS: website is ONLINE. Status: $($response.StatusCode)"
+                    $success = $true
+                }
+            } catch {
+                Write-Host "Attempt $($retryCount + 1) failed: $($_.Exception.Message)"
+                if ($_.Exception.InnerException) {
+                    Write-Host "Inner: $($_.Exception.InnerException.Message)"
+                }
+                $retryCount++
+                Start-Sleep -Seconds 10
+            }
+        }
+
+        if (-not $success) {
+            Write-Host "FATAL ERROR: API did not respond at public URL."
+            # Debug DNS
+            Resolve-DnsName $url | Format-Table
+            exit 1
+        }

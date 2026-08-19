@@ -1,0 +1,15 @@
+# Propietario por defecto
+* @rockespier
+
+# Backend
+/source/backend/ @rockespier
+
+# Frontend
+/source/frontend/ @rockespier
+
+# GitHub Actions y configuración crítica
+/.github/ @rockespier
+
+# Configuración de agentes
+/AGENTS.md @rockespier
+/.codex/ @rockespier

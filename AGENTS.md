@@ -11,8 +11,6 @@ access, and `UnitOfWork` composes repositories. The MVC frontend lives in
 view models (`VM*`) are in `FrontAssistanceTravelers.WebTravel`, with page
 scripts under `wwwroot/Travel/`.
 
-`Assistance Travelers/` is the legacy VB.NET/WebForms system; edit it only for
-explicit legacy maintenance. `Publicado/` is publish output, not source.
 
 ## Build, Test, and Development Commands
 

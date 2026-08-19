@@ -4,11 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository overview
 
-This repo hosts **Assistance Travelers / EuroAmerican Assistance**, a travel-insurance sales & operations platform (agencies, policies/"ventas", quoting, billing/"cobranza", commissions/"liquidacion"). It contains two parallel systems:
+This repo hosts **EuroAmerican Assistance**, a travel-insurance sales & operations platform (agencies, policies/"ventas", quoting, billing/"cobranza", commissions/"liquidacion"). It contains two parallel systems:
 
 - **`source/`** — the active .NET 8 rewrite. This is where new work happens.
-- **`Assistance Travelers/`** (repo root) — the legacy VB.NET WebForms system (`.aspx`/`.aspx.vb`) and its WCF/WebAPI services (`WS/`, `WS_EUA/`, `WcfEUA/`). Still deployed and occasionally patched, but not where new features go unless explicitly asked.
-- **`Publicado/`** — a precompiled publish output of the legacy public quoting site, not source of truth.
 - **`documentacion/`** — planning docs (Word).
 
 All application/domain text (models, routes, UI) is in **Spanish** — keep new code consistent with that (e.g. `Venta`, `Solicitud`, `Cobranza`, `Liquidacion`, `Agencia`, `Pasajero`, `Promocion`).

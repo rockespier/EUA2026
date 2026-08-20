@@ -1,4 +1,4 @@
-﻿using BackAssistanceTravelers.Models.Cobranza;
+using BackAssistanceTravelers.Models.Cobranza;
 using BackAssistanceTravelers.Models.Error;
 using BackAssistanceTravelers.Models.Producto;
 using BackAssistanceTravelers.Repositories.Travel;
@@ -72,7 +72,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pPRODUCTO_PromocionActivo", int_pProductoPromocionActivo);
                 parameters.Add("@pPRODUCTO_AgenciaID", int_pProductoAgenciaID);
 
-                var result = await connection.QueryAsync<BEProducto>("Producto_Obtener", parameters,
+                var result = await connection.QueryAsync<BEProducto>("Producto_Obtener_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
                 return result;
             }

@@ -139,6 +139,18 @@ async function cargarCombosSolictud() {
         }
     }
 }
+async function cargarComboProductoCambio(agenciaId) {
+    $('#mdventextModProNewProductoSolicitud').empty();
+    $('#mdventextModProNewProductoSolicitud').append($('<option/>').attr("value", "").text('---Seleccione---'));
+    const elcomboProductoCambio = await getProducto(0, 1, 0, agenciaId);
+    if (elcomboProductoCambio !== undefined) {
+        for (const cboobj of elcomboProductoCambio) {
+            const valorId = cboobj.productoId;
+            const valorNombre = cboobj.productoNombre;
+            $('#mdventextModProNewProductoSolicitud').append($('<option/>').attr("value", valorId).text(valorNombre));
+        }
+    }
+}
 $('#mdvenSelTrasVentAgenciaSolicitud').change(async function () {
     const strIdAgencia = $(this).val();
     const elcomboAgenciaUsuarios = await getAgenciaUsuario(strIdAgencia, 0, 1);
@@ -1718,6 +1730,7 @@ $('#mdvenSelTipoSolicitud').change(async function () {
             document.getElementById('mdvenTxtModProEdadSolicitudOri').value = laVenta.ventaClienteEdad;
             document.getElementById('mdvenFecModProFechaInicialSolicitudOri').value = formatearFechaString(dtfechaIni_v1);
             document.getElementById('mdvenFecModProFechaFinalSolicitudOri').value = formatearFechaString(dtfechaFin_v1);
+            await cargarComboProductoCambio(laVenta.ventaUsuarioAgenciaId);
             limpiarTipoSolicitud_10();
             btGuardarSolicitud.removeAttribute("disabled");
             btGuardarSolicitud.onclick = clickValidarProducto;

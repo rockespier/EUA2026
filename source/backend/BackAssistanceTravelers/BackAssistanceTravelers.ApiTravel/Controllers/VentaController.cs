@@ -37,12 +37,18 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
         public async Task<IActionResult> getObtenerVentas(string? pOrigen = "", DateTime pVentaIngresoInicio = default, DateTime pVentaIngresoFin = default,
                     int pVentaID = 0, int pUsuarioId = 0, string? pEstadoId = "", string? pSituacionId = "", int pAgenciaId = 0,
                     int pAgenciaUsuarioId = 0, string? pClienteNombres = "", string? pClienteApellidos = "", int pPaisId = 0,
-                    string? pCodigoExterno = "", string? pTipoDoc = "", string? pNumeDoc = "")
+                    string? pCodigoExterno = "", string? pTipoDoc = "", string? pNumeDoc = "", int pPromotorId = 0)
         {
             try
             {
                 var data = await unitOfWork.Ventas.Ventas_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId,
                                                             pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pTipoDoc, pNumeDoc);
+                if (pPromotorId > 0)
+                {
+                    var agenciasPromotor = await unitOfWork.Agencias.Agencia_Obtener(0, 0, pPromotorId, -1, pPaisId);
+                    var agenciaIdsPromotor = agenciasPromotor.Select(a => a.agenciaId).ToHashSet();
+                    data = data.Where(v => agenciaIdsPromotor.Contains(v.ventaUsuarioAgenciaId));
+                }
                 if (data == null || !data.Any())
                 {
                     BEErrorApi objError = new BEErrorApi();

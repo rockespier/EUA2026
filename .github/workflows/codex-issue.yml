@@ -1,0 +1,277 @@
+name: Codex Issue Agent
+
+on:
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: codex-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  codex:
+    name: Implement issue with Codex
+
+    # Solo comentarios en Issues, no comentarios de PR.
+    # Y únicamente usuarios con acceso al repositorio.
+    if: |
+      github.event.issue.pull_request == null &&
+      contains(github.event.comment.body, '@codex implement') &&
+      (
+        github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR'
+      )
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    env:
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_TITLE: ${{ github.event.issue.title }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+      USER_INSTRUCTION: ${{ github.event.comment.body }}
+      BRANCH_NAME: codex/issue-${{ github.event.issue.number }}
+
+    steps:
+
+      # ---------------------------------------------------------
+      # CHECKOUT
+      # ---------------------------------------------------------
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # ---------------------------------------------------------
+      # PREPARAR RAMA
+      # ---------------------------------------------------------
+
+      - name: Configure Git
+        run: |
+          git config user.name "codex-agent"
+          git config user.email "codex-agent@users.noreply.github.com"
+
+      - name: Create Codex branch
+        shell: bash
+        run: |
+          git fetch origin main
+
+          if git ls-remote --exit-code --heads origin "$BRANCH_NAME"; then
+            echo "Branch $BRANCH_NAME already exists."
+            git fetch origin "$BRANCH_NAME"
+            git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
+          else
+            echo "Creating $BRANCH_NAME from main."
+            git checkout -b "$BRANCH_NAME" origin/main
+          fi
+
+      # ---------------------------------------------------------
+      # CODEX
+      # ---------------------------------------------------------
+
+      - name: Implement issue with Codex
+        id: codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+
+          # Permite modificar únicamente el workspace.
+          permission-profile: ":workspace"
+
+          # Mantiene Codex sin sudo en el runner.
+          safety-strategy: drop-sudo
+
+          prompt: |
+            You are an autonomous senior software engineer working on
+            repository ${{ github.repository }}.
+
+            Implement GitHub Issue #${{ github.event.issue.number }}.
+
+            ISSUE TITLE:
+            ${{ github.event.issue.title }}
+
+            ISSUE DESCRIPTION:
+            ${{ github.event.issue.body }}
+
+            USER COMMAND:
+            ${{ github.event.comment.body }}
+
+            Repository structure:
+
+            Backend:
+            source/backend/
+
+            Frontend:
+            source/frontend/
+
+            IMPORTANT INSTRUCTIONS:
+
+            1. Read AGENTS.md before making any change.
+
+            2. Understand the issue completely before modifying code.
+
+            3. Inspect the existing architecture and follow the current
+               patterns and conventions.
+
+            4. Implement the smallest correct solution.
+
+            5. Do not modify unrelated files.
+
+            6. Do not modify GitHub workflows unless the issue explicitly
+               requires it.
+
+            7. Do not commit or push anything yourself.
+               GitHub Actions will handle Git operations.
+
+            8. Do not merge anything.
+
+            9. If backend code is affected, inspect:
+               source/backend/
+
+            10. If frontend code is affected, inspect:
+                source/frontend/
+
+            11. Preserve backwards compatibility whenever possible.
+
+            12. Run appropriate tests/build checks when possible.
+
+            13. If tests cannot be executed, explain why in your final
+                response.
+
+            14. At the end provide a concise summary containing:
+
+                - Root cause / requirement
+                - Files modified
+                - Implementation performed
+                - Tests or validations performed
+                - Any risks or follow-up work
+
+      # ---------------------------------------------------------
+      # DETECTAR CAMBIOS
+      # ---------------------------------------------------------
+
+      - name: Detect changes
+        id: changes
+        shell: bash
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ---------------------------------------------------------
+      # COMMIT
+      # ---------------------------------------------------------
+
+      - name: Commit changes
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          git add -A
+
+          git commit \
+            -m "fix: implement issue #${ISSUE_NUMBER}"
+
+          git push -u origin "$BRANCH_NAME"
+
+      # ---------------------------------------------------------
+      # CREAR PR
+      # ---------------------------------------------------------
+
+      - name: Create Pull Request
+        id: pr
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODEX_RESULT: ${{ steps.codex.outputs.final-message }}
+        shell: bash
+        run: |
+          EXISTING_PR=$(gh pr list \
+            --head "$BRANCH_NAME" \
+            --base main \
+            --state open \
+            --json url \
+            --jq '.[0].url')
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Existing PR: $EXISTING_PR"
+            echo "url=$EXISTING_PR" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          cat > /tmp/pr-body.md <<EOF
+          ## 🤖 Implementado por Codex
+
+          Resolves #${ISSUE_NUMBER}
+
+          ### Resultado de Codex
+
+          ${CODEX_RESULT}
+
+          ---
+
+          Este Pull Request fue generado automáticamente a partir de:
+
+          \`@codex implement\`
+
+          **Requiere revisión humana antes del merge.**
+          EOF
+
+          PR_URL=$(gh pr create \
+            --base main \
+            --head "$BRANCH_NAME" \
+            --title "Fix #${ISSUE_NUMBER}: ${ISSUE_TITLE}" \
+            --body-file /tmp/pr-body.md)
+
+          echo "url=$PR_URL" >> "$GITHUB_OUTPUT"
+
+      # ---------------------------------------------------------
+      # COMENTAR EN ISSUE
+      # ---------------------------------------------------------
+
+      - name: Comment result on issue
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ steps.pr.outputs.url }}
+        shell: bash
+        run: |
+          gh issue comment "$ISSUE_NUMBER" \
+            --body "🤖 **Codex terminó la implementación.**
+
+          Se creó una rama independiente:
+
+          \`$BRANCH_NAME\`
+
+          Pull Request:
+
+          $PR_URL
+
+          La solución no ha sido fusionada automáticamente. Revisa el PR antes de hacer merge."
+
+      # ---------------------------------------------------------
+      # SIN CAMBIOS
+      # ---------------------------------------------------------
+
+      - name: Comment when no changes were produced
+        if: steps.changes.outputs.changed == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODEX_RESULT: ${{ steps.codex.outputs.final-message }}
+        shell: bash
+        run: |
+          cat > /tmp/comment.md <<EOF
+          🤖 **Codex analizó la issue pero no generó cambios.**
+
+          ${CODEX_RESULT}
+          EOF
+
+          gh issue comment "$ISSUE_NUMBER" \
+            --body-file /tmp/comment.md

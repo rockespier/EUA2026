@@ -109,6 +109,18 @@ async function cargarCombosSolictud() {
                 }
             }
         }
+        const elcomboPromotor = await getPromotoresPais(menuUserId, 0);
+        if (elcomboPromotor !== undefined) {
+            let cantElementos13 = elcomboPromotor.length;
+            if (cantElementos13 > 0) {
+                $('#mdvenSelPromoSearch').append($('<option/>').attr("value", "").text('---Seleccione---'));
+                for (const cboobj of elcomboPromotor) {
+                    const valorId = cboobj.usuarioId;
+                    const valorNombre = cboobj.usuarioNombre;
+                    $('#mdvenSelPromoSearch').append($('<option/>').attr("value", valorId).text(valorNombre));
+                }
+            }
+        }
         if (elcomboAgencia !== undefined) {
             let cantElementos05 = elcomboAgencia.length;
             if (cantElementos05 > 0) {
@@ -2348,21 +2360,19 @@ $('#mdvenSelPaisSearch').change(async function () {
             });
         }
     }
-    /*
-    const elcomboTipo = await getPromotoresPais(menuUserId, strIdPais);
+    const elcomboTipo = await getPromotoresPais(menuUserId, strIdPais === "" ? 0 : strIdPais);
+    $('#mdvenSelPromoSearch').empty();
     if (elcomboTipo != undefined) {
         let cantElementos11 = elcomboTipo.length;
         if (cantElementos11 > 0) {
-            $('#mdvenselPromotorSearch').empty();
-            $('#mdvenselPromotorSearch').append($('<option/>').attr("value", "").text('---Seleccione---'));
+            $('#mdvenSelPromoSearch').append($('<option/>').attr("value", "").text('---Seleccione---'));
             for (const cboobj of elcomboTipo) {
                 const valorId = cboobj.usuarioId;
                 const valorNombre = cboobj.usuarioNombre;
-                $('#mdvenselPromotorSearch').append($('<option/>').attr("value", valorId).text(valorNombre));
+                $('#mdvenSelPromoSearch').append($('<option/>').attr("value", valorId).text(valorNombre));
             }
         }
     }
-    */
 });
 $('#mdvenSelAgenciaSearch').change(async function () {
     const AgenciaId = $(this).val();
@@ -2684,9 +2694,13 @@ async function CargarTodo() {
     let BusquedaCodPais = document.getElementById("mdvenSelPaisSearch").value;
     let BusquedaCodAgencia = localStorage.getItem("lsagenciaIdSel");
     let BusquedaCodAgenciaUsuario = document.getElementById("mdvenSelUsuarioSearch").value;
+    let BusquedaCodPromotor = document.getElementById("mdvenSelPromoSearch").value;
 
     if (BusquedaCodPais === "") {
         BusquedaCodPais = 0;
+    }
+    if (BusquedaCodPromotor === "") {
+        BusquedaCodPromotor = 0;
     }
     if (BusquedaCodAgencia === "" || BusquedaCodAgencia == null) {
         BusquedaCodAgencia = 0;
@@ -2718,7 +2732,7 @@ async function CargarTodo() {
     const BusquedaNumeDoc = document.getElementById("mdvenTxtDocumentoSearch").value;
 
 
-    const listadoVentas = await getVentas(menuelOrigen, CodigoBusqueda, dtfechaVigINI, dtfechaVigFIN, AgenciaId, BusquedaDesNombres, BusquedaDesApellidos, BusquedaCodEstado, BusquedaCodSituacion, BusquedaCodExterno, BusquedaCodPais, BusquedaCodAgencia, BusquedaCodAgenciaUsuario, BusquedaTipoDoc, BusquedaNumeDoc);
+    const listadoVentas = await getVentas(menuelOrigen, CodigoBusqueda, dtfechaVigINI, dtfechaVigFIN, AgenciaId, BusquedaDesNombres, BusquedaDesApellidos, BusquedaCodEstado, BusquedaCodSituacion, BusquedaCodExterno, BusquedaCodPais, BusquedaCodAgencia, BusquedaCodAgenciaUsuario, BusquedaTipoDoc, BusquedaNumeDoc, BusquedaCodPromotor);
     
     if (listadoVentas !== undefined) {
         if (listadoVentas.length > 0) {
@@ -2733,9 +2747,9 @@ async function CargarTodo() {
     }
     $("#cargar").hide();
 }
-async function getVentas(pOrigen, pIdVenta, pfechaIni, pfechaFin, pIdusuario, pNombres, pApellidos, pEstado, pSituacion, pCodExt, pPais, pAgencia, pUsuarioAgencia, pTipoDoc, pNumeDoc) {
+async function getVentas(pOrigen, pIdVenta, pfechaIni, pfechaFin, pIdusuario, pNombres, pApellidos, pEstado, pSituacion, pCodExt, pPais, pAgencia, pUsuarioAgencia, pTipoDoc, pNumeDoc, pPromotor) {
     const urlApiFecht = menuUrlApi + "Venta/VentasObtener";
-    const urlParametro = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin + "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion + "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres + "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pTipoDoc=" + pTipoDoc + "&pNumeDoc=" + pNumeDoc;
+    const urlParametro = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin + "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion + "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres + "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pTipoDoc=" + pTipoDoc + "&pNumeDoc=" + pNumeDoc + "&pPromotorId=" + (pPromotor || 0);
     //console.log(urlApiFecht + urlParametro);
     const response = await fetch(urlApiFecht + urlParametro, {
         method: 'GET',
@@ -2867,12 +2881,6 @@ async function AbrirModalConsulta(id) {
 
 }
 async function AbrirModalBusqueda() {
-    let BusquedaCodPais = document.getElementById("mdvenSelPaisSearch").value;
-
-    if (BusquedaCodPais === "") {
-        document.getElementById("mdvenSelPaisSearch").value = menuPaisId;
-    }
-
     let AgenciaId = 0;
     if (menuelOrigen !== 'U') {
         AgenciaId = menuelAgenciaUsuarioId;
@@ -2880,9 +2888,11 @@ async function AbrirModalBusqueda() {
     if (AgenciaId === 0) {
         $('#divVenSelPaisSearch').show();
         $('#divVenSelAgenciaSearch').show();
+        $('#divVenSelPromotorSearch').show();
     } else {
         $('#divVenSelPaisSearch').hide();
         $('#divVenSelAgenciaSearch').hide();
+        $('#divVenSelPromotorSearch').hide();
     }
     //localStorage.removeItem('lsagenciaIdSel');   
 
@@ -2898,6 +2908,7 @@ async function limpiarModalBuqueda() {
     document.getElementById("mdvenTxtNombresSearch").value = "";
     document.getElementById("mdvenTxtApellidosSearch").value = "";
     document.getElementById("mdvenSelPaisSearch").value = "";
+    document.getElementById("mdvenSelPromoSearch").value = "";
     document.getElementById("txtAgencia").value = "";
     document.getElementById("mdvenSelUsuarioSearch").value = "";
     document.getElementById("mdvenSelEstadoSearch").value = "";

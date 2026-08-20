@@ -22,6 +22,11 @@
 
 ## Pull requests
 
+- Before creating a pull request, always synchronize the working branch with the latest `main`.
+- Fetch the latest changes from `origin/main`.
+- Rebase the working branch onto `origin/main` when possible.
+- If rebasing is unsafe or causes conflicts, stop and report the conflict instead of force-pushing or resolving it automatically.
+- Never create a pull request from a branch that is known to be behind `main`.
 - Include `Closes #<issue>`.
 - Explain risks and testing.
 - Never claim tests passed unless they were executed successfully.

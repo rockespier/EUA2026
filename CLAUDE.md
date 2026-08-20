@@ -38,6 +38,29 @@ source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln
 
 Follow `.editorconfig`: UTF-8, LF endings, final newline, 4-space indent for C# (2 spaces for JSON/YAML/Markdown). Use `BE` prefix for backend entities, `VM` for frontend view models, `I*Repository` for repository interfaces, and keep domain/UI terms in Spanish. Commits use short, imperative Spanish summaries (e.g. `agregar telefono al listado de agencias`), scoped to one change.
 
+## Pull Request Workflow
+
+Before creating any pull request:
+
+1. Fetch the latest `main` branch:
+
+   git fetch origin main
+
+2. Synchronize the working branch with the latest `origin/main`.
+
+3. Prefer rebasing:
+
+   git rebase origin/main
+
+4. If conflicts occur:
+   - Do not force-push.
+   - Do not guess conflict resolutions.
+   - Stop and report the conflict.
+
+5. Only create the Pull Request after the branch is synchronized with the latest `main`.
+
+6. Never merge directly into `main`.
+
 ## Build & run
 
 Requires the .NET 8 SDK (`net8.0` target on all `source/` projects; CI workflows reference `7.0.x` for the SDK setup step but the actual TFM is 8.0 — use SDK 8 locally).

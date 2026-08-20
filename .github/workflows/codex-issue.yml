@@ -12,8 +12,6 @@ jobs:
   codex:
     name: Implement issue with Codex
 
-    # Solo comentarios en Issues, no comentarios de PR.
-    # Y únicamente usuarios con acceso al repositorio.
     if: |
       github.event.issue.pull_request == null &&
       contains(github.event.comment.body, '@codex implement') &&
@@ -33,26 +31,34 @@ jobs:
     env:
       ISSUE_NUMBER: ${{ github.event.issue.number }}
       ISSUE_TITLE: ${{ github.event.issue.title }}
-      ISSUE_BODY: ${{ github.event.issue.body }}
-      USER_INSTRUCTION: ${{ github.event.comment.body }}
       BRANCH_NAME: codex/issue-${{ github.event.issue.number }}
 
     steps:
 
-      # ---------------------------------------------------------
+      # =========================================================
       # CHECKOUT
-      # ---------------------------------------------------------
+      # =========================================================
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      # ---------------------------------------------------------
-      # PREPARAR RAMA
-      # ---------------------------------------------------------
+      # =========================================================
+      # .NET
+      # =========================================================
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      # =========================================================
+      # GIT
+      # =========================================================
 
       - name: Configure Git
+        shell: bash
         run: |
           git config user.name "codex-agent"
           git config user.email "codex-agent@users.noreply.github.com"
@@ -63,136 +69,299 @@ jobs:
           git fetch origin main
 
           if git ls-remote --exit-code --heads origin "$BRANCH_NAME"; then
+
             echo "Branch $BRANCH_NAME already exists."
+
             git fetch origin "$BRANCH_NAME"
-            git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
+
+            git checkout -B \
+              "$BRANCH_NAME" \
+              "origin/$BRANCH_NAME"
+
           else
+
             echo "Creating $BRANCH_NAME from main."
-            git checkout -b "$BRANCH_NAME" origin/main
+
+            git checkout \
+              -b "$BRANCH_NAME" \
+              origin/main
+
           fi
 
-      # ---------------------------------------------------------
+      # =========================================================
       # CODEX
-      # ---------------------------------------------------------
+      # =========================================================
 
       - name: Implement issue with Codex
         id: codex
         uses: openai/codex-action@v1
         with:
+
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
 
-          # Permite modificar únicamente el workspace.
           permission-profile: ":workspace"
 
-          # Mantiene Codex sin sudo en el runner.
           safety-strategy: drop-sudo
 
           prompt: |
-            You are an autonomous senior software engineer working on
-            repository ${{ github.repository }}.
+            You are an autonomous senior software engineer.
 
-            Implement GitHub Issue #${{ github.event.issue.number }}.
+            Repository:
+            ${{ github.repository }}
 
-            ISSUE TITLE:
+            Implement GitHub Issue:
+            #${{ github.event.issue.number }}
+
+            =====================================================
+            ISSUE TITLE
+            =====================================================
+
             ${{ github.event.issue.title }}
 
-            ISSUE DESCRIPTION:
+            =====================================================
+            ISSUE DESCRIPTION
+            =====================================================
+
             ${{ github.event.issue.body }}
 
-            USER COMMAND:
+            =====================================================
+            USER COMMAND
+            =====================================================
+
             ${{ github.event.comment.body }}
 
-            Repository structure:
+            =====================================================
+            REPOSITORY STRUCTURE
+            =====================================================
 
             Backend:
-            source/backend/
+
+            source/backend/BackAssistanceTravelers/
+
+            Solution:
+
+            source/backend/BackAssistanceTravelers/
+            BackAssistanceTravelers.sln
+
 
             Frontend:
-            source/frontend/
 
-            IMPORTANT INSTRUCTIONS:
+            source/frontend/FrontAssistanceTravelers/
 
-            1. Read AGENTS.md before making any change.
+            Solution:
+
+            source/frontend/FrontAssistanceTravelers/
+            FrontAssistanceTravelers.sln
+
+
+            Both applications currently target .NET 8.
+
+            =====================================================
+            INSTRUCTIONS
+            =====================================================
+
+            1. Read AGENTS.md before making changes.
 
             2. Understand the issue completely before modifying code.
 
-            3. Inspect the existing architecture and follow the current
-               patterns and conventions.
+            3. Inspect the existing implementation before proposing
+               a solution.
 
-            4. Implement the smallest correct solution.
+            4. Follow the existing architecture and coding conventions.
 
-            5. Do not modify unrelated files.
+            5. Implement the smallest correct solution.
 
-            6. Do not modify GitHub workflows unless the issue explicitly
-               requires it.
+            6. Do not modify unrelated files.
 
-            7. Do not commit or push anything yourself.
-               GitHub Actions will handle Git operations.
+            7. Do not modify GitHub Actions workflows unless explicitly
+               required by the issue.
 
-            8. Do not merge anything.
+            8. Do not commit.
 
-            9. If backend code is affected, inspect:
-               source/backend/
+            9. Do not push.
 
-            10. If frontend code is affected, inspect:
-                source/frontend/
+            10. Do not create Pull Requests.
 
-            11. Preserve backwards compatibility whenever possible.
+            11. Do not merge anything.
 
-            12. Run appropriate tests/build checks when possible.
+            GitHub Actions manages all Git operations.
 
-            13. If tests cannot be executed, explain why in your final
-                response.
+            =====================================================
+            BACKEND
+            =====================================================
 
-            14. At the end provide a concise summary containing:
+            Backend source:
 
-                - Root cause / requirement
-                - Files modified
-                - Implementation performed
-                - Tests or validations performed
-                - Any risks or follow-up work
+            source/backend/BackAssistanceTravelers/
 
-      # ---------------------------------------------------------
-      # DETECTAR CAMBIOS
-      # ---------------------------------------------------------
+            If backend changes are necessary:
 
-      - name: Detect changes
+            - inspect the complete backend architecture;
+            - preserve dependency boundaries;
+            - follow existing repository patterns;
+            - avoid unnecessary API contract changes.
+
+            =====================================================
+            FRONTEND
+            =====================================================
+
+            Frontend source:
+
+            source/frontend/FrontAssistanceTravelers/
+
+            This frontend is currently ASP.NET Core .NET 8,
+            not Angular.
+
+            Follow the existing ASP.NET Core architecture.
+
+            =====================================================
+            VALIDATION
+            =====================================================
+
+            You may inspect and validate the code.
+
+            GitHub Actions will independently perform the authoritative
+            build after your modifications.
+
+            =====================================================
+            FINAL RESPONSE
+            =====================================================
+
+            Return:
+
+            - Requirement / root cause
+            - Solution implemented
+            - Files modified
+            - Validation performed
+            - Risks
+            - Follow-up work if necessary
+
+      # =========================================================
+      # DETECTAR QUÉ CAMBIÓ
+      # =========================================================
+
+      - name: Detect changed areas
         id: changes
         shell: bash
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
 
-      # ---------------------------------------------------------
-      # COMMIT
-      # ---------------------------------------------------------
+          echo "Changed files:"
 
-      - name: Commit changes
-        if: steps.changes.outputs.changed == 'true'
+          git status --short
+
+          BACKEND_CHANGED=false
+          FRONTEND_CHANGED=false
+          ANY_CHANGED=false
+
+          while IFS= read -r file
+          do
+
+            [ -z "$file" ] && continue
+
+            ANY_CHANGED=true
+
+            case "$file" in
+
+              source/backend/*)
+                BACKEND_CHANGED=true
+                ;;
+
+              source/frontend/*)
+                FRONTEND_CHANGED=true
+                ;;
+
+            esac
+
+          done < <(
+            {
+              git diff --name-only
+              git diff --name-only --cached
+              git ls-files --others --exclude-standard
+            } | sort -u
+          )
+
+          echo "any=$ANY_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "backend=$BACKEND_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "frontend=$FRONTEND_CHANGED" >> "$GITHUB_OUTPUT"
+
+          echo "Any changes: $ANY_CHANGED"
+          echo "Backend changes: $BACKEND_CHANGED"
+          echo "Frontend changes: $FRONTEND_CHANGED"
+
+      # =========================================================
+      # RESTORE / BUILD BACKEND
+      # =========================================================
+
+      - name: Restore backend
+        if: steps.changes.outputs.backend == 'true'
         shell: bash
         run: |
+          dotnet restore \
+            source/backend/BackAssistanceTravelers/BackAssistanceTravelers.sln
+
+      - name: Build backend
+        if: steps.changes.outputs.backend == 'true'
+        shell: bash
+        run: |
+          dotnet build \
+            source/backend/BackAssistanceTravelers/BackAssistanceTravelers.sln \
+            --configuration Release \
+            --no-restore
+
+      # =========================================================
+      # RESTORE / BUILD FRONTEND
+      # =========================================================
+
+      - name: Restore frontend
+        if: steps.changes.outputs.frontend == 'true'
+        shell: bash
+        run: |
+          dotnet restore \
+            source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln
+
+      - name: Build frontend
+        if: steps.changes.outputs.frontend == 'true'
+        shell: bash
+        run: |
+          dotnet build \
+            source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln \
+            --configuration Release \
+            --no-restore
+
+      # =========================================================
+      # COMMIT
+      # =========================================================
+
+      - name: Commit changes
+        if: steps.changes.outputs.any == 'true'
+        shell: bash
+        run: |
+
           git add -A
 
           git commit \
             -m "fix: implement issue #${ISSUE_NUMBER}"
 
-          git push -u origin "$BRANCH_NAME"
+          git push \
+            -u origin \
+            "$BRANCH_NAME"
 
-      # ---------------------------------------------------------
-      # CREAR PR
-      # ---------------------------------------------------------
+      # =========================================================
+      # PULL REQUEST
+      # =========================================================
 
       - name: Create Pull Request
         id: pr
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.any == 'true'
+
         env:
           GH_TOKEN: ${{ github.token }}
           CODEX_RESULT: ${{ steps.codex.outputs.final-message }}
+
         shell: bash
+
         run: |
+
           EXISTING_PR=$(gh pr list \
             --head "$BRANCH_NAME" \
             --base main \
@@ -201,9 +370,14 @@ jobs:
             --jq '.[0].url')
 
           if [ -n "$EXISTING_PR" ]; then
+
             echo "Existing PR: $EXISTING_PR"
-            echo "url=$EXISTING_PR" >> "$GITHUB_OUTPUT"
+
+            echo "url=$EXISTING_PR" \
+              >> "$GITHUB_OUTPUT"
+
             exit 0
+
           fi
 
           cat > /tmp/pr-body.md <<EOF
@@ -211,17 +385,28 @@ jobs:
 
           Resolves #${ISSUE_NUMBER}
 
-          ### Resultado de Codex
+          ### Resultado
 
           ${CODEX_RESULT}
 
+          ### Validaciones automáticas
+
+          Backend modificado:
+          ${{ steps.changes.outputs.backend }}
+
+          Frontend modificado:
+          ${{ steps.changes.outputs.frontend }}
+
+          Los proyectos afectados fueron compilados automáticamente
+          antes de crear este Pull Request.
+
           ---
 
-          Este Pull Request fue generado automáticamente a partir de:
+          Generado automáticamente mediante:
 
           \`@codex implement\`
 
-          **Requiere revisión humana antes del merge.**
+          ⚠️ Requiere revisión humana antes del merge.
           EOF
 
           PR_URL=$(gh pr create \
@@ -230,48 +415,79 @@ jobs:
             --title "Fix #${ISSUE_NUMBER}: ${ISSUE_TITLE}" \
             --body-file /tmp/pr-body.md)
 
-          echo "url=$PR_URL" >> "$GITHUB_OUTPUT"
+          echo "url=$PR_URL" \
+            >> "$GITHUB_OUTPUT"
 
-      # ---------------------------------------------------------
-      # COMENTAR EN ISSUE
-      # ---------------------------------------------------------
+      # =========================================================
+      # COMENTARIO EN ISSUE
+      # =========================================================
 
       - name: Comment result on issue
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.any == 'true'
+
         env:
           GH_TOKEN: ${{ github.token }}
           PR_URL: ${{ steps.pr.outputs.url }}
-        shell: bash
-        run: |
-          gh issue comment "$ISSUE_NUMBER" \
-            --body "🤖 **Codex terminó la implementación.**
 
-          Se creó una rama independiente:
+        shell: bash
+
+        run: |
+
+          cat > /tmp/issue-comment.md <<EOF
+
+          🤖 **Codex terminó la implementación.**
+
+          Rama:
 
           \`$BRANCH_NAME\`
 
-          Pull Request:
+          ### Validación
+
+          Backend modificado:
+          \`${{ steps.changes.outputs.backend }}\`
+
+          Frontend modificado:
+          \`${{ steps.changes.outputs.frontend }}\`
+
+          Los proyectos afectados compilaron correctamente.
+
+          ### Pull Request
 
           $PR_URL
 
-          La solución no ha sido fusionada automáticamente. Revisa el PR antes de hacer merge."
+          ⚠️ El código no fue fusionado automáticamente.
 
-      # ---------------------------------------------------------
+          Revisa el Pull Request antes del merge.
+
+          EOF
+
+          gh issue comment \
+            "$ISSUE_NUMBER" \
+            --body-file /tmp/issue-comment.md
+
+      # =========================================================
       # SIN CAMBIOS
-      # ---------------------------------------------------------
+      # =========================================================
 
       - name: Comment when no changes were produced
-        if: steps.changes.outputs.changed == 'false'
+        if: steps.changes.outputs.any == 'false'
+
         env:
           GH_TOKEN: ${{ github.token }}
           CODEX_RESULT: ${{ steps.codex.outputs.final-message }}
+
         shell: bash
+
         run: |
+
           cat > /tmp/comment.md <<EOF
+
           🤖 **Codex analizó la issue pero no generó cambios.**
 
           ${CODEX_RESULT}
+
           EOF
 
-          gh issue comment "$ISSUE_NUMBER" \
+          gh issue comment \
+            "$ISSUE_NUMBER" \
             --body-file /tmp/comment.md

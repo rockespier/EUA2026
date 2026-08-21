@@ -18,7 +18,7 @@ Explica qué se modificó y por qué.
 ## Áreas afectadas
 
 - [ ] Backend .NET
-- [ ] Frontend Angular
+- [ ] Frontend 
 - [ ] Base de datos
 - [ ] Contratos API
 - [ ] Autenticación

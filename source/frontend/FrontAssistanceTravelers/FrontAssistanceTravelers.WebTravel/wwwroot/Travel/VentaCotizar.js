@@ -18,7 +18,7 @@ async function iniciarPredeterminado() {
         let cantElementos00 = elcomboAgencia.length;
         if (cantElementos00 > 0) {
             var dataSource = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('agenciaNombre'),
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['agenciaNombre', 'agenciaRUC']),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 local: elcomboAgencia
             });

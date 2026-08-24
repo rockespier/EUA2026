@@ -2904,6 +2904,7 @@ async function AbrirModalConsulta(id) {
                 document.getElementById("mdvenFecFinalVigRead").value = formatearFechaString(dtfecha);                
             }
             document.getElementById("mdvenDiasVigRead").value = laVenta[0].ventaNumeroDias;
+            document.getElementById("mdvenOrigenVigRead").value = laVenta[0].ventaOrigen;
             document.getElementById("mdvenDestinoVigRead").value = laVenta[0].ventaDestino;
             document.getElementById("mdvenSelProductoProdRead").value = laVenta[0].ventaProductoNombre;
             document.getElementById("mdvenSelProductoProdPromoRead").value = laVenta[0].ventaPromocionNombre;

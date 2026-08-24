@@ -12,6 +12,7 @@
         public string? ventaUsuarioOrigen { get; set; }
         public string? ventaUsuarioAgenciaNombre { get; set; }
         public string? ventaDestino { get; set; }
+        public string? ventaOrigen { get; set; }
         public int ventaProductoId { get; set; }
         public string? ventaProductoNombre { get; set; }
         public string? ventaClienteDocumentoTipoId { get; set; }

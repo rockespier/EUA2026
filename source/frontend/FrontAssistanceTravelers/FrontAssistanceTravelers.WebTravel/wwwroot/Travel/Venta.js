@@ -2426,7 +2426,7 @@ async function CargarTodo() {
                 targets: 0
             }
         ],
-        "order": [["3", "asc"]], //ventaCreadoFecha
+        "order": [[groupColumn, "asc"], ["3", "asc"]], //Agencia (alfabetico) y ventaCreadoFecha
         "data": [],
         "aoColumns": [
             {
@@ -2550,17 +2550,21 @@ async function CargarTodo() {
             var rowsData = api.rows({ page: 'current' }).data();
             var last = null;
             var storedIndexArray = [];
+            var collapsedGroups = window.collapsedGroups || {};
             api.column(groupColumn, { page: 'current' })
                 .data()
                 .each(function (group, i) {
+                    var groupKey = group.replace(/[^A-Za-z0-9]/g, '');
                     if (last !== group) {
                         storedIndexArray.push(i);
                         var esAgenciaVip = rowsData[i] && rowsData[i].ventaAgenciaVip == 1;
                         var iconoVip = esAgenciaVip ? '<i class="fa fa-star font-warning" title="Agencia VIP"></i> ' : '';
+                        var isCollapsed = collapsedGroups[groupKey] || false;
                         $(rows)
                             .eq(i)
                             .before(
-                                '<tr class="group"><td colspan="20">' +
+                                '<tr class="group group-start" data-group="' + groupKey + '"><td colspan="20" style="cursor:pointer;">' +
+                                '<span class="toggle-group" style="font-weight:bold;">' + (isCollapsed ? '[+]' : '[-]') + '</span> ' +
                                 iconoVip + group +
                                 ' (<span class="group-count"></span>) </td></tr>'
                             );
@@ -2577,6 +2581,28 @@ async function CargarTodo() {
                     storedIndexArray[i + 1] - storedIndexArray[i]
                 );
             }
+            // Oculta las filas de los grupos colapsados
+            $('.group.group-start').each(function () {
+                var groupKey = $(this).data('group');
+                var isCollapsed = collapsedGroups[groupKey] || false;
+                var next = $(this).nextUntil('.group.group-start');
+                if (isCollapsed) {
+                    next.hide();
+                } else {
+                    next.show();
+                }
+            });
+
+            // Evento para expandir/colapsar un grupo
+            $('.toggle-group').off('click').on('click', function () {
+                var $groupRow = $(this).closest('.group.group-start');
+                var groupKey = $groupRow.data('group');
+                collapsedGroups[groupKey] = !collapsedGroups[groupKey];
+                window.collapsedGroups = collapsedGroups;
+                api.draw(false);
+            });
+
+            updateCollapseButtonText();
         },
         filter: true,
         pageLength: 10,
@@ -2747,6 +2773,53 @@ async function CargarTodo() {
     }
     $("#cargar").hide();
 }
+$('#btnCollapseAllGroups').off('click').on('click', function () {
+    var api = $('#dtVenta').DataTable();
+    var collapsedGroups = window.collapsedGroups || {};
+    var allCollapsed = true;
+
+    // Verifica si todos los grupos están colapsados
+    api.column(groupColumn, { page: 'current' })
+        .data()
+        .each(function (group) {
+            var groupKey = group.replace(/[^A-Za-z0-9]/g, '');
+            if (!collapsedGroups[groupKey]) {
+                allCollapsed = false;
+            }
+        });
+
+    // Si todos están colapsados, expande todos; si no, colapsa todos
+    api.column(groupColumn, { page: 'current' })
+        .data()
+        .each(function (group) {
+            var groupKey = group.replace(/[^A-Za-z0-9]/g, '');
+            collapsedGroups[groupKey] = !allCollapsed;
+        });
+
+    window.collapsedGroups = collapsedGroups;
+    api.draw(false);
+});
+
+// Actualiza el texto del botón al cargar la tabla
+function updateCollapseButtonText() {
+    var api = $('#dtVenta').DataTable();
+    var collapsedGroups = window.collapsedGroups || {};
+    var allCollapsed = true;
+    api.column(groupColumn, { page: 'current' })
+        .data()
+        .each(function (group) {
+            var groupKey = group.replace(/[^A-Za-z0-9]/g, '');
+            if (!collapsedGroups[groupKey]) {
+                allCollapsed = false;
+            }
+        });
+    if (allCollapsed) {
+        $('#btnCollapseAllGroups').text('Expandir todo');
+    } else {
+        $('#btnCollapseAllGroups').text('Colapsar todo');
+    }
+}
+
 async function getVentas(pOrigen, pIdVenta, pfechaIni, pfechaFin, pIdusuario, pNombres, pApellidos, pEstado, pSituacion, pCodExt, pPais, pAgencia, pUsuarioAgencia, pTipoDoc, pNumeDoc, pPromotor) {
     const urlApiFecht = menuUrlApi + "Venta/VentasObtener";
     const urlParametro = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin + "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion + "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres + "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pTipoDoc=" + pTipoDoc + "&pNumeDoc=" + pNumeDoc + "&pPromotorId=" + (pPromotor || 0);

@@ -748,3 +748,24 @@ $(document).ready(function () {
         }, 800);
     }
 });
+
+$(document).on('click', '.btn-copiar-fecha', async function () {
+    const $boton = $(this);
+    const $icono = $boton.find('i');
+    const targetId = $boton.data('copy-target');
+    const valor = $('#' + targetId).val();
+    if (!valor) {
+        return;
+    }
+    try {
+        await navigator.clipboard.writeText(valor);
+    } catch (e) {
+        const $temporal = $('<input>').val(valor).appendTo('body').select();
+        document.execCommand('copy');
+        $temporal.remove();
+    }
+    $icono.removeClass('fa-copy').addClass('fa-check');
+    setTimeout(function () {
+        $icono.removeClass('fa-check').addClass('fa-copy');
+    }, 1500);
+});

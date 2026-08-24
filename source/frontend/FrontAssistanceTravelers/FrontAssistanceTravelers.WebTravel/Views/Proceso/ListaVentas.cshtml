@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
@@ -316,13 +316,23 @@
 								<div class="col">
 									<div class="mb-3">
 										<label class="form-label">Fec. Inicio</label>
+										<div class="input-group">
 										<input type="date" class="form-control" id="mdvenFecIncioVigRead" name="mdvenFecIncioVigRead" readonly>
+										<button class="btn btn-outline-secondary btn-copiar-fecha" type="button" data-copy-target="mdvenFecIncioVigRead" title="Copiar fecha">
+											<i class="fa fa-copy"></i>
+										</button>
+										</div>
 									</div>
 								</div>
 								<div class="col">
 									<div class="mb-3">
 										<label class="form-label">Fec. Termino</label>
+										<div class="input-group">
 										<input type="date" class="form-control" id="mdvenFecFinalVigRead" name="mdvenFecFinalVigRead" readonly>
+										<button class="btn btn-outline-secondary btn-copiar-fecha" type="button" data-copy-target="mdvenFecFinalVigRead" title="Copiar fecha">
+											<i class="fa fa-copy"></i>
+										</button>
+										</div>
 										<span style="visibility:hidden" id="numerodias">0</span>
 									</div>
 								</div>
@@ -491,7 +501,12 @@
 								<div class="col-12 col-sm-2 col-lg-2">
 									<div class="mb-3">
 										<label class="form-label">Nacimiento</label>
+										<div class="input-group">
 										<input class="form-control" type="date" id="mdvenTxtFecNacClienRead" name="mdvenTxtFecNacClienRead" readonly>
+										<button class="btn btn-outline-secondary btn-copiar-fecha" type="button" data-copy-target="mdvenTxtFecNacClienRead" title="Copiar fecha">
+											<i class="fa fa-copy"></i>
+										</button>
+										</div>
 									</div>
 								</div>
 								<div class="col-12 col-sm-1 col-lg-1">
@@ -1263,7 +1278,7 @@
 	<!-- Plugins JS Ends-->
 	<!-- Theme js-->
 	<script src="../assets/js/script.js"></script>
-	<script src="~/travel/General.js?v=1.56"></script>
+	<script src="~/travel/General.js?v=1.57"></script>
 	<script src="~/travel/venta.js?v=6.02"></script>
 	<script src="~/travel/ventaCotizar.js?v=1.71"></script>
 

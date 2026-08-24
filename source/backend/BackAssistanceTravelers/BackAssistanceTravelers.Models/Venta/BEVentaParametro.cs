@@ -14,6 +14,7 @@ namespace BackAssistanceTravelers.Models.Venta
 		public int ventaNumeroDias { get; set; }
 
 		public string? ventaDestino { get; set; }
+		public string? ventaOrigen { get; set; }
 		public int ventaProductoId { get; set; }
 		public string? ventaProductoNombre { get; set; }
 		public decimal ventaProductoImporte { get; set; }

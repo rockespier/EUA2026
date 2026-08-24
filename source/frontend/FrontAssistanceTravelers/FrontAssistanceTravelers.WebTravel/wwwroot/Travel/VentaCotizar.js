@@ -174,6 +174,7 @@ async function IniciarFechaDatos() {
 }
 async function limpiarModalDatosVenta() {
     IniciarFechaDatos();
+    document.getElementById("mdvenOrigenVig").value = "";
     document.getElementById("mdvenDestinoVig").value = "";
     document.getElementById("mdvenSelProductoProd").value = "";
 
@@ -202,6 +203,9 @@ async function limpiarModalDatosVenta() {
 
     $("#mdvenFecFinalVig").removeClass("is-valid");
     $("#mdvenFecFinalVig").removeClass("is-invalid");
+
+    $("#mdvenOrigenVig").removeClass("is-valid");
+    $("#mdvenOrigenVig").removeClass("is-invalid");
 
     $("#mdvenDestinoVig").removeClass("is-valid");
     $("#mdvenDestinoVig").removeClass("is-invalid");
@@ -501,6 +505,7 @@ async function ProcesarVenta() {
         fechaFormateaFinV = formatearFechaString(dtfechaFinV);
     }
     const eltxtDiasVigente = document.getElementById("mdvenDiasVig");
+    const eltxtOrigenVigente = document.getElementById("mdvenOrigenVig");
     const eltxtDestinoVigente = document.getElementById("mdvenDestinoVig");
 
     const elcboProducto = document.getElementById("mdvenSelProductoProd");
@@ -543,6 +548,7 @@ async function ProcesarVenta() {
         ventaFechaVigenciaFin: fechaFormateaFinV,
         ventaNumeroDias: parseInt(eltxtDiasVigente.value),
         ventaDestino: (eltxtDestinoVigente.value || '').toUpperCase(),
+        ventaOrigen: (eltxtOrigenVigente.value || '').toUpperCase(),
         ventaProductoId: valorelcboProductoId,
         ventaProductoNombre: (valorelcboProductoDes || '').toUpperCase(),
         ventaProductoImporte: importeProducto,

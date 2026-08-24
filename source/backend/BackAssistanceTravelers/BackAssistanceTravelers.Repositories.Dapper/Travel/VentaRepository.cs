@@ -209,6 +209,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_FechaVigenciaFin", str_vFechaFechaVigenciaFin);
                 parameters.Add("@pVENTA_NumeroDias", obj_pVenta.ventaNumeroDias);
                 parameters.Add("@pVENTA_Destino", obj_pVenta.ventaDestino!.ToString().ToUpper());
+                parameters.Add("@pVENTA_Origen", obj_pVenta.ventaOrigen?.ToUpper());
                 parameters.Add("@pVENTA_ProductoId", obj_pVenta.ventaProductoId);
                 parameters.Add("@pVENTA_ProductoImporte", obj_pVenta.ventaProductoImporte, DbType.Decimal, precision: 18, scale: 4);
                 parameters.Add("@pVENTA_ContactoNombres", obj_pVenta.ventaContactoNombres!.ToString().ToUpper());
@@ -271,6 +272,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_FechaVigenciaInicio", str_vFechaFechaVigenciaInicio);
                 parameters.Add("@pVENTA_FechaVigenciaFin", str_vFechaFechaVigenciaFin);
                 parameters.Add("@pVENTA_Destino", obj_pVenta.ventaDestino);
+                parameters.Add("@pVENTA_Origen", obj_pVenta.ventaOrigen);
                 parameters.Add("@pProductoATVCodigo", obj_pVenta.productoATVCodigo);
                 parameters.Add("@pVENTA_AgenciaLogin", obj_pVenta.ventaUsuarioAgenciaNombre);
                 parameters.Add("@pVENTA_AgenciaUsuarioLogin", obj_pVenta.ventaCreadoUsuarioNombre);

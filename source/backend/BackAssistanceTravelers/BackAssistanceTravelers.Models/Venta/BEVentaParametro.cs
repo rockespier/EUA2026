@@ -45,7 +45,9 @@ namespace BackAssistanceTravelers.Models.Venta
 		public decimal ventaComisionImporte { get; set; }
 		public decimal ventaIncentivoImporte { get; set; }
         public decimal ventaPublicidadImporte { get; set; }
-		public decimal ventaPagarLiquidacion { get; set; }	
+		public decimal ventaPagarLiquidacion { get; set; }
+		public decimal ventaIncentivoPostImporte { get; set; }
+		public DateTime ventaIncentivoFechaPago { get; set; }
 
     }
 }

@@ -314,6 +314,118 @@ async function getPago(pId, dte_pFechaInicio, dte_pFechaFin) {
     }
 }
 
+function clickDescargarPlantillaIncentivos() {
+    const link = document.createElement('a');
+    link.href = '/descargarPlantillaPagoIncentivos';
+    link.download = 'PagoIncentivos_Plantilla.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+async function AbrirModalImportarIncentivos() {
+    const formModal = document.getElementById("modalDatosImportarIncentivos");
+    formModal.reset();
+    inActivarImportacionCargaIncentivos();
+    $('#divResultadoIncentivos').hide();
+    $('#popupModalImportarIncentivos').modal('show');
+}
+async function clickImportarIncentivosLimpiar() {
+    limpiarModaImportarIncentivos();
+}
+function limpiarModaImportarIncentivos() {
+    document.getElementById("mdFileImportarIncentivos").value = "";
+    $('#mdDescargarErrorIncentivos').empty();
+    $('#divResultadoIncentivos').hide();
+}
+async function activarImportacionCargaIncentivos() {
+    $('#mdBotImportarIncentivos').hide();
+    $('#mdBotImportarIncentivosCarga').show();
+}
+async function inActivarImportacionCargaIncentivos() {
+    $('#mdBotImportarIncentivos').show();
+    $('#mdBotImportarIncentivosCarga').hide();
+}
+const toBase64Incentivos = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
+$('#mdBotImportarIncentivos').on('click', async function (e) {
+    const Archivos = document.getElementById('mdFileImportarIncentivos');
+    const CantidadArchivos = Archivos.files.length;
+    if (CantidadArchivos == 0) {
+        mostrarMensaje(3, "Por favor seleccionar al menos un archivo para cargar.");
+        return false;
+    }
+    const imobj = Archivos.files[0];
+    const eltipo = imobj.type;
+    const eltamano = imobj.size;
+    if (eltamano > 500000000) {
+        mostrarMensaje(3, "El archivo excede el máximo  de 500MB, por favor seleccionar un archivo menor.");
+        return false;
+    }
+    const infoQuitaDatoBase64 = "data:" + eltipo + ";base64,";
+    const base64archivo = await toBase64Incentivos(imobj);
+    const base64archivoFinal = base64archivo.replace(infoQuitaDatoBase64, "")
+    showLoader();
+    activarImportacionCargaIncentivos();
+    try {
+        const info = {
+            base64archivo: base64archivoFinal,
+        };
+        let response = await fetch('/importarExcelPagoIncentivos', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/octet-stream',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        });
+
+        if (response.ok) {
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let fileName = '';
+            if (contentDisposition && contentDisposition.includes('filename=')) {
+                const fileNameMatch = contentDisposition.match(/filename\*?=\s*['"]?([^'";\s]+)/);
+                if (fileNameMatch && fileNameMatch[1]) {
+                    fileName = fileNameMatch[1];
+                }
+            }
+            if (fileName == "ok.xlsx") {
+                CargarTodo();
+                $('#divResultadoIncentivos').hide();
+                $('#popupModalImportarIncentivos').modal('hide');
+                mostrarMensaje(1, "Se actualizaron los post-incentivos correctamente.");
+            } else {
+                const originalBlob = await response.blob();
+                const contenido = await originalBlob.text();
+                const blob = new Blob(
+                    [new TextEncoder().encode(contenido)],
+                    { type: "text/plain;charset=utf-8" }
+                );
+                $('#mdDescargarErrorIncentivos').empty();
+                const eldjuntodescargar = document.getElementById("mdDescargarErrorIncentivos");
+                const aDescarga = document.createElement("a");
+                const rutaUrl = URL.createObjectURL(blob);
+                aDescarga.setAttribute("href", rutaUrl);
+                aDescarga.setAttribute("target", "_blank");
+                aDescarga.style.color = "red";
+                aDescarga.innerHTML = `Existen errores en la importación, click aquí para ver los errores.`
+                eldjuntodescargar.appendChild(aDescarga)
+                $('#divResultadoIncentivos').show();
+            }
+        } else {
+            mostrarMensaje(1, "Error al generar el archivo.");
+        }
+    } catch (error) {
+        mostrarMensaje(1, "Error inesperado: " + error);
+    } finally {
+        hideLoader();
+        inActivarImportacionCargaIncentivos();
+    }
+});
+
 async function updatePagoEstado(ventaId, beneficiarioId) {
     const urlApiFecht = menuUrlApi + "Cobranza/IncentivoPagoProcesar";
     const urlParametro = "?pVentaId=" + ventaId + "&pBeneficiarioId=" + beneficiarioId + "&pUsuarioId=" + menuUserId;

@@ -255,6 +255,34 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			}
 			return objError;
 		}
+		private async Task<BEErrorApi> VentaGestionIncentivos_Procesar(BEVenta pVenta)
+		{
+			var httpClient = httpClientFactory.CreateClient();
+			string parametros = ObjectoTOJson(pVenta);
+			string RutaApi = configuration.GetValue<string>("Generales:RutaAPI")! + "Venta/";
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", User.FindFirst("Token")?.Value ?? string.Empty);
+			var enEntidadEnviarJSONContenido = new StringContent(parametros.ToString(), Encoding.UTF8, "application/json");
+			var response = await httpClient.PostAsync(RutaApi + "VentaGestionIncentivosProcesar", enEntidadEnviarJSONContenido);
+			if (response.StatusCode == HttpStatusCode.OK)
+			{
+				string jsonOK = await response.Content.ReadAsStringAsync();
+				BEErrorApi objOK = JsonConvert.DeserializeObject<BEErrorApi>(jsonOK)!;
+
+				return objOK;
+			}
+			string jsonError = await response.Content.ReadAsStringAsync();
+			BEErrorApi objError = new BEErrorApi();
+			if (jsonError != "")
+			{
+				objError = JsonConvert.DeserializeObject<BEErrorApi>(jsonError)!;
+			}
+			else
+			{
+				objError.errorCodigo = StatusCode(((int)response.StatusCode)).StatusCode;
+				objError.errorDescripcion = response.ReasonPhrase;
+			}
+			return objError;
+		}
 		private async Task<List<BEVenta>> Venta_Obtener(int Id)
 		{
 			var httpClient = httpClientFactory.CreateClient();
@@ -1795,6 +1823,151 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 				var fileName = "VentaMasivaErrores.txt";
 				return File(memoryStream, contentType, fileName);
 			}
+		}
+		[HttpGet]
+		[Route("descargarPlantillaPagoIncentivos")]
+		public FileStreamResult descargarPlantillaPagoIncentivos()
+		{
+			var memoryStream = new MemoryStream();
+			using (var workbook = new XLWorkbook())
+			{
+				workbook.Properties.Author = "EuroAmericanAssistance";
+				workbook.Properties.Title = "Plantilla Post-Incentivo";
+				workbook.Properties.Subject = "Importación masiva de Post-Incentivo";
+				var worksheet = workbook.Worksheets.Add("PostIncentivo");
+				worksheet.ShowGridLines = false;
+				worksheet.Cell(1, 1).Value = "Plantilla de importación masiva - Post-Incentivo";
+				worksheet.Cell(1, 1).Style.Font.Bold = true;
+				worksheet.Cell(2, 1).Value = "No modifique el orden de las columnas. Los datos deben ingresarse a partir de la fila 4.";
+				worksheet.Cell(3, 1).Value = "VentaId";
+				worksheet.Cell(3, 2).Value = "PostIncentivo";
+				worksheet.Cell(3, 3).Value = "FechaPagoIncentivo";
+				worksheet.Row(3).Style.Font.Bold = true;
+				worksheet.Column(1).Width = 15;
+				worksheet.Column(2).Width = 18;
+				worksheet.Column(3).Width = 22;
+				worksheet.Column(2).Style.NumberFormat.Format = "#,##0.00";
+				worksheet.Column(3).Style.DateFormat.Format = "dd/MM/yyyy";
+				workbook.SaveAs(memoryStream);
+			}
+			memoryStream.Position = 0;
+			var contentType = "application/octet-stream";
+			var fileName = "PagoIncentivos_Plantilla.xlsx";
+			return File(memoryStream, contentType, fileName);
+		}
+		[HttpPost]
+		[Route("importarExcelPagoIncentivos")]
+		public async Task<FileStreamResult> importarPagoIncentivos([FromBody] BEImportarPagoIncentivos pImportarPagoIncentivos)
+		{
+			string streamBase64Image = pImportarPagoIncentivos.base64archivo!.Trim();
+			byte[] fileAsBytes = Convert.FromBase64String(streamBase64Image);
+			Stream streamBase64 = new MemoryStream(fileAsBytes, 0, fileAsBytes.Length);
+			StringBuilder erroresValidar = await validarPagoIncentivos(streamBase64);
+			if (erroresValidar.Length == 0)
+			{
+				StringBuilder erroresInsert = await procesarImportarPagoIncentivos(streamBase64);
+				if (erroresInsert.Length == 0)
+				{
+					byte[] byteArray = new byte[100];
+					MemoryStream memoryStream = new MemoryStream(byteArray);
+					memoryStream.Position = 0;
+					var contentType = "application/octet-stream";
+					var fileName = "ok.xlsx";
+					return File(memoryStream, contentType, fileName);
+				}
+				else
+				{
+					MemoryStream memoryStream = await CreateLogMemoryStream(erroresInsert);
+					var contentType = "text/plain";
+					var fileName = "PagoIncentivosErrores.txt";
+					return File(memoryStream, contentType, fileName);
+				}
+			}
+			else
+			{
+				MemoryStream memoryStream = await CreateLogMemoryStream(erroresValidar);
+				var contentType = "text/plain";
+				var fileName = "PagoIncentivosErrores.txt";
+				return File(memoryStream, contentType, fileName);
+			}
+		}
+		private async Task<StringBuilder> procesarImportarPagoIncentivos(Stream archivo)
+		{
+			StringBuilder errorMessages = new StringBuilder();
+			try
+			{
+				using (var workbook = new XLWorkbook(archivo))
+				{
+					var worksheet = workbook.Worksheet(1).SetTabActive();
+					if (worksheet.RowsUsed().Count() == 0)
+					{
+						throw new Exception("No existe informacion en el excel");
+					}
+
+					int idUsuario = int.TryParse(User.FindFirst("IdUsuario")?.Value, out var _idUsuario) ? _idUsuario : 0;
+					foreach (var row in worksheet.RowsUsed().Skip(3))
+					{
+						if (string.IsNullOrWhiteSpace(row.Cell(1).Value.ToString()))
+							break;
+
+						try
+						{
+							var oVenta = new BEVenta();
+							oVenta.ventaId = (int)row.Cell(1).GetDouble();
+							oVenta.ventaIncentivoPostImporte = (float)row.Cell(2).GetDouble();
+							oVenta.ventaIncentivoFechaPago = SafeGetDateTime(row.Cell(3), row.RowNumber(), "C");
+							oVenta.ventaCreadoUsuarioId = idUsuario;
+
+							var oError = await VentaGestionIncentivos_Procesar(oVenta);
+							if (oError.errorCodigo != 200)
+							{
+								errorMessages.AppendLine("==================================================================================================================");
+								errorMessages.AppendLine($"Fila ({row.RowNumber()}) Ocurrió un error al intentar enviar los datos de la Hoja Excel a la base de datos.");
+								errorMessages.AppendLine($"Fila ({row.RowNumber()}) ERROR: {oError.errorDescripcion} VENTA: {oVenta.ventaId}");
+							}
+						}
+						catch (Exception exRow)
+						{
+							errorMessages.AppendLine("==================================================================================================================");
+							errorMessages.AppendLine($"Fila ({row.RowNumber()}) Error de conversión de datos:");
+							errorMessages.AppendLine($"ERROR: {exRow.Message}");
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				errorMessages.AppendLine("Error al procesar el archivo: " + ex.Message);
+			}
+			return errorMessages;
+		}
+		private async Task<StringBuilder> validarPagoIncentivos(Stream archivo)
+		{
+			StringBuilder errorMessages = new StringBuilder();
+			try
+			{
+				using (var workbook = new XLWorkbook(archivo))
+				{
+					var worksheet = workbook.Worksheet(1).SetTabActive();
+					if (worksheet.RowsUsed().Count() == 0)
+					{
+						throw new Exception("No existe informacion en el excel");
+					}
+
+					foreach (var row in worksheet.RowsUsed().Skip(3))
+					{
+						ValidateNumericCell(worksheet, row.RowNumber(), 1, "A", errorMessages); // VentaId
+						ValidateNumericCell(worksheet, row.RowNumber(), 2, "B", errorMessages); // Post-Incentivo
+						ValidateDateCell(worksheet, row.RowNumber(), 3, "C", errorMessages); // Fecha pago Incentivo
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				errorMessages.AppendLine("Error al procesar el archivo: " + ex.Message);
+			}
+
+			return errorMessages;
 		}
         // ✅ NUOVO HELPER: converte celle Excel in DateTime con fallback robusto
         private DateTime SafeGetDateTime(IXLCell cell, int rowNumber, string colLetter)

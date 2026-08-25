@@ -2853,6 +2853,8 @@ async function permisoEditar() {
         $('#mdvenSelIncentivoRead').prop('readonly', false);
         $('#mdvenPorPagarRead').prop('readonly', false);
         $('#mdvenFechaCancelacionRead').prop('readonly', false);
+        $('#mdvenSelIncentivoPostRead').prop('readonly', false);
+        $('#mdvenFechaIncentivoPagoRead').prop('readonly', false);
         $('#mdvenTxtObsVenta').prop('readonly', false);
         $('#btnActualizarVenta').show();
     } else {
@@ -2860,6 +2862,8 @@ async function permisoEditar() {
         $('#mdvenSelIncentivoRead').prop('readonly', true);
         $('#mdvenPorPagarRead').prop('readonly', true);
         $('#mdvenFechaCancelacionRead').prop('readonly', true);
+        $('#mdvenSelIncentivoPostRead').prop('readonly', true);
+        $('#mdvenFechaIncentivoPagoRead').prop('readonly', true);
         $('#mdvenTxtObsVenta').prop('readonly', true);
         $('#btnActualizarVenta').hide();
     }
@@ -2948,11 +2952,47 @@ async function AbrirModalConsulta(id) {
             
             $('#mdvenDocumentoRead').val(laVenta[0].cobranzaDocumento);
 
+            const laGestionIncentivos = await getVentaGestionIncentivos(id);
+            if (laGestionIncentivos !== undefined && laGestionIncentivos.length > 0) {
+                $('#mdvenSelIncentivoPostRead').val(laGestionIncentivos[0].ventaIncentivoPostImporte);
+                if (laGestionIncentivos[0].ventaIncentivoFechaPago !== "0001-01-01T00:00:00" && laGestionIncentivos[0].ventaIncentivoFechaPago !== "1970-01-01T00:00:00") {
+                    const fechaIncentivoPagoMoment = moment(laGestionIncentivos[0].ventaIncentivoFechaPago, "YYYY-MM-DD");
+                    const dtfechaIncentivoPago = fechaIncentivoPagoMoment.toDate();
+                    document.getElementById("mdvenFechaIncentivoPagoRead").value = formatearFechaString(dtfechaIncentivoPago);
+                } else {
+                    document.getElementById("mdvenFechaIncentivoPagoRead").value = "";
+                }
+            } else {
+                $('#mdvenSelIncentivoPostRead').val("");
+                document.getElementById("mdvenFechaIncentivoPagoRead").value = "";
+            }
+
             await permisoEditar();
         }
     }
     $('#popupModalVentaRead').modal('show');
 
+}
+async function getVentaGestionIncentivos(pVentaId) {
+    const urlApiFecht = menuUrlApi + "Venta/VentaGestionIncentivosObtener";
+    const urlParametro = "?pVentaId=" + pVentaId;
+    const response = await fetch(urlApiFecht + urlParametro, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${menuToken}`,
+        }
+    })
+    if (response.status === 404 || response.status === 400) {
+        const responseError = await response.json();
+        console.log(responseError);
+    } else if (response.status === 200) {
+        const object3 = await response.json()
+        if (object3.length > 0) {
+            return object3;
+        }
+    }
 }
 async function AbrirModalBusqueda() {
     let AgenciaId = 0;
@@ -3307,22 +3347,72 @@ async function ProcesarActualizarVenta() {
     const eltxtDocumento = document.getElementById("mdvenDocumentoRead");
     const eltxtObsVenta = document.getElementById("mdvenTxtObsVenta");
     let idVenta = document.getElementById('mdHidIdVentaTarjeta').value;
-  
+
     const dataEnviar = {
         ventaId: idVenta,
         ventaCobranzaPagoFecha: fechaFormateaIniV,
         ventaComisionImporte: parseFloat(eltxtComision.value).toFixed(4),
         ventaIncentivoImporte: parseFloat(eltxtIncentivo.value).toFixed(4),
-        ventaPagarLiquidacion: parseFloat(eltxtPorPagar.value).toFixed(4),       
+        ventaPagarLiquidacion: parseFloat(eltxtPorPagar.value).toFixed(4),
         ventaCreadoUsuarioId: menuUserId,
         ventaObservacion: eltxtObsVenta.value,
     };
     console.log(dataEnviar);
     const resultado = await postVentaActualizarProcesar(dataEnviar);
+    if (resultado.errorCodigo == 200) {
+        const resultadoIncentivos = await ProcesarGestionIncentivos(idVenta, eltxtObsVenta.value);
+        if (resultadoIncentivos.errorCodigo != 200) {
+            return resultadoIncentivos;
+        }
+    }
+    return resultado;
+}
+async function ProcesarGestionIncentivos(idVenta, obsVenta) {
+    const eltxtIncentivoPost = document.getElementById("mdvenSelIncentivoPostRead");
+    const eldatFechaIncentivoPago = document.getElementById("mdvenFechaIncentivoPagoRead");
+
+    let fechaFormateaIncentivoPago;
+    if (eldatFechaIncentivoPago.value == "") {
+        const fecha = new Date(0);
+        fechaFormateaIncentivoPago = formatearFechaString(fecha);
+    } else {
+        const fechaIncentivoPagoMoment = moment(eldatFechaIncentivoPago.value, "YYYY-MM-DD");
+        const dtfechaIncentivoPago = fechaIncentivoPagoMoment.toDate();
+        fechaFormateaIncentivoPago = formatearFechaString(dtfechaIncentivoPago);
+    }
+
+    const dataEnviar = {
+        ventaId: idVenta,
+        ventaIncentivoPostImporte: eltxtIncentivoPost.value == "" ? 0 : parseFloat(eltxtIncentivoPost.value).toFixed(4),
+        ventaIncentivoFechaPago: fechaFormateaIncentivoPago,
+        ventaCreadoUsuarioId: menuUserId,
+        ventaObservacion: obsVenta,
+    };
+    const resultado = await postVentaGestionIncentivosProcesar(dataEnviar);
     return resultado;
 }
 async function postVentaActualizarProcesar(enviarBody) {
     const urlApiFecht = menuUrlApi + "Venta/VentaActualizarProcesar";
+    const elbody = JSON.stringify(enviarBody);
+    const response = await fetch(urlApiFecht, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${menuToken}`,
+        },
+        body: elbody
+    })
+    if (response.status === 404 || response.status === 400) {
+        const responseError = await response.json();
+        return responseError;
+    } else if (response.status === 200) {
+        const object = await response.json()
+        return object;
+    }
+}
+async function postVentaGestionIncentivosProcesar(enviarBody) {
+    const urlApiFecht = menuUrlApi + "Venta/VentaGestionIncentivosProcesar";
     const elbody = JSON.stringify(enviarBody);
     const response = await fetch(urlApiFecht, {
         method: 'POST',

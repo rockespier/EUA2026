@@ -873,5 +873,75 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
                 return BadRequest(objError);
             }
         }
+
+        [HttpGet, Authorize]
+        [Route("VentaGestionIncentivosObtener")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BEVenta>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BEErrorApi))]
+        public async Task<IActionResult> getVentaGestionIncentivosObtener(int pVentaId)
+        {
+            try
+            {
+                var data = await unitOfWork.Ventas.Venta_ObtenerGestionIncentivos(pVentaId);
+                if (data == null || !data.Any())
+                {
+                    BEErrorApi objError = new BEErrorApi();
+                    objError.errorCodigo = 204;
+                    objError.errorDescripcion = "Sin información.";
+                    Log4Net.LogInformation(ObjectoTOJson(objError));
+                    return NoContent();
+                }
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                BEError objError = new BEError();
+                objError.errorCodigo = 400;
+                objError.errorDescripcion = e.Message;
+                Log4Net.LogError(ObjectoTOJson(objError));
+                return BadRequest(objError);
+            }
+        }
+
+        [HttpPost, Authorize]
+        [Route("VentaGestionIncentivosProcesar")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BEErrorApi))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BEErrorApi))]
+        public async Task<IActionResult> postVentaGestionIncentivosProcesar([FromBody] BEVentaParametro parametrosVenta)
+        {
+            try
+            {
+                var venta = new BEVenta
+                {
+                    ventaId = parametrosVenta.ventaId,
+                    ventaObservacion = parametrosVenta.ventaObservacion,
+                    ventaIncentivoPostImporte = (float)parametrosVenta.ventaIncentivoPostImporte,
+                    ventaIncentivoFechaPago = parametrosVenta.ventaIncentivoFechaPago,
+                    ventaCreadoUsuarioId = parametrosVenta.ventaCreadoUsuarioId
+                };
+                var data = await unitOfWork.Ventas.VentaGestionIncentivos_Procesar(venta);
+                if (string.IsNullOrEmpty(data.errorDescripcion))
+                {
+                    BEErrorApi objError = new BEErrorApi();
+                    objError.errorCodigo = 400;
+                    objError.errorDescripcion = "Datos incorrectos";
+                    Log4Net.LogInformation(ObjectoTOJson(objError), "error");
+                    return BadRequest(objError);
+                }
+                BEErrorApi objOK = new BEErrorApi();
+                objOK.errorCodigo = 200;
+                objOK.errorDescripcion = "Se actualizo el post-incentivo correctamente.";
+                Log4Net.LogInformation(ObjectoTOJson(objOK));
+                return Ok(objOK);
+            }
+            catch (Exception e)
+            {
+                BEError objError = new BEError();
+                objError.errorCodigo = 400;
+                objError.errorDescripcion = e.Message;
+                Log4Net.LogError(ObjectoTOJson(objError));
+                return BadRequest(objError);
+            }
+        }
     }
 }

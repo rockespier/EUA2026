@@ -223,7 +223,8 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_Counter", obj_pVenta.ventaCounter);
                 parameters.Add("@pVENTA_Observacion", obj_pVenta.ventaObservacion);
 				parameters.Add("@pVENTA_PromocionId", obj_pVenta.ventaPromocionId);
-				var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaGrupal_Procesar_2026", parameters,
+                parameters.Add("@pVENTA_Origen", obj_pVenta.ventaOrigen == null ? "" : obj_pVenta.ventaOrigen);
+                var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaGrupal_Procesar_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
                 return result!;
             }
@@ -296,6 +297,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_ContactoPais", obj_pVenta.ventaContactoPais!.ToString().ToUpper());
                 parameters.Add("@pVENTA_CodigoExterno", obj_pVenta.ventaCodigoExterno == null ? "" : obj_pVenta.ventaCodigoExterno);
                 parameters.Add("@pVENTA_Clientenacionalidad", obj_pVenta.VentaNacionalidad == null ? "" : obj_pVenta.VentaNacionalidad);
+                parameters.Add("@pVENTA_Origen", obj_pVenta.ventaOrigen == null ? "" : obj_pVenta.ventaOrigen);
                 var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaMasiva_ProcesarNuevo_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
                 return result!;

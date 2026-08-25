@@ -144,6 +144,9 @@
                                 <button id="btnBusqueda" type="button" class="btn btn-dark" onclick="AbrirModalBusqueda();">
                                     <i class="fa fa-binoculars"></i>  Busqueda Avanzada
                                 </button>
+                                <button id="btnImportarIncentivos" type="button" class="btn btn-success" onclick="AbrirModalImportarIncentivos();">
+                                    <i class="fa fa-upload"></i>  Importar Post-Incentivo
+                                </button>
                             </div>
                         </p>
                         <div class="table-responsive user-datatable">
@@ -219,7 +222,50 @@
         </div>
     </div>
     <!-- popup Venta Busqueda-->
-   
+
+    <!-- popup Importar Post-Incentivo-->
+    <div class="modal fade bd-example-modal-lg" id="popupModalImportarIncentivos" data-bs-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="tituloModalImportarIncentivos" name="tituloModalImportarIncentivos" class="modal-title">Importar Post-Incentivo</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="modalDatosImportarIncentivos" name="modalDatosImportarIncentivos" action="">
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" id="mdFileImportarIncentivos" name="mdFileImportarIncentivos" accept=".xls,.xlsx" aria-describedby="mdBotImportarIncentivos" aria-label="Upload">
+                                        <button class="btn btn-outline-success" type="button" id="mdBotImportarIncentivos" name="mdBotImportarIncentivos">Importar</button>
+                                        <button class="btn btn-outline-success" type="button" id="mdBotImportarIncentivosCarga" disabled name="mdBotImportarIncentivosCarga"> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;Importando...</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="divResultadoIncentivos" name="divResultadoIncentivos">
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <div id="mdDescargarErrorIncentivos" name="mdDescargarErrorIncentivos" class="col">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" type="button" id="btnDescargarPlantillaIncentivos" name="btnDescargarPlantillaIncentivos" onclick="clickDescargarPlantillaIncentivos();">
+                            <i class="fa fa-download"></i>  Plantilla
+                        </button>
+                        <button class="btn btn-info" type="button" id="btnLimpiarImportarIncentivos" name="btnLimpiarImportarIncentivos" onclick="clickImportarIncentivosLimpiar();">
+                            <i class="fa fa-eraser"></i>  Limpiar
+                        </button>
+                        <button class="btn btn-secondary" type="button" id="btnCerrarImportarIncentivos" name="btnCerrarImportarIncentivos" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- popup Importar Post-Incentivo-->
+
 </div>
 @section Script {
     <!-- Plugins JS start-->
@@ -247,5 +293,5 @@
     <!-- Theme js-->
     <script src="../assets/js/script.js"></script>
     <script src="~/travel/General.js?v=1.55"></script>
-    <script src="~/travel/ListaPagoIncentivos.js?v=1.19"></script>
+    <script src="~/travel/ListaPagoIncentivos.js?v=1.20"></script>
 }

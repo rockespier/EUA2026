@@ -1,4 +1,4 @@
-﻿let idVenta;
+let idVenta;
 let idPasajero;
 let estadoProcesarVenta;
 ReseteoLocalStorage();

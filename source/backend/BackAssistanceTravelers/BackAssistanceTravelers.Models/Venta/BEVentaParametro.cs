@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,6 +48,7 @@ namespace BackAssistanceTravelers.Models.Venta
 		public decimal ventaPagarLiquidacion { get; set; }
 		public decimal ventaIncentivoPostImporte { get; set; }
 		public DateTime ventaIncentivoFechaPago { get; set; }
+        public DateTime ventaIncentivoPostFechaPago { get; set; }
 
     }
 }

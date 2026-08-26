@@ -99,6 +99,18 @@ $('#btonFechas').on('click', async function (e) {
 $('#mdselPromotor').change(async function () {
     cambiarValoresChart();
 });
+$('#mdSelPais').change(async function () {
+    const strIdPais = $(this).val();
+    if (!(parseInt(menuPerfilId) === 2 || parseInt(menuPerfilId) === 6 || parseInt(menuPerfilId) === 5)) {
+        const elcomboTipo5 = await getPromotoresPais(parseInt(menuUserId), strIdPais);
+        $('#mdselPromotor').empty();
+        $('#mdselPromotor').append($('<option/>').attr("value", "").text('---Todos---'));
+        for (const cboobj of elcomboTipo5) {
+            $('#mdselPromotor').append($('<option/>').attr("value", cboobj.usuarioId).text(cboobj.usuarioNombre));
+        }
+    }
+    cambiarValoresChart();
+});
 function join(date, options, separator) {
     function format(option) {
         let formatter = new Intl.DateTimeFormat('en', option);

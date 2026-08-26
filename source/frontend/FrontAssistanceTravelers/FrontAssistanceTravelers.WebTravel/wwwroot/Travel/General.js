@@ -769,3 +769,90 @@ $(document).on('click', '.btn-copiar-fecha', async function () {
         $icono.removeClass('fa-check').addClass('fa-copy');
     }, 1500);
 });
+
+// Exporta el contenido visible/filtrado de una tabla DataTables a Excel o PDF.
+// La última columna de cada uno de los reportes de Ventas es siempre el importe/cantidad,
+// por lo que se formatea numéricamente sin necesidad de conocer el layout exacto de cada reporte.
+function exportarReporteTabla(tableId, tipo, filenamePrefix, anio) {
+    const table = $('#' + tableId).DataTable();
+    if (!table || !table.rows({ search: 'applied' }).count()) {
+        swal("Aviso", "No hay datos para exportar", "warning");
+        return;
+    }
+    const filename = anio ? filenamePrefix + '_' + anio : filenamePrefix;
+    const extend = tipo === 'pdf' ? 'pdfHtml5' : 'excelHtml5';
+    const colImporte = table.columns().count() - 1;
+    const buttonConfig = {
+        extend: extend,
+        title: filename,
+        filename: filename,
+        exportOptions: {
+            columns: ':visible',
+            footer: false,
+            modifier: {
+                page: 'all',
+                search: 'applied'
+            },
+            format: {
+                body: function (data, row, column) {
+                    if (column === colImporte) {
+                        const cleanValue = String(data).replace(/[^0-9.-]/g, '');
+                        const numValue = parseFloat(cleanValue);
+                        return !isNaN(numValue) ? numValue : 0;
+                    }
+                    return data;
+                },
+                header: function (data) {
+                    return data || '';
+                }
+            }
+        }
+    };
+    if (extend === 'pdfHtml5') {
+        buttonConfig.orientation = 'landscape';
+        buttonConfig.pageSize = 'A4';
+    } else {
+        buttonConfig.customize = function (xlsx) {
+            const sheet = xlsx.xl.worksheets['sheet1.xml'];
+            const colLetra = String.fromCharCode(65 + colImporte);
+            $('row c[r^="' + colLetra + '"]', sheet).each(function (index) {
+                if (index > 0) {
+                    $(this).attr('s', '2');
+                    const value = $(this).find('v').text();
+                    if (value && !isNaN(value)) {
+                        $(this).attr('t', 'n');
+                    }
+                }
+            });
+        };
+    }
+    const buttons = new $.fn.dataTable.Buttons(table, { buttons: [buttonConfig] });
+    const container = buttons.container().appendTo('body');
+    setTimeout(function () {
+        const selectorBoton = extend === 'pdfHtml5' ? '.buttons-pdf' : '.buttons-excel';
+        const boton = container.find(selectorBoton);
+        if (boton.length > 0) {
+            boton[0].click();
+        } else {
+            console.error('No se encontró el botón de exportación (' + extend + ')');
+        }
+        setTimeout(function () {
+            if (buttons && typeof buttons.destroy === 'function') {
+                try {
+                    buttons.destroy();
+                    container.remove();
+                } catch (error) {
+                    console.warn('Error al limpiar botones de exportación:', error);
+                }
+            }
+        }, 500);
+    }, 50);
+}
+
+// Exporta ambos cuadros (período actual y período anterior) en una sola acción.
+function exportarReporteAmbosCuadros(tableId1, tableId2, tipo, filenamePrefix, anio1, anio2) {
+    exportarReporteTabla(tableId1, tipo, filenamePrefix, anio1);
+    setTimeout(function () {
+        exportarReporteTabla(tableId2, tipo, filenamePrefix, anio2);
+    }, 700);
+}

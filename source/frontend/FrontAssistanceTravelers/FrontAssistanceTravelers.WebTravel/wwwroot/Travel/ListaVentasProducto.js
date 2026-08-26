@@ -231,6 +231,33 @@ function registrarEventosExportacion() {
         }
     });
 
+    // Exportación a PDF y exportación combinada de ambos períodos (Excel/PDF)
+    $("#btnExportPdf").off('click');
+    $("#btnExportPdf2").off('click');
+    $("#btnExportAmbosExcel").off('click');
+    $("#btnExportAmbosPdf").off('click');
+
+    $("#btnExportPdf").on('click', function (e) {
+        e.preventDefault();
+        const anioFiltro = $("#mdvenselAnioSearch option:selected").val() || new Date().getFullYear();
+        exportarReporteTabla('dtVenta', 'pdf', 'Ventas_por_Producto', anioFiltro);
+    });
+    $("#btnExportPdf2").on('click', function (e) {
+        e.preventDefault();
+        const anioFiltro2 = (($("#mdvenselAnioSearch option:selected").val() || new Date().getFullYear()) - 1);
+        exportarReporteTabla('dtVenta2', 'pdf', 'Ventas_por_Producto', anioFiltro2);
+    });
+    $("#btnExportAmbosExcel").on('click', function (e) {
+        e.preventDefault();
+        const anioFiltro = $("#mdvenselAnioSearch option:selected").val() || new Date().getFullYear();
+        exportarReporteAmbosCuadros('dtVenta', 'dtVenta2', 'excel', 'Ventas_por_Producto', anioFiltro, anioFiltro - 1);
+    });
+    $("#btnExportAmbosPdf").on('click', function (e) {
+        e.preventDefault();
+        const anioFiltro = $("#mdvenselAnioSearch option:selected").val() || new Date().getFullYear();
+        exportarReporteAmbosCuadros('dtVenta', 'dtVenta2', 'pdf', 'Ventas_por_Producto', anioFiltro, anioFiltro - 1);
+    });
+
     console.log('Eventos de exportación registrados correctamente');
 }
 

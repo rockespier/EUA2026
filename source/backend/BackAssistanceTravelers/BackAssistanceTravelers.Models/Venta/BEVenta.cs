@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +65,8 @@ namespace BackAssistanceTravelers.Models.Venta
 		public DateTime ventaAnuladoFecha { get; set; }
 		public DateTime ventaCobranzaPagoFecha { get; set; }
 		public DateTime ventaIncentivoFechaPago { get; set; }
-		public DateTime ventaIncentivoModificadoFecha { get; set; }
+        public DateTime ventaIncentivoPostFechaPago { get; set; }
+        public DateTime ventaIncentivoModificadoFecha { get; set; }
 		public DateTime ventaFechaVigenciaInicio { get; set; }
 		public DateTime ventaFechaVigenciaFin { get; set; }
 		public DateTime ventaClienteFechaNacimiento { get; set; }

@@ -69,6 +69,7 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
                         new Claim(JwtRegisteredClaimNames.Sub, pUsuario),
                         new Claim(JwtRegisteredClaimNames.Email, pUsuario),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, data.usuarioId.ToString()),
                         new Claim(ClaimTypes.Role, data.usuarioPerfilId.ToString()),
                         new Claim("PerfilNombre", data.usuarioPerfilNombre ?? string.Empty)
                     }),

@@ -1214,7 +1214,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             double dblVentaPaisImpuesto = 0, dblVentaPaisImpuestoVenta = 0;
             double dblSubTotal = 0, dblTarifa = 0, dblNeto = 0, dblComision = 0, dblIGV = 0, dblComisionEUA = 0, dblIGV_EUA = 0;
             double dblIncentivo = 0, publicidad = 0, dblTotalPagar = 0, TotalComision = 0, dblIgvInterno = 0;
-            double dblDescuentoPorcentaje = 0, dblDescuentoImporte = 0, dblDescuentoImporteAcumula = 0;
+            double dblDescuentoPorcentaje = (double)pLiquidacionExportar.DescuentoPorcentaje, dblDescuentoImporte = 0, dblDescuentoImporteAcumula = 0;
             float dblDescuento = 0, dblTarifaDescuento = 0;
 
             // Lista per processare le liquidazioni dopo aver generato e salvato l'Excel
@@ -1276,6 +1276,13 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                     dblTotalPagar = dblTarifa;
                 }
                 dblTotalPagar = dblTotalPagar - publicidad;
+
+                if (dblDescuentoPorcentaje > 0)
+                {
+                    dblDescuentoImporte = dblTotalPagar * (dblDescuentoPorcentaje / 100);
+                    dblTotalPagar -= dblDescuentoImporte;
+                    dblDescuentoImporteAcumula += dblDescuentoImporte;
+                }
 
                 dblAcumulaSubTotal += dblSubTotal;
                 dblAcumulaTotal += dblTarifa;

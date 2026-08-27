@@ -603,11 +603,11 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
         public async Task<IActionResult> getObtenerLiquidacionVentas(string? pOrigen = "", DateTime pVentaIngresoInicio = default, DateTime pVentaIngresoFin = default,
                     int pVentaID = 0, int pUsuarioId = 0, string? pEstadoId = "", string? pSituacionId = "", int pAgenciaId = 0,
                     int pAgenciaUsuarioId = 0, string? pClienteNombres = "", string? pClienteApellidos = "", int pPaisId = 0, string? pCodigoExterno = "",
-                    int pPromotorId = 0, int pDistritoId = 0, int int_pLiquidacionPendiente = 0)
+                    int pPromotorId = 0, int pDistritoId = 0, int int_pLiquidacionPendiente = 0, int pEjecutivoCobradorId = 0)
         {
             try
             {
-                var data = await unitOfWork.Ventas.Liquidacion_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId, pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pPromotorId, pDistritoId, int_pLiquidacionPendiente);
+                var data = await unitOfWork.Ventas.Liquidacion_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId, pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pPromotorId, pDistritoId, int_pLiquidacionPendiente, pEjecutivoCobradorId);
                 if (data == null || !data.Any())
                 {
                     BEErrorApi objError = new BEErrorApi();
@@ -861,6 +861,39 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
                 {
                     objOK.errorDescripcion = "Se actualizo la venta correctamente.";
                 }
+                Log4Net.LogInformation(ObjectoTOJson(objOK));
+                return Ok(objOK);
+            }
+            catch (Exception e)
+            {
+                BEError objError = new BEError();
+                objError.errorCodigo = 400;
+                objError.errorDescripcion = e.Message;
+                Log4Net.LogError(ObjectoTOJson(objError));
+                return BadRequest(objError);
+            }
+        }
+
+        [HttpPost, Authorize]
+        [Route("VentaPrecioActualizarProcesar")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BEErrorApi))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BEErrorApi))]
+        public async Task<IActionResult> postVentaPrecioActualizarProcesar(int pVentaID, decimal pPrecio, int pUsuarioId)
+        {
+            try
+            {
+                var data = await unitOfWork.Ventas.VentaPrecio_Procesar(pVentaID, pPrecio, pUsuarioId);
+                if (string.IsNullOrEmpty(data.errorDescripcion))
+                {
+                    BEErrorApi objError = new BEErrorApi();
+                    objError.errorCodigo = 400;
+                    objError.errorDescripcion = "Datos incorrectos";
+                    Log4Net.LogInformation(ObjectoTOJson(objError), "error");
+                    return BadRequest(objError);
+                }
+                BEErrorApi objOK = new BEErrorApi();
+                objOK.errorCodigo = 200;
+                objOK.errorDescripcion = "Se actualizo el precio de la venta correctamente.";
                 Log4Net.LogInformation(ObjectoTOJson(objOK));
                 return Ok(objOK);
             }

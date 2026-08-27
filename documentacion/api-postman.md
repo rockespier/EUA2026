@@ -1,5 +1,89 @@
 # Cambios de API
 
+## Mejoras en Liquidaciones (precio editable, descuento y filtro por ejecutivo cobrador)
+
+Relacionado a: issue #9 (Mejoras en Liquidaciones).
+
+### Descripción
+
+1. La columna "Precio" de la grilla de Liquidación (`VentasLiquidacionObtener`) ahora es editable directamente en el datatable; el guardado se hace con un nuevo endpoint dedicado y queda constancia de la edición manual.
+2. Se agrega una caja de texto de "Descuento (%)" en la pantalla de Liquidación; al hacer clic en "Liquidación" el porcentaje se aplica al total a pagar antes de generar el Excel y de liquidar cada venta.
+3. Se agrega el filtro "Ejecutivo cobrador" (dropdown) al popup de búsqueda avanzada de Liquidación.
+
+### `GET Venta/VentasLiquidacionObtener` — nuevo parámetro `pEjecutivoCobradorId`
+
+- `pEjecutivoCobradorId` (`int`, opcional, default `0`): filtra la búsqueda por el ejecutivo cobrador asociado a la agencia de la venta (mismo campo de valores `cobranzaCobradorId` ya usado en el combo "Cobrador" de la Cancelación de Liquidación y en `Agencia.agenciaEjecutivoCobrador`). `0` = sin filtro.
+- Internamente se agrega el parámetro `@pEjecutivoCobradorId` a la llamada del stored procedure `Liquidacion_Obtener3`.
+
+### `POST Venta/VentaPrecioActualizarProcesar` — nuevo endpoint
+
+Actualiza únicamente el precio (`ventaImporteVenta`) de una venta desde la edición inline de la grilla de Liquidación, dejando constancia de que fue una edición manual (para auditoría). Se creó como endpoint independiente de `VentaActualizarProcesar` para no arrastrar los demás campos que ese endpoint actualiza (comisión, incentivo, importe por pagar, fecha de cancelación), que corresponden a otro flujo (cancelación de venta).
+
+Parámetros (query string, `POST`):
+
+```
+pVentaID: int
+pPrecio: decimal
+pUsuarioId: int
+```
+
+Internamente invoca un nuevo stored procedure `Venta_ActualizarPrecio`.
+
+### `POST LiquidacionGenerarExcel` (frontend, `ProcesoController`) — nuevo campo `DescuentoPorcentaje`
+
+Se agrega el campo `DescuentoPorcentaje` (`decimal`, opcional, default `0`) al body `BELiquidacionExportar` que arma el botón "Liquidación". El porcentaje se aplica al total a pagar de cada venta (después de restar la publicidad y antes de acumular/grabar), impactando tanto el Excel generado como el importe (`pago`) enviado a `Venta/VentasLiquidacionProcesar`.
+
+```json
+{
+  "CodigoTarjeta": "1001, 1002",
+  "CodigoAgencia": 55,
+  "CodigoMotivo": "P",
+  "formula": 1,
+  "DescuentoPorcentaje": 5.5
+}
+```
+
+### `BEVenta` — nuevo campo `ventaPrecioEditadoManual`
+
+Se agrega la propiedad `ventaPrecioEditadoManual` (`bool`) al modelo `BEVenta`, para que la grilla pueda marcar visualmente el precio editado manualmente. Requiere que `Liquidacion_Obtener3` incluya esta columna en el `SELECT`; mientras no se actualice el stored procedure, el campo llega en `false` por defecto y la marca visual simplemente no aparece (no rompe el listado existente).
+
+### ⚠️ Dependencia externa (base de datos)
+
+Este repositorio no contiene stored procedures (viven en SQL Server, fuera del repo). Los siguientes cambios deben coordinarse con el DBA antes de desplegar, o las llamadas fallarán / los filtros y la auditoría no tendrán efecto:
+
+```sql
+-- 1) Nueva columna de auditoría para saber si el precio fue editado manualmente
+ALTER TABLE Venta ADD PrecioEditadoManual BIT NOT NULL DEFAULT 0;
+
+-- 2) Nuevo stored procedure para el guardado inline del precio (POST Venta/VentaPrecioActualizarProcesar)
+--    Firma esperada por el código Dapper:
+--      @pVENTA_Id INT,
+--      @pVENTA_ImportePrecio DECIMAL(18,2),
+--      @pVENTA_Usuario INT
+--    Debe actualizar Venta.ImporteVenta = @pVENTA_ImportePrecio,
+--    Venta.PrecioEditadoManual = 1, Venta.ModificadoUsuarioId = @pVENTA_Usuario,
+--    Venta.ModificadoFecha = GETDATE(), y devolver (codigo, descripcion) como los demás SP de actualización.
+
+-- 3) Liquidacion_Obtener3: agregar el parámetro @pEjecutivoCobradorId INT = 0
+--    y filtrar por el ejecutivo cobrador de la agencia (Agencia.EjecutivoCobrador),
+--    además de incluir la columna PrecioEditadoManual AS ventaPrecioEditadoManual en el SELECT
+--    para que se refleje en la grilla.
+
+-- 4) Liquidacion_Procesar: dado que el importe a pagar (@pVENTA_Pago) ya llega
+--    con el descuento porcentual aplicado desde el backend .NET, no requiere cambios,
+--    pero se recomienda verificar que el SP no recalcule ese importe internamente.
+```
+
+### Frontend
+
+- `Views/Proceso/ListaLiquidaciones.cshtml`: nuevo campo "Descuento (%)" junto al selector de fórmula, y nuevo dropdown "Ejecutivo cobrador" (`#mdvenSelEjeCobradorSearch`) en el popup de búsqueda avanzada.
+- `wwwroot/Travel/Liquidacion.js`: columna "Precio" editable (`contenteditable`) con guardado vía `Venta/VentaPrecioActualizarProcesar` al perder el foco; carga y lectura del filtro "Ejecutivo cobrador" (reutiliza `getValoresTipo('cobranzaCobradorId', 1)`); lectura del descuento (%) y envío en el body de `/LiquidacionGenerarExcel`.
+
+### Fuera de alcance de este cambio
+
+- No se agregó una tabla de auditoría/bitácora genérica; se reutiliza el patrón existente de columnas `ModificadoUsuarioId`/`ModificadoFecha` + el nuevo flag `PrecioEditadoManual`.
+- No se agregó una columna de "Descuento" nueva al Excel generado; el descuento se refleja en la columna existente "A PAGAR".
+
 ## `POST Venta/VentasProcesar` — nuevo campo `ventaOrigen`
 
 Relacionado a: issue #6 (Origen de ventas).

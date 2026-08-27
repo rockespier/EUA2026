@@ -18,7 +18,7 @@ namespace BackAssistanceTravelers.Repositories.Travel
 													string? str_pEstadoId = "", string? str_pSituacionId = "", int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "",
 													string? str_pClienteApellidos = "", int int_pPaisId = 0, string? str_pCodigoExterno = "", string? str_pTipoDoc = "", string? str_pNumeDoc = "");
 		Task<IEnumerable<BEVenta>> Venta_Web_Obtener(string? str_pOrigen = "", DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default, int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "", int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "", int int_pPaisId = 0, string? str_pCodigoExterno = "");
-		Task<IEnumerable<BEVenta>> Liquidacion_Obtener(string? str_pOrigen = "", DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default, int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "", int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "", int int_pPaisId = 0, string? str_pCodigoExterno = "", int int_pPromotorId = 0, int int_pDistritoId = 0, int int_pLiquidacionPendiente = 0);
+		Task<IEnumerable<BEVenta>> Liquidacion_Obtener(string? str_pOrigen = "", DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default, int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "", int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "", int int_pPaisId = 0, string? str_pCodigoExterno = "", int int_pPromotorId = 0, int int_pDistritoId = 0, int int_pLiquidacionPendiente = 0, int int_pEjecutivoCobradorId = 0);
 		Task<BEError> Venta_WEB_Procesar(BEVenta obj_pVenta);
 		Task<BEError> Ventas_Procesar(BEVenta obj_pVenta);
 		Task<BEError> Venta_CancelarExtornar(int int_pVentaID, string? int_pVentaSituacionId);
@@ -53,6 +53,7 @@ namespace BackAssistanceTravelers.Repositories.Travel
 		Task<BEError> Liquidacion_Procesar(int int_pVentaID, decimal dec_pComision, decimal dec_pIncentivo, decimal dec_pPublicidad, int int_IDUsuario, int int_pFormula, decimal dec_pDescuento, decimal dec_pPago, int int_pLiquidacionCod);
 		Task<IEnumerable<BEAgenciaProducto>> Venta_ObtenerDescuentoVentas(string? str_pVentaCodigos);
 		Task<BEError> VentaActualizar_Procesar(BEVentaParametro obj_pVenta);
+		Task<BEError> VentaPrecio_Procesar(int int_pVentaID, decimal dec_pPrecio, int int_pUsuarioId);
 
     }
 }

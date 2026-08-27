@@ -51,5 +51,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers {
 		public IActionResult Lista09PaisAnualVentas() {
 			return View();
 		}
+		public IActionResult PersonalizadoVentas() {
+			return View();
+		}
 	}
 }

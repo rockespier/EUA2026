@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var indexDashluser = ((ClaimsIdentity)User.Identity!).FindFirst("PaginaDashboard")!.Value;
@@ -205,7 +205,7 @@
 
     .dropdown-basic {
         margin-bottom: -60px !important;
-     }
+    }
 </style>
 <link href="~/assets/css/vendors/jquery-ui.css" rel="stylesheet" />
 <link href="~/assets/css/datatablev2/datatables.datatables.css" rel="stylesheet" />
@@ -249,67 +249,66 @@
             <!-- State saving Starts-->
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-body">                       
-                            <!--Filtros-->
-                          <div class="card-body dropdown-basic">
-                               
-                                    <button id="btnLiquiPende" type="button" class="btn btn-info col-md-4" onclick="exportarLiquidacionCanPen('P');">
-                                        <i class="fa fa-list-alt"></i>  Liquidación
-                                    </button>
+                    <div class="card-body">
+                        <!--Filtros-->
+                        <div class="card-body dropdown-basic">
 
-                                    <button id="btnLiquiCancelar" type="button" class="btn btn-success col-md-4" onclick="AbrirModalCancelar();">
-                                        <i class="fa fa-file-text"></i>  Cancelación
-                                    </button>
+                            <button id="btnLiquiPende" type="button" class="btn btn-info col-md-4" onclick="exportarLiquidacionCanPen('P');">
+                                <i class="fa fa-list-alt"></i>  Liquidación
+                            </button>
 
-                                    <button id="btnLiquiExtornar" type="button" class="btn btn-danger col-md-4" onclick="ventasExtornar();">
-                                        <i class="fa fa-undo"></i>  Extornar
-                                    </button> 
+                            <button id="btnLiquiCancelar" type="button" class="btn btn-success col-md-4" onclick="AbrirModalCancelar();">
+                                <i class="fa fa-file-text"></i>  Cancelación
+                            </button>
 
-                                    <button id="btnBusqueda" type="button" class="btn btn-dark col-md-4" onclick="AbrirModalBusqueda();">
-                                        <i class="fa fa-binoculars"></i>  Busqueda Avanzada
-                                    </button>
+                            <button id="btnLiquiExtornar" type="button" class="btn btn-danger col-md-4" onclick="ventasExtornar();">
+                                <i class="fa fa-undo"></i>  Extornar
+                            </button>
 
-                                    <button id="btnLiquiCance" type="button" class="btn btn-info col-md-4" onclick="exportarLiquidacionCanPen('C');">
-                                        <i class="fa fa-list-ul"></i>  Reporte
-                                    </button>
+                            <button id="btnBusqueda" type="button" class="btn btn-dark col-md-4" onclick="AbrirModalBusqueda();">
+                                <i class="fa fa-binoculars"></i>  Busqueda Avanzada
+                            </button>
 
-                                    <div class="row">
-                                        <div class="col-sm-3 col-md-3 col-lg-3">
-                                            <label required="" class="col-md-2">Formula:<sup class="text-danger">* </sup></label>
-                                        </div>
-                                        <div class="col-sm-3 col-md-3 col-lg-3">
-                                            <label for="txtDescuentoLiquidacion" class="col-md-6">Descuento (%):</label>
-                                            <input type="number" min="0" max="100" step="0.01" class="form-control form-control-sm d-inline-block" style="width:100px" id="txtDescuentoLiquidacion" name="txtDescuentoLiquidacion" placeholder="0.00">
-                                        </div>
-                                        <div class="col-sm-2 col-md-2 col-lg-2">
-                                            <div class="form-check">
-                                                <label for="rdRegular" class="form-check-label">
-                                                    <input type="radio" id="rdRegular" name="RdFormulaLiquidacion" value="1" required="" class="form-check-input">Regular
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 col-md-2 col-lg-2">
-                                                <div class="form-check">
-                                                    <label for="rdPlanb" class="form-check-label">
-                                                        <input type="radio" id="rdPlanb" name="RdFormulaLiquidacion" value="2" required="" class="form-check-input">Plan B
-                                                    </label>
-                                                </div>
-                                        </div>
-                                        <div class="col-sm-2 col-md-2 col-lg-2">
-                                            <div class="form-check">
-                                                <label for="rdPlanb" class="form-check-label">
-                                                    <input type="radio" id="rdFull" name="RdFormulaLiquidacion" value="3" required="" class="form-check-input">Full
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 col-md-3 col-lg-3 text-end">
-                                            <div class="mb-3">
-                                                <button id="btnCollapseAllGroups" class="btn btn-primary" type="button">Colapsar todo</button>
-                                            </div>
-                                        </div>
+                            <button id="btnLiquiCance" type="button" class="btn btn-info col-md-4" onclick="exportarLiquidacionCanPen('C');">
+                                <i class="fa fa-list-ul"></i>  Reporte
+                            </button>
+
+                            <button id="btnCollapseAllGroups" class="btn btn-primary" type="button">Colapsar todo</button>
+
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <label required="" class="col-md-2">Formula:<sup class="text-danger">* </sup></label>
+                                </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <div class="form-check">
+                                        <label for="rdRegular" class="form-check-label">
+                                            <input type="radio" id="rdRegular" name="RdFormulaLiquidacion" value="1" required="" class="form-check-input">Regular
+                                        </label>
                                     </div>
+                                </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <div class="form-check">
+                                        <label for="rdPlanb" class="form-check-label">
+                                            <input type="radio" id="rdPlanb" name="RdFormulaLiquidacion" value="2" required="" class="form-check-input">Plan B
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <div class="form-check">
+                                        <label for="rdPlanb" class="form-check-label">
+                                            <input type="radio" id="rdFull" name="RdFormulaLiquidacion" value="3" required="" class="form-check-input">Full
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 text-end">
+                                    <div class="mb-3">
+                                        <label for="txtDescuentoLiquidacion" class="col-md-6">Descuento (%):</label>
+                                        <input type="number" min="0" max="100" step="0.01" class="form-control form-control-sm d-inline-block" style="width:100px" id="txtDescuentoLiquidacion" name="txtDescuentoLiquidacion" placeholder="0.00">
+                                    </div>
+                                </div>
                             </div>
-                       
+                        </div>
+
                         <div class="table-responsive user-datatable">
                             <table class="display" id="dtVenta">
                                 <thead>
@@ -328,9 +327,9 @@
                                         <th>Situación</th>
                                         <th>Registrado por</th>
                                         <th>Pais</th>
-                                        <th>Formula</th> 
+                                        <th>Formula</th>
                                         <th>Cod.Externo</th>
-                                        <th>Acciones</th>                                       
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -754,6 +753,6 @@
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="../assets/js/script.js"></script>
-    <script src="~/travel/General.js?v=1.55"></script>
-    <script src="~/travel/liquidacion.js?v=6.98"></script>
+    <script src="~/travel/General.js?v=1.56"></script>
+    <script src="~/travel/liquidacion.js?v=7.0"></script>
 }

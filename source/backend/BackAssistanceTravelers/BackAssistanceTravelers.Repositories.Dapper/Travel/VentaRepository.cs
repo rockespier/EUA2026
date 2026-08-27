@@ -54,8 +54,8 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pLiquidacionPendiente", int_pLiquidacionPendiente);
                 parameters.Add("@pEjecutivoCobradorId", int_pEjecutivoCobradorId);
                 var result = await connection.QueryAsync<BEVenta>
-                                        ("Liquidacion_Obtener3", parameters,
-                                        commandType: System.Data.CommandType.StoredProcedure,commandTimeout:900);
+                                        ("Liquidacion_Obtener_2026", parameters,
+                                        commandType: System.Data.CommandType.StoredProcedure, commandTimeout: 900);
                 return result;
             }
         }
@@ -220,11 +220,11 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_ContactoTelefono", obj_pVenta.ventaContactoTelefono);
                 parameters.Add("@pVENTA_ContactoDistrito", obj_pVenta.ventaContactoDistrito!.ToString().ToUpper());
                 parameters.Add("@pVENTA_ContactoPais", obj_pVenta.ventaContactoPais!.ToString().ToUpper());
-                parameters.Add("@pVENTA_ImporteVenta", obj_pVenta.ventaImporteVenta, DbType.Decimal, precision:18, scale:4);
+                parameters.Add("@pVENTA_ImporteVenta", obj_pVenta.ventaImporteVenta, DbType.Decimal, precision: 18, scale: 4);
                 parameters.Add("@pVENTA_Usuario", obj_pVenta.ventaCreadoUsuarioId);
                 parameters.Add("@pVENTA_Counter", obj_pVenta.ventaCounter);
                 parameters.Add("@pVENTA_Observacion", obj_pVenta.ventaObservacion);
-				parameters.Add("@pVENTA_PromocionId", obj_pVenta.ventaPromocionId);
+                parameters.Add("@pVENTA_PromocionId", obj_pVenta.ventaPromocionId);
                 parameters.Add("@pVENTA_Origen", obj_pVenta.ventaOrigen == null ? "" : obj_pVenta.ventaOrigen);
                 var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaGrupal_Procesar_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
@@ -589,7 +589,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 return result!;
             }
         }
-        public async Task<IEnumerable<BEPasajero>> Venta_ObtenerPasajero(string? str_pVentaClienteDocumentoTipoId, string? str_pVentaClienteDocumentoNumero, 
+        public async Task<IEnumerable<BEPasajero>> Venta_ObtenerPasajero(string? str_pVentaClienteDocumentoTipoId, string? str_pVentaClienteDocumentoNumero,
             DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default)
         {
             await using (var connection = new SqlConnection(_connectionString))
@@ -612,28 +612,30 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 return result;
             }
         }
-		public async Task<IEnumerable<BEPasajero>> Venta_ListaPasajero(string? str_pVentaClienteDocumentoTipoId, string? str_pVentaClienteDocumentoNumero,
-			DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default) {
-			await using (var connection = new SqlConnection(_connectionString)) {
-				Helpers GeneralAyuda = new Helpers();
-				string str_vFechaValidoDesde = "";
-				string str_vFechaValidoHasta = "";
-				if (dte_pVentaIngresoInicio != DateTime.Parse("0001-01-01"))
-					str_vFechaValidoDesde = GeneralAyuda.TraerFechaFormatoServidorBD(dte_pVentaIngresoInicio);
-				if (dte_pVentaIngresoFin != DateTime.Parse("0001-01-01"))
-				 str_vFechaValidoHasta = GeneralAyuda.TraerFechaFormatoServidorBD(dte_pVentaIngresoFin);
-				var parameters = new DynamicParameters();
-				parameters.Add("@pPasajero_DocumentoTipo", str_pVentaClienteDocumentoTipoId);
-				parameters.Add("@pPasajero_DocumentoNumero", str_pVentaClienteDocumentoNumero);
-				parameters.Add("@pFechaIngresoInicio", str_vFechaValidoDesde);
-				parameters.Add("@pFechaIngresoFin", str_vFechaValidoHasta);
-				var result = await connection.QueryAsync<BEPasajero>
-										("Pasajero_Listado", parameters,
-										commandType: System.Data.CommandType.StoredProcedure);
-				return result;
-			}
-		}
-		public async Task<IEnumerable<BEVenta>> Venta_ObtenerTarjetasVencidas()
+        public async Task<IEnumerable<BEPasajero>> Venta_ListaPasajero(string? str_pVentaClienteDocumentoTipoId, string? str_pVentaClienteDocumentoNumero,
+            DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default)
+        {
+            await using (var connection = new SqlConnection(_connectionString))
+            {
+                Helpers GeneralAyuda = new Helpers();
+                string str_vFechaValidoDesde = "";
+                string str_vFechaValidoHasta = "";
+                if (dte_pVentaIngresoInicio != DateTime.Parse("0001-01-01"))
+                    str_vFechaValidoDesde = GeneralAyuda.TraerFechaFormatoServidorBD(dte_pVentaIngresoInicio);
+                if (dte_pVentaIngresoFin != DateTime.Parse("0001-01-01"))
+                    str_vFechaValidoHasta = GeneralAyuda.TraerFechaFormatoServidorBD(dte_pVentaIngresoFin);
+                var parameters = new DynamicParameters();
+                parameters.Add("@pPasajero_DocumentoTipo", str_pVentaClienteDocumentoTipoId);
+                parameters.Add("@pPasajero_DocumentoNumero", str_pVentaClienteDocumentoNumero);
+                parameters.Add("@pFechaIngresoInicio", str_vFechaValidoDesde);
+                parameters.Add("@pFechaIngresoFin", str_vFechaValidoHasta);
+                var result = await connection.QueryAsync<BEPasajero>
+                                        ("Pasajero_Listado", parameters,
+                                        commandType: System.Data.CommandType.StoredProcedure);
+                return result;
+            }
+        }
+        public async Task<IEnumerable<BEVenta>> Venta_ObtenerTarjetasVencidas()
         {
             await using (var connection = new SqlConnection(_connectionString))
             {
@@ -643,16 +645,18 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 return result!;
             }
         }
-		public async Task<IEnumerable<BEAgenciaProducto>> Venta_ObtenerDescuentoVentas(string? str_pVentaCodigos) {
-			await using (var connection = new SqlConnection(_connectionString)) {
-				var parameters = new DynamicParameters();
-				parameters.Add("@pVENTA_Codigos", str_pVentaCodigos);				
-				var result = await connection.QueryAsync<BEAgenciaProducto>("Venta_ObtenerDescuentoVentas", parameters,
-										commandType: System.Data.CommandType.StoredProcedure);
-				return result!;
-			}
-		}
-		public async Task<IEnumerable<BEVenta>> Venta_ObtenerVentasEspecificas(string? str_pVentaCodigos, string? str_pVentaSituacion)
+        public async Task<IEnumerable<BEAgenciaProducto>> Venta_ObtenerDescuentoVentas(string? str_pVentaCodigos)
+        {
+            await using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@pVENTA_Codigos", str_pVentaCodigos);
+                var result = await connection.QueryAsync<BEAgenciaProducto>("Venta_ObtenerDescuentoVentas", parameters,
+                                        commandType: System.Data.CommandType.StoredProcedure);
+                return result!;
+            }
+        }
+        public async Task<IEnumerable<BEVenta>> Venta_ObtenerVentasEspecificas(string? str_pVentaCodigos, string? str_pVentaSituacion)
         {
             await using (var connection = new SqlConnection(_connectionString))
             {
@@ -775,26 +779,26 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 return result!;
             }
         }
-		public async Task<BEError> Liquidacion_Procesar(int int_pVentaID, decimal dec_pComision, decimal dec_pIncentivo, decimal dec_pPublicidad, int int_IDUsuario,
+        public async Task<BEError> Liquidacion_Procesar(int int_pVentaID, decimal dec_pComision, decimal dec_pIncentivo, decimal dec_pPublicidad, int int_IDUsuario,
                                                         int int_pFormula, decimal dec_pDescuento, decimal dec_pPago, int int_pLiquidacionCod)
-		{
-			await using (var connection = new SqlConnection(_connectionString))
-			{
-				var parameters = new DynamicParameters();
-				parameters.Add("@pVENTA_Id", int_pVentaID);
-				parameters.Add("@pVENTA_Comision", dec_pComision);
-				parameters.Add("@pVENTA_Incentivo", dec_pIncentivo);
-				parameters.Add("@pVENTA_publicidad", dec_pPublicidad);
-				parameters.Add("@pVENTA_formulaLiquidacion", int_pFormula);
-				parameters.Add("@pVENTA_descuentoImporte", dec_pDescuento);
-				parameters.Add("@pVENTA_UsuarioId", int_IDUsuario);
-				parameters.Add("@pVENTA_Pago", dec_pPago);
-				parameters.Add("@pLiquidacionCodigo", int_pLiquidacionCod);
-				var result = await connection.QueryFirstOrDefaultAsync<BEError>("Liquidacion_Procesar", parameters,
-										commandType: System.Data.CommandType.StoredProcedure);
-				return result!;
-			}
-		}
+        {
+            await using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@pVENTA_Id", int_pVentaID);
+                parameters.Add("@pVENTA_Comision", dec_pComision);
+                parameters.Add("@pVENTA_Incentivo", dec_pIncentivo);
+                parameters.Add("@pVENTA_publicidad", dec_pPublicidad);
+                parameters.Add("@pVENTA_formulaLiquidacion", int_pFormula);
+                parameters.Add("@pVENTA_descuentoImporte", dec_pDescuento);
+                parameters.Add("@pVENTA_UsuarioId", int_IDUsuario);
+                parameters.Add("@pVENTA_Pago", dec_pPago);
+                parameters.Add("@pLiquidacionCodigo", int_pLiquidacionCod);
+                var result = await connection.QueryFirstOrDefaultAsync<BEError>("Liquidacion_Procesar", parameters,
+                                        commandType: System.Data.CommandType.StoredProcedure);
+                return result!;
+            }
+        }
         public async Task<BEError> VentaActualizar_Procesar(BEVentaParametro obj_pVenta)
         {
             await using (var connection = new SqlConnection(_connectionString))
@@ -836,7 +840,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 var parameters = new DynamicParameters();
                 parameters.Add("@pVENTA_Id", int_pVentaID);
                 parameters.Add("@pVENTA_ImportePrecio", dec_pPrecio);
-                parameters.Add("@pVENTA_Usuario", int_pUsuarioId);
+                parameters.Add("@pVENTA_UsuarioId", int_pUsuarioId);
 
                 var resultData = await connection.QueryFirstOrDefaultAsync<dynamic>("Venta_ActualizarPrecio", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);

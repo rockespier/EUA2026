@@ -1,4 +1,4 @@
-﻿hideLoader();
+hideLoader();
 ReseteoLocalStorage();
 cargarCombosBusqueda();
 IniciarFechasBsuqueda();
@@ -837,7 +837,7 @@ async function IniciarFechasBsuqueda() {
 async function IniciarTablaClick() {
     const tablaGrid = $('#dtVenta').DataTable();
 
-    $('#dtVenta tbody').on('click', 'tr td', function () {
+    $('#dtVenta tbody').on('dblclick', 'tr td', function () {
         const datavalor = tablaGrid.row(this).data();
         if (datavalor !== undefined) {
             const idRec = tablaGrid.row(this).data().ventaId;

@@ -270,12 +270,16 @@
                                     </button>
 
                                     <button id="btnLiquiCance" type="button" class="btn btn-info col-md-4" onclick="exportarLiquidacionCanPen('C');">
-                                        <i class="fa fa-list-ul"></i>  Reporte 
+                                        <i class="fa fa-list-ul"></i>  Reporte
                                     </button>
-                               
+
                                     <div class="row">
                                         <div class="col-sm-3 col-md-3 col-lg-3">
                                             <label required="" class="col-md-2">Formula:<sup class="text-danger">* </sup></label>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                            <label for="txtDescuentoLiquidacion" class="col-md-6">Descuento (%):</label>
+                                            <input type="number" min="0" max="100" step="0.01" class="form-control form-control-sm d-inline-block" style="width:100px" id="txtDescuentoLiquidacion" name="txtDescuentoLiquidacion" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-2 col-md-2 col-lg-2">
                                             <div class="form-check">
@@ -545,6 +549,15 @@
                                     <div>
                                         <label class="form-label" for="selMarca">Promotor:</label>
                                         <select class="form-select form-select-sm" id="mdvenSelPromoSearch" name="mdvenSelPromoSearch">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" name="divVenSelEjeCobradorSearch" id="divVenSelEjeCobradorSearch">
+                                <div class="col-sm-12">
+                                    <div>
+                                        <label class="form-label" for="mdvenSelEjeCobradorSearch">Ejecutivo cobrador:</label>
+                                        <select class="form-select form-select-sm" id="mdvenSelEjeCobradorSearch" name="mdvenSelEjeCobradorSearch">
                                         </select>
                                     </div>
                                 </div>

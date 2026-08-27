@@ -529,6 +529,10 @@ async function exportarLiquidacionCanPen(situacion) {
         mostrarMensaje(2, "Por favor, seleccionar al menos una venta en el estado : " + desSituacion + " .");
         return false;
     }
+    let descuentoPorcentaje = parseFloat(document.getElementById("txtDescuentoLiquidacion").value);
+    if (isNaN(descuentoPorcentaje) || descuentoPorcentaje < 0) {
+        descuentoPorcentaje = 0;
+    }
     showLoader();
     try {
         var dataEnviar = [];
@@ -541,6 +545,7 @@ async function exportarLiquidacionCanPen(situacion) {
                 CodigoAgencia: parseInt(idAgencia),
                 CodigoMotivo: situacion,
                 formula: formula,
+                DescuentoPorcentaje: descuentoPorcentaje,
             };
             dataEnviar.push(ventasUnido);
         });
@@ -636,6 +641,18 @@ async function cargarCombosBusqueda() {
                 const valorId = cboobj.usuarioid;
                 const valorNombre = cboobj.usuarioNombre;
                 $('#mdvenSelPromoSearch').append($('<option/>').attr("value", valorId).text(valorNombre));
+            }
+        }
+    }
+    const elcomboEjeCobrador = await getValoresTipo('cobranzaCobradorId', 1);
+    if (elcomboEjeCobrador !== undefined) {
+        let cantElementos06 = elcomboEjeCobrador.length;
+        if (cantElementos06 > 0) {
+            $('#mdvenSelEjeCobradorSearch').append($('<option/>').attr("value", "").text('---Seleccione---'));
+            for (const cboobj of elcomboEjeCobrador) {
+                const valorId = cboobj.valorId;
+                const valorNombre = cboobj.valorNombre;
+                $('#mdvenSelEjeCobradorSearch').append($('<option/>').attr("value", valorId).text(valorNombre));
             }
         }
     }
@@ -787,8 +804,9 @@ async function limpiarModalBuqueda() {
     document.getElementById("mdvenCodExternoSearch").value = "";
     document.getElementById("mdvenSelPaisSearch").value = "";  
     document.getElementById("txtAgencia").value = "";
-    document.getElementById("mdvenSelUsuarioSearch").value = "";   
+    document.getElementById("mdvenSelUsuarioSearch").value = "";
     document.getElementById("mdvenSelSituacionSearch").value = "";
+    document.getElementById("mdvenSelEjeCobradorSearch").value = "";
 }
 async function clickBuscarLimpiar() {
     limpiarModalBuqueda();
@@ -916,7 +934,19 @@ async function CargarTodo() {
                     return "<span title='" + resultado + "'>" + resultado + "</span>";
                 }
             }, {
-                "mData": "ventaImporteVenta"
+                "mData": "ventaImporteVenta", "className": "editable-precio",
+                "createdCell": function (td, cellData, rowData) {
+                    $(td).attr('contenteditable', 'true');
+                    $(td).attr('data-venta-id', rowData.ventaId);
+                    $(td).attr('data-precio-original', cellData);
+                    if (rowData.ventaPrecioEditadoManual) {
+                        $(td).attr('title', 'Precio editado manualmente');
+                        $(td).css('font-style', 'italic');
+                    }
+                },
+                "render": function (mData, disp) {
+                    return disp === 'display' ? parseFloat(mData).toFixed(2) : mData;
+                }
             },  {
                 "mData": "ventaSituacionNombre"
             }, {
@@ -1110,6 +1140,7 @@ async function CargarTodo() {
     
     let BusquedaCodPromotor = "";
     let BusquedaCodDistrito = "";
+    let BusquedaCodEjeCobrador = document.getElementById("mdvenSelEjeCobradorSearch").value;
 
     if (BusquedaCodPais === "") {
         BusquedaCodPais = menuPaisId;       
@@ -1125,6 +1156,9 @@ async function CargarTodo() {
     }
     if (BusquedaCodDistrito === "") {
         BusquedaCodDistrito = 0;
+    }
+    if (BusquedaCodEjeCobrador === "") {
+        BusquedaCodEjeCobrador = 0;
     }
 
     if (BusquedaCodSituacion === "") {
@@ -1154,7 +1188,7 @@ async function CargarTodo() {
         estadoCheck = 1
     }
 
-    const listadoVentas = await getVentasLiquidacion(menuelOrigen, CodigoBusqueda, dtfechaVigINI, dtfechaVigFIN, AgenciaId, BusquedaDesNombres, BusquedaDesApellidos, BusquedaCodEstado, BusquedaCodSituacion, BusquedaCodExterno, BusquedaCodPais, BusquedaCodAgencia, BusquedaCodAgenciaUsuario, BusquedaCodPromotor, BusquedaCodDistrito, estadoCheck);
+    const listadoVentas = await getVentasLiquidacion(menuelOrigen, CodigoBusqueda, dtfechaVigINI, dtfechaVigFIN, AgenciaId, BusquedaDesNombres, BusquedaDesApellidos, BusquedaCodEstado, BusquedaCodSituacion, BusquedaCodExterno, BusquedaCodPais, BusquedaCodAgencia, BusquedaCodAgenciaUsuario, BusquedaCodPromotor, BusquedaCodDistrito, estadoCheck, BusquedaCodEjeCobrador);
     if (listadoVentas !== undefined) {
         if (listadoVentas.length > 0) {
             tablaGrid.clear().draw();
@@ -1169,6 +1203,50 @@ async function CargarTodo() {
     setTimeout(async () => {
         await colapsarTodo();
     }, 300);
+}
+
+$(document).off('focusout', '#dtVenta td.editable-precio').on('focusout', '#dtVenta td.editable-precio', async function () {
+    const celda = $(this);
+    const ventaId = parseInt(celda.attr('data-venta-id'));
+    const precioOriginal = parseFloat(celda.attr('data-precio-original'));
+    const nuevoPrecio = parseFloat(celda.text().trim().replace(',', '.'));
+
+    if (isNaN(nuevoPrecio) || nuevoPrecio < 0) {
+        mostrarMensaje(2, "El precio ingresado no es válido.");
+        celda.text(precioOriginal.toFixed(2));
+        return;
+    }
+    if (nuevoPrecio === precioOriginal) {
+        celda.text(precioOriginal.toFixed(2));
+        return;
+    }
+    const resultado = await postVentaPrecioActualizarProcesar(ventaId, nuevoPrecio);
+    if (resultado !== undefined && resultado.errorCodigo === 200) {
+        celda.attr('data-precio-original', nuevoPrecio);
+        celda.attr('title', 'Precio editado manualmente');
+        celda.css('font-style', 'italic');
+        celda.text(nuevoPrecio.toFixed(2));
+        mostrarMensaje(1, "Precio actualizado correctamente.");
+    } else {
+        mostrarMensaje(2, "No se pudo actualizar el precio.");
+        celda.text(precioOriginal.toFixed(2));
+    }
+});
+async function postVentaPrecioActualizarProcesar(pVentaID, pPrecio) {
+    const urlApiFecht = menuUrlApi + "Venta/VentaPrecioActualizarProcesar";
+    const urlParametro = "?pVentaID=" + pVentaID + "&pPrecio=" + pPrecio + "&pUsuarioId=" + menuUserId;
+    const response = await fetch(urlApiFecht + urlParametro, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${menuToken}`,
+        }
+    });
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return undefined;
 }
 
 $('#btnCollapseAllGroups').off('click').on('click', function () {
@@ -1294,9 +1372,9 @@ async function AbrirModalConsulta(id) {
     }
     $('#popupModalVentaRead').modal('show');
 }
-async function getVentasLiquidacion(pOrigen, pIdVenta, pfechaIni, pfechaFin, pIdusuario, pNombres, pApellidos, pEstado, pSituacion, pCodExt, pPais, pAgencia, pUsuarioAgencia, pPromotor, pDist, pLiquidacionPendiente) {
+async function getVentasLiquidacion(pOrigen, pIdVenta, pfechaIni, pfechaFin, pIdusuario, pNombres, pApellidos, pEstado, pSituacion, pCodExt, pPais, pAgencia, pUsuarioAgencia, pPromotor, pDist, pLiquidacionPendiente, pEjeCobrador) {
     const urlApiFecht = menuUrlApi + "Venta/VentasLiquidacionObtener";
-    const urlParametro = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin + "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion + "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres + "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pPromotorId=" + pPromotor + "&pDistritoId=" + pDist + "&int_pLiquidacionPendiente=" + pLiquidacionPendiente;
+    const urlParametro = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin + "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion + "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres + "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pPromotorId=" + pPromotor + "&pDistritoId=" + pDist + "&int_pLiquidacionPendiente=" + pLiquidacionPendiente + "&pEjecutivoCobradorId=" + (pEjeCobrador || 0);
     const response = await fetch(urlApiFecht + urlParametro, {
         method: 'GET',
         headers: {

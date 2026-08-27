@@ -109,6 +109,7 @@ namespace BackAssistanceTravelers.Models.Venta
 		public string? ventaFormulaLiquidacionNombre { get; set; }
 		public float ventaPagarLiquidacion { get; set; }
 		public string? productoATVCodigo { get; set; }
+		public bool ventaPrecioEditadoManual { get; set; }
 
         public string? ventaCobranzaPagoFechaString { get; set; }
     }

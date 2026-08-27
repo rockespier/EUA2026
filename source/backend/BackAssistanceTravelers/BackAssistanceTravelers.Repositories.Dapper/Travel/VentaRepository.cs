@@ -21,9 +21,10 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
         {
         }
         public async Task<IEnumerable<BEVenta>> Liquidacion_Obtener(string? str_pOrigen = "", DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default,
-                                int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "", 
-                                int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "", 
-                                int int_pPaisId = 0, string? str_pCodigoExterno = "", int int_pPromotorId = 0, int int_pDistritoId = 0, int int_pLiquidacionPendiente = 0)
+                                int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "",
+                                int int_pAgenciaId = 0, int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "",
+                                int int_pPaisId = 0, string? str_pCodigoExterno = "", int int_pPromotorId = 0, int int_pDistritoId = 0, int int_pLiquidacionPendiente = 0,
+                                int int_pEjecutivoCobradorId = 0)
         {
             await using (var connection = new SqlConnection(_connectionString))
             {
@@ -51,6 +52,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pAgenciaPromotorId", int_pPromotorId);
                 parameters.Add("@pAgenciaUbigeoId", int_pDistritoId);
                 parameters.Add("@pLiquidacionPendiente", int_pLiquidacionPendiente);
+                parameters.Add("@pEjecutivoCobradorId", int_pEjecutivoCobradorId);
                 var result = await connection.QueryAsync<BEVenta>
                                         ("Liquidacion_Obtener3", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure,commandTimeout:900);
@@ -817,6 +819,28 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                                         commandType: System.Data.CommandType.StoredProcedure);
 
                 // Crea el objeto BEError con el mapeo correcto
+                var result = new BEError();
+                if (resultData != null)
+                {
+                    result.errorCodigo = resultData.codigo;
+                    result.errorDescripcion = resultData.descripcion;
+                }
+
+                return result;
+            }
+        }
+        public async Task<BEError> VentaPrecio_Procesar(int int_pVentaID, decimal dec_pPrecio, int int_pUsuarioId)
+        {
+            await using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@pVENTA_Id", int_pVentaID);
+                parameters.Add("@pVENTA_ImportePrecio", dec_pPrecio);
+                parameters.Add("@pVENTA_Usuario", int_pUsuarioId);
+
+                var resultData = await connection.QueryFirstOrDefaultAsync<dynamic>("Venta_ActualizarPrecio", parameters,
+                                        commandType: System.Data.CommandType.StoredProcedure);
+
                 var result = new BEError();
                 if (resultData != null)
                 {

@@ -6,5 +6,6 @@
 		public int CodigoAgencia { get; set; }
 		public string? CodigoMotivo { get; set; }
 		public int formula { get; set; }
+		public decimal DescuentoPorcentaje { get; set; }
 	}
 }

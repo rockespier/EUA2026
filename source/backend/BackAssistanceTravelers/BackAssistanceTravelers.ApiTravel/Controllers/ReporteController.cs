@@ -228,6 +228,7 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
             int int_pPaisId, string? int_pSituacionId, int int_pAnio, int int_pMes,
             int int_TipoReporte, int int_pAgenciaId, int int_pPromotorId, int int_pProductoId) {
             try {
+                int_pPromotorId = ResolverPromotorId(int_pPromotorId);
                 var data = await unitOfWork.Reportes.VentasRangoEdad_Obtener(int_pGrupoId,int_pPaisId, int_pSituacionId, int_pAnio, int_pMes, int_TipoReporte, int_pAgenciaId, int_pPromotorId, int_pProductoId);
                 if (data == null || !data.Any()) {
                     BEErrorApi objError = new BEErrorApi();

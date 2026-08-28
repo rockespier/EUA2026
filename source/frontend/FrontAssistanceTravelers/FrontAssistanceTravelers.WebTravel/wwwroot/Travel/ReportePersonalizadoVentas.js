@@ -31,7 +31,6 @@ const COLUMNAS_VENTA = [
     },
     {
         grupo: "Cliente", campos: [
-            { campo: "ventaClienteApellidoNombre", etiqueta: "Cliente (Apellidos y Nombres)", tipo: "texto" },
             { campo: "ventaClienteNombres", etiqueta: "Nombres", tipo: "texto" },
             { campo: "ventaClienteApellidos", etiqueta: "Apellidos", tipo: "texto" },
             { campo: "ventaClienteDocumentoTipoNombre", etiqueta: "Tipo de Documento", tipo: "texto" },
@@ -59,8 +58,7 @@ const COLUMNAS_VENTA = [
     },
     {
         grupo: "Agencia y Promotor", campos: [
-            { campo: "ventaAgenciaNombre", etiqueta: "Agencia", tipo: "texto" },
-            { campo: "ventaUsuarioAgenciaNombre", etiqueta: "Usuario Agencia", tipo: "texto" },
+            { campo: "ventaUsuarioAgenciaNombre", etiqueta: "Agencia", tipo: "texto" },
             { campo: "ventaAgenciaDireccion", etiqueta: "Dirección Agencia", tipo: "texto" },
             { campo: "ventaAgenciaCorreo", etiqueta: "Correo Agencia", tipo: "texto" },
             { campo: "ventaAgenciaRUC", etiqueta: "RUC Agencia", tipo: "texto" },
@@ -144,6 +142,7 @@ let tablaGrid = null;
 cargarCombosBusqueda();
 IniciarFechasBsuqueda();
 construirPanelColumnas();
+hideLoader();
 
 function showLoader() {
     document.getElementById('globalLoader').style.display = 'flex';

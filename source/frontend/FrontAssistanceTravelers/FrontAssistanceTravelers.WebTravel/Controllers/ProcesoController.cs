@@ -991,6 +991,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             var agencia = pLiquidacionExportar.CodigoAgencia;
             var situacion = pLiquidacionExportar.CodigoMotivo;
             var formula = pLiquidacionExportar.formula; //1 Desglose Regular |2 Plan B | 3 Full
+            bool blnTieneDescuento = pLiquidacionExportar.DescuentoPorcentaje > 0;
+            // Si hay descuento, se agrega la columna "DESCUENTO" en S y "A PAGAR"/"DESTINO" se corren a T/U
+            string colPagar = blnTieneDescuento ? "T" : "S";
+            string colDestino = blnTieneDescuento ? "U" : "T";
 
             int elcodigVenta1 = Int32.Parse(codigos!.Split(",")[0]);
 
@@ -1144,7 +1148,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Column("Q").Width = 20;
             worksheet.Column("R").Width = 20;
             worksheet.Column("S").Width = 20;
-            worksheet.Column("T").Width = 30;
+            worksheet.Column(colPagar).Width = 20;
+            worksheet.Column(colDestino).Width = 30;
 
             Stream streamLogo = await RetornarStreamImageLogo("logos/logo.png");
             worksheet.AddPicture(streamLogo).MoveTo(worksheet.Cell("B2"));
@@ -1176,7 +1181,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             estiloDetalleTitulos.Border.LeftBorder = XLBorderStyleValues.Medium;
             estiloDetalleTitulos.Border.RightBorderColor = XLColor.Black;
             estiloDetalleTitulos.Border.RightBorder = XLBorderStyleValues.Medium;
-            worksheet.Range("A16:T16").Style = estiloDetalleTitulos;
+            worksheet.Range("A16:" + colDestino + "16").Style = estiloDetalleTitulos;
 
             int intInicioRegistroInicio = 17;
             int intInicioRegistro = intInicioRegistroInicio;
@@ -1205,8 +1210,12 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             }
             worksheet.Cell("Q16").Value = "INC.";
             worksheet.Cell("R16").Value = "PUB.";
-            worksheet.Cell("S16").Value = "A PAGAR";
-            worksheet.Cell("T16").Value = "DESTINO";
+            if (blnTieneDescuento)
+            {
+                worksheet.Cell("S16").Value = "DESCUENTO";
+            }
+            worksheet.Cell(colPagar + "16").Value = "A PAGAR";
+            worksheet.Cell(colDestino + "16").Value = "DESTINO";
             worksheet.Cell("A16").Value = "COD.EXTERNO";
 
             double dblAcumulaTotal = 0, dblAcumulaComision = 0, dblAcumulaPagar = 0, dblAcumulaSubTotal = 0;
@@ -1316,8 +1325,12 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                     worksheet.Cell("P" + intInicioRegistro).Value = TotalComision;
                     worksheet.Cell("Q" + intInicioRegistro).Value = dblIncentivo;
                     worksheet.Cell("R" + intInicioRegistro).Value = publicidad;
-                    worksheet.Cell("S" + intInicioRegistro).Value = dblTotalPagar;
-                    worksheet.Cell("T" + intInicioRegistro).Value = item.ventaDestino;
+                    if (blnTieneDescuento)
+                    {
+                        worksheet.Cell("S" + intInicioRegistro).Value = Math.Round(dblDescuentoImporte, 2);
+                    }
+                    worksheet.Cell(colPagar + intInicioRegistro).Value = dblTotalPagar;
+                    worksheet.Cell(colDestino + intInicioRegistro).Value = item.ventaDestino;
                     worksheet.Cell("A" + intInicioRegistro).Value = item.ventaCodigoExterno;
                 }
 
@@ -1379,7 +1392,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             estiloDetalleDatosLeft.Border.RightBorder = XLBorderStyleValues.Thin;
             worksheet.Range("F" + intInicioRegistroInicio + ":F" + intInicioRegistro).Style = estiloDetalleDatosLeft;
             worksheet.Range("I" + intInicioRegistroInicio + ":I" + intInicioRegistro).Style = estiloDetalleDatosLeft;
-            worksheet.Range("T" + intInicioRegistroInicio + ":T" + intInicioRegistro).Style = estiloDetalleDatosLeft;
+            worksheet.Range(colDestino + intInicioRegistroInicio + ":" + colDestino + intInicioRegistro).Style = estiloDetalleDatosLeft;
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistro).Style = estiloDetalleDatosLeft;
 
             var estiloDetalleDatosRight = workbook.Style;
@@ -1411,7 +1424,11 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range("P" + intInicioRegistroInicio + ":P" + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range("Q" + intInicioRegistroInicio + ":Q" + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range("R" + intInicioRegistroInicio + ":R" + sumaIni).Style = estiloDetalleDatosRight;
-            worksheet.Range("S" + intInicioRegistroInicio + ":S" + sumaIni).Style = estiloDetalleDatosRight;            
+            worksheet.Range("S" + intInicioRegistroInicio + ":S" + sumaIni).Style = estiloDetalleDatosRight;
+            if (blnTieneDescuento)
+            {
+                worksheet.Range(colPagar + intInicioRegistroInicio + ":" + colPagar + sumaIni).Style = estiloDetalleDatosRight;
+            }
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 
 
@@ -1419,7 +1436,11 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Cell("P" + sumaIni).Value = dblAcumulaComision;
             worksheet.Cell("Q" + sumaIni).Value = Math.Round(dblinc, 2);
             worksheet.Cell("R" + sumaIni).Value = Math.Round(dblPubl, 2);
-            worksheet.Cell("S" + sumaIni).Value = dblAcumulaPagar;
+            if (blnTieneDescuento)
+            {
+                worksheet.Cell("S" + sumaIni).Value = Math.Round(dblDescuentoImporteAcumula, 2);
+            }
+            worksheet.Cell(colPagar + sumaIni).Value = dblAcumulaPagar;
             
 
             // Stili e totali (uguali al codice originale)...

@@ -1337,8 +1337,12 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 
 
 
+                // Importe de descuento a registrar en ventaDescuentoImporte: se conserva el descuento ya existente
+                // de la venta (otro descuento, sin uso actual) y se le suma el descuento calculado en la liquidacion.
+                float dblDescuentoAEnviar = dblDescuento + (float)Math.Round(dblDescuentoImporte, 2);
+
                 // aggiungo alla lista di lavoro post-excel
-                pendingLiquidaciones.Add((item.ventaId, TotalComision, dblIncentivo, publicidad, (int.TryParse(User.FindFirst("IdUsuario")?.Value, out var _uid) ? _uid : 0), formula, dblDescuento, dblTotalPagar, oCodigoLiquidacion[0].correlativoUltimoGenerado));
+                pendingLiquidaciones.Add((item.ventaId, TotalComision, dblIncentivo, publicidad, (int.TryParse(User.FindFirst("IdUsuario")?.Value, out var _uid) ? _uid : 0), formula, dblDescuentoAEnviar, dblTotalPagar, oCodigoLiquidacion[0].correlativoUltimoGenerado));
 
                 intInicioRegistro++;
                 dblinc += item.VentaIncentivoTarifa;

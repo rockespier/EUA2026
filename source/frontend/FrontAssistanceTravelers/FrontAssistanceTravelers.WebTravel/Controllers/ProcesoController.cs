@@ -476,14 +476,15 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			var ventaId = parametros[0];
 			var menbreteTipo = parametros[1];
 			var precioTipo = parametros[2];
-			Stream XLSXGarantiaAdjunto = new MemoryStream(await exportVentaImpHmtlMemory(Int32.Parse(ventaId), Int32.Parse(menbreteTipo), Int32.Parse(precioTipo)));
+			var origenTipo = parametros[3];
+			Stream XLSXGarantiaAdjunto = new MemoryStream(await exportVentaImpHmtlMemory(Int32.Parse(ventaId), Int32.Parse(menbreteTipo), Int32.Parse(precioTipo), Int32.Parse(origenTipo)));
 			var XLSXGarantiaType = "application/octet-stream";
 			var XLSXGarantiaNombreArchivo = ventaId.ToString().Trim() + ".pdf";
 			return File(XLSXGarantiaAdjunto, XLSXGarantiaType, XLSXGarantiaNombreArchivo);
 		}
-		private async Task<byte[]> exportVentaImpHmtlMemory(int id, int membrete, int precio)
+		private async Task<byte[]> exportVentaImpHmtlMemory(int id, int membrete, int precio, int origen)
 		{
-			string body = await exportVentaImpHmtl(id, membrete, precio);
+			string body = await exportVentaImpHmtl(id, membrete, precio, origen);
 			using (MemoryStream outputStream = new MemoryStream())
 			{
 				PdfWriter writer = new PdfWriter(outputStream);
@@ -494,7 +495,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 				return outputStream.ToArray();
 			}
 		}
-		private async Task<string> exportVentaImpHmtl(int id, int membrete, int precio)
+		private async Task<string> exportVentaImpHmtl(int id, int membrete, int precio, int origen)
 		{
 			string strNro = id.ToString();
 			var strValorTipoDatosContacto1 = "ContactoEUALinea1";
@@ -515,6 +516,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			var plancontratado = "PLAN CONTRATADO";
 			var agencia = "AGENCIA";
 			var tarifa = "TARIFA";
+			var origenlabel = "ORIGEN";
+			var destinolabel = "DESTINO";
 			var centrales = "CENTRALES DE EMERGENCIA";
 			var mensaje_centrales = "En caso de emergencia, contacte a la central de emergencia a los siguientes números <br> USA +1(954) 678 6680 EUROPA +34(93) 172 7699<br><b>WHATSAPP DE ASISTENCIAS* +51 959262339 ó +51 993325531 *</b> Solo para textos, imágenes y <br>audios.<br> Verifique en el CC.GG. las cláusulas de los límites y/o importes indicados líneas abajo";
 			var importante = "IMPORTANTE";
@@ -538,6 +541,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 				plancontratado = "CONTRACTED PLAN";
 				agencia = "AGENCY";
 				tarifa = "RATE";
+				origenlabel = "ORIGIN";
+				destinolabel = "DESTINATION";
 				centrales = "EMERGENCY CENTERS";
 				mensaje_centrales = "For assistance call us the following numbers: USA +1(954) 678 6680 EUROPA +34(93) 172 7699<br>Whatsapp * +51 959262339 or +51 993325531 * Only for texts, images and audios.<br>Check in the CC.GG. the clauses of the limits and/or amounts indicated below.";
 				importante = "IMPORTANT";
@@ -662,6 +667,16 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaProductoNombre);
 			writer.AppendFormat("<td class='espacio'><b>{0}:</b></td>",agencia);
 			writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaUsuarioAgenciaNombre);
+			writer.AppendLine("</tr>");
+			writer.AppendLine("<tr>");
+			if (origen == 1) {
+				writer.AppendFormat("<td class='espacio'><b>{0}:</b></td>", origenlabel);
+				writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaOrigen);
+			} else {
+				writer.AppendLine("<td colspan='2'></td>");
+			}
+			writer.AppendFormat("<td class='espacio'><b>{0}:</b></td>", destinolabel);
+			writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaDestino);
 			writer.AppendLine("</tr>");
 			if (precio == 1) {
 				writer.AppendLine("<tr>");

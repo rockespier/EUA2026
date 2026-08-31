@@ -2000,10 +2000,12 @@ let elvalidarImprimir = $("#modalDatosVentaPrint").validate({
     rules: {
         mdvenSelTipoHojaPrint: "required",
         mdvenSelPrecioPrint: "required",
+        mdvenSelOrigenPrint: "required",
     },
     messages: {
         mdvenSelTipoHojaPrint: "Seleccione el tipo de hoja.",
         mdvenSelPrecioPrint: "Seleccione el tipo documento.",
+        mdvenSelOrigenPrint: "Seleccione si desea mostrar el origen.",
     },
     errorElement: "em",
     errorPlacement: function (error, element) {
@@ -2028,12 +2030,16 @@ async function AbrirModaImprimir() {
     eltitulo.innerHTML = "Impresión de venta Nº: " + id;
     document.getElementById("mdvenSelTipoHojaPrint").value = "";
     document.getElementById("mdvenSelPrecioPrint").value = "";
+    document.getElementById("mdvenSelOrigenPrint").value = "";
 
     $("#mdvenSelTipoHojaPrint").removeClass("is-valid");
     $("#mdvenSelTipoHojaPrint").removeClass("is-invalid");
 
     $("#mdvenSelPrecioPrint").removeClass("is-valid");
     $("#mdvenSelPrecioPrint").removeClass("is-invalid");
+
+    $("#mdvenSelOrigenPrint").removeClass("is-valid");
+    $("#mdvenSelOrigenPrint").removeClass("is-invalid");
 
     $('#popupModalVentaRead').modal('hide');
     $('#popupModalVentaPrint').modal('show');
@@ -2065,7 +2071,8 @@ async function clickValidarImpirmir() {
             const idVenta = document.getElementById('mdHidIdVentaTarjeta').value;
             const idMembrete = document.getElementById("mdvenSelTipoHojaPrint").value;
             const idPrecio = document.getElementById("mdvenSelPrecioPrint").value;
-            const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio;
+            const idOrigen = document.getElementById("mdvenSelOrigenPrint").value;
+            const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen;
 
             let response = await fetch('/exportVentaImprimir/' + paramatro, {
                 method: 'GET',
@@ -2107,7 +2114,8 @@ async function clickValidarImpirmirAll() {
                 const idVenta = obj;
                 const idMembrete = document.getElementById("mdvenSelTipoHojaPrintAll").value;
                 const idPrecio = document.getElementById("mdvenSelPrecioPrintAll").value;
-                const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio;
+                const idOrigen = document.getElementById("mdvenSelOrigenPrintAll").value;
+                const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen;
 
                 let response = await fetch('/exportVentaImprimir/' + paramatro, {
                     method: 'GET',
@@ -2177,20 +2185,25 @@ async function AbrirModaImprimirVentas() {
     eltitulo.innerHTML = "Impresión de ventas masiva (" + cantidad + ")";
     document.getElementById("mdvenSelTipoHojaPrintAll").value = "";
     document.getElementById("mdvenSelPrecioPrintAll").value = "";
+    document.getElementById("mdvenSelOrigenPrintAll").value = "";
     $("#mdvenSelTipoHojaPrintAll").removeClass("is-valid");
     $("#mdvenSelTipoHojaPrintAll").removeClass("is-invalid");
     $("#mdvenSelPrecioPrintAll").removeClass("is-valid");
     $("#mdvenSelPrecioPrintAll").removeClass("is-invalid");
+    $("#mdvenSelOrigenPrintAll").removeClass("is-valid");
+    $("#mdvenSelOrigenPrintAll").removeClass("is-invalid");
     $('#popupModalVentaPrintAll').modal('show');
 }
 let elvalidarImprimirAll = $("#modalDatosVentaPrintAll").validate({
     rules: {
         mdvenSelTipoHojaPrintAll: "required",
         mdvenSelPrecioPrintAll: "required",
+        mdvenSelOrigenPrintAll: "required",
     },
     messages: {
         mdvenSelTipoHojaPrintAll: "Seleccione el tipo de hoja.",
         mdvenSelPrecioPrintAll: "Seleccione el tipo documento.",
+        mdvenSelOrigenPrintAll: "Seleccione si desea mostrar el origen.",
     },
     errorElement: "em",
     errorPlacement: function (error, element) {

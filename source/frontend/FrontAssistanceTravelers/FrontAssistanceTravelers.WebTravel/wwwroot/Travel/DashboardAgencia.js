@@ -197,6 +197,65 @@ function DivNoVisible() {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
+// Guarda la instancia y los datos de cada gráfico renderizado, para poder exportarlos a Excel luego.
+window.dashboardChartData = window.dashboardChartData || {};
+function registrarGraficoExport(vChart, chart, titulo, categorias, series, labels, valores) {
+    window.dashboardChartData[vChart] = { chart: chart, titulo: titulo, categorias: categorias, series: series, labels: labels, valores: valores };
+}
+// Exporta a un único Excel las imágenes fijas y los datos de los gráficos "Actual"/"Anterior" de este dashboard.
+async function exportarGraficoExcel() {
+    const idsGraficos = ['c96', 'c98'];
+    const periodos = [];
+    for (const idChart of idsGraficos) {
+        const entrada = window.dashboardChartData[idChart];
+        if (!entrada || !entrada.chart) {
+            continue;
+        }
+        const uri = await entrada.chart.dataURI();
+        const periodo = {
+            etiqueta: entrada.titulo,
+            imagenBase64: uri.imgURI.split(',')[1]
+        };
+        if (entrada.categorias && entrada.categorias.length > 0 && entrada.series) {
+            periodo.columnas = ['Mes'].concat(entrada.series.map(function (s) { return s.name; }));
+            periodo.filas = entrada.categorias.map(function (cat, idx) {
+                return [cat].concat(entrada.series.map(function (s) { return String(s.data[idx]); }));
+            });
+        } else if (entrada.labels && entrada.labels.length > 0 && entrada.valores) {
+            periodo.columnas = ['Mes', 'Importe'];
+            periodo.filas = entrada.labels.map(function (lab, idx) { return [lab, String(entrada.valores[idx])]; });
+        }
+        periodos.push(periodo);
+    }
+    if (periodos.length === 0) {
+        swal("Aviso", "No hay datos para exportar", "warning");
+        return;
+    }
+    showLoader();
+    try {
+        const response = await fetch('/Reporte/ExportarExcelDosPeriodos', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/octet-stream',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ titulo: 'Grafico_Agencia', columnaImporte: -1, periodos: periodos })
+        });
+        if (!response.ok) {
+            swal("Error", "Ocurrió un error al generar el excel.", "error");
+            return;
+        }
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Grafico_Agencia.xlsx';
+        link.click();
+    } catch (error) {
+        swal("Error", "Ocurrió un error al exportar: " + error.message, "error");
+    } finally {
+        hideLoader();
+    }
+}
 //FUNCIONES DE API
 async function getMenuDashBoradJefe() {
     const urlApiFecht = menuUrlApi + "generales/MenuDashboardObtener";
@@ -574,6 +633,7 @@ async function getObetenerBarras(vPeriodoId, vMetodo, vChart, vReporte, vPromoto
             chartXModelo.empty = true;
             chartXModelo.render();
             chartXModelo.empty = false;
+            registrarGraficoExport(vChart, chartXModelo, vNombreReporte, dataMeses2, dataChatXModelo);
             window.dispatchEvent(new Event('resize'))
         }
     } else {
@@ -710,6 +770,7 @@ async function getObetenerBarras(vPeriodoId, vMetodo, vChart, vReporte, vPromoto
             chartXModelo.empty = true;
             chartXModelo.render();
             chartXModelo.empty = false;
+            registrarGraficoExport(vChart, chartXModelo, vNombreReporte, [], []);
             window.dispatchEvent(new Event('resize'))
         }
     }
@@ -857,6 +918,7 @@ async function getObetenerPie(vPeriodoId, vMetodo, vChart, vReporte, vPromotor, 
             chartPieModelo.empty = true;
             chartPieModelo.render();
             chartPieModelo.empty = false;
+            registrarGraficoExport(vChart, chartPieModelo, vNombreReporte, undefined, undefined, dataLabels, dataSeries);
             window.dispatchEvent(new Event('resize'))
         }
     } else {
@@ -957,6 +1019,7 @@ async function getObetenerPie(vPeriodoId, vMetodo, vChart, vReporte, vPromotor, 
             chartPieModelo.empty = true;
             chartPieModelo.render();
             chartPieModelo.empty = false;
+            registrarGraficoExport(vChart, chartPieModelo, vNombreReporte, undefined, undefined, [], []);
             window.dispatchEvent(new Event('resize'))
         }
     }

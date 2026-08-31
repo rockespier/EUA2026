@@ -500,6 +500,7 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BEErrorApi))]
 		public async Task<IActionResult> getObtenerVentasPromotorDiario(int int_pPaisId, int int_pAnio, int int_TipoReporte, int int_pUsuarioId, int int_pMes) {
 			try {
+				int_pUsuarioId = ResolverPromotorId(int_pUsuarioId);
 				var data = await unitOfWork.Reportes.VentasPromotorDiarias_Obtener(int_pPaisId, int_pAnio, int_TipoReporte, int_pUsuarioId, int_pMes);
 				if (data == null || !data.Any()) {
 					BEErrorApi objError = new BEErrorApi();

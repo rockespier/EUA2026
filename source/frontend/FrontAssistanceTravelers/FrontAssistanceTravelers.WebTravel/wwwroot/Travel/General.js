@@ -850,9 +850,64 @@ function exportarReporteTabla(tableId, tipo, filenamePrefix, anio) {
 }
 
 // Exporta ambos cuadros (período actual y período anterior) en una sola acción.
+// Para Excel, ambos periodos se combinan en un único archivo (ver exportarReporteExcelDosPeriodos);
+// para PDF se mantiene la exportación por separado.
 function exportarReporteAmbosCuadros(tableId1, tableId2, tipo, filenamePrefix, anio1, anio2) {
+    if (tipo === 'excel') {
+        exportarReporteExcelDosPeriodos(tableId1, tableId2, filenamePrefix, anio1, anio2);
+        return;
+    }
     exportarReporteTabla(tableId1, tipo, filenamePrefix, anio1);
     setTimeout(function () {
         exportarReporteTabla(tableId2, tipo, filenamePrefix, anio2);
     }, 700);
+}
+
+// Genera un único Excel con encabezado y formato de tabla que incluye los datos
+// visibles/filtrados de ambas tablas (período actual y período anterior) en un mismo documento.
+async function exportarReporteExcelDosPeriodos(tableId1, tableId2, filenamePrefix, etiqueta1, etiqueta2) {
+    const pares = [[tableId1, etiqueta1], [tableId2, etiqueta2]];
+    const periodos = [];
+    for (const [tableId, etiqueta] of pares) {
+        const table = $('#' + tableId).DataTable();
+        if (!table || !table.rows({ search: 'applied' }).count()) {
+            continue;
+        }
+        const columnas = table.columns(':visible').header().to$().map(function () {
+            return $(this).text().trim();
+        }).get();
+        const filas = [];
+        table.rows({ search: 'applied' }).nodes().to$().each(function () {
+            filas.push($(this).find('td').map(function () {
+                return $(this).text().trim();
+            }).get());
+        });
+        periodos.push({ etiqueta: String(etiqueta), columnas: columnas, filas: filas });
+    }
+    if (periodos.length === 0) {
+        swal("Aviso", "No hay datos para exportar", "warning");
+        return;
+    }
+    const colImporte = periodos[0].columnas.length - 1;
+    try {
+        const response = await fetch('/Reporte/ExportarExcelDosPeriodos', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/octet-stream',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ titulo: filenamePrefix, columnaImporte: colImporte, periodos: periodos })
+        });
+        if (!response.ok) {
+            swal("Error", "Ocurrió un error al generar el excel.", "error");
+            return;
+        }
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filenamePrefix + '.xlsx';
+        link.click();
+    } catch (error) {
+        swal("Error", "Ocurrió un error al exportar: " + error.message, "error");
+    }
 }

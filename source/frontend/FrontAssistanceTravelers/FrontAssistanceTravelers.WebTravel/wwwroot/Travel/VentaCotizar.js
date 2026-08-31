@@ -631,6 +631,7 @@ async function limpiarModalPasajero() {
     document.getElementById("mdvenTxtDistrito").value = "";;
     document.getElementById("mdvenTxtCiudad").value = "";;
     document.getElementById("mdvenTxtPais").value = "";;
+    document.getElementById("mdvenChkVip").checked = false;
     $("#mdvenSelTipoDoc").removeClass("is-valid");
     $("#mdvenSelTipoDoc").removeClass("is-invalid");
     $("#mdvenTxtNumDocumento").removeClass("is-valid");
@@ -951,6 +952,10 @@ async function CargarPasajeros(id) {
             }, {
                 "mData": "ventaClienteTelefono"
             }, {
+                "mData": "ventaClienteVip", "className": "text-center", "render": function (mData) {
+                    return mData == 1 ? "Sí" : "No";
+                }
+            }, {
                 "mData": null, "defaultContent": [0], "className": "text-center",
                 "render": function (mData) {
                     return "<ul class='action'>" + botonEditar + "&nbsp;" + botonEliminar + "</ul>";
@@ -1053,6 +1058,8 @@ async function ProcesarPasajero() {
     const eltxtPais = document.getElementById("mdvenTxtPais");
     // CAMBIO: ottieni il testo dell'opzione selezionata
     const textoNacionalidad = document.getElementById("mdvenTxtNacionalidad"); //$('#mdvenSelNacionalidad option:selected').text();
+    const elchkVip = document.getElementById("mdvenChkVip");
+    const valorVipCheck = elchkVip.checked ? 1 : 0;
 
     const dataEnviar = {
         ventaClienteId: idPasajero,
@@ -1069,7 +1076,8 @@ async function ProcesarPasajero() {
         ventaClienteDistrito: eltxtDistrito.value,
         ventaClienteCiudad: eltxtCiudad.value,
         ventaClientePais: eltxtPais.value,
-        ventaNacionalidad: textoNacionalidad.value
+        ventaNacionalidad: textoNacionalidad.value,
+        ventaClienteVip: valorVipCheck
     };
     const resultado = await postPasajeroProcesar(dataEnviar);
     return resultado;
@@ -1096,6 +1104,7 @@ async function editarPasajeroVenta(data) {
         document.getElementById("mdvenTxtDistrito").value = data.ventaClienteDistrito;
         document.getElementById("mdvenTxtCiudad").value = data.ventaClienteCiudad;
         document.getElementById("mdvenTxtPais").value = data.ventaClientePais;
+        document.getElementById("mdvenChkVip").checked = data.ventaClienteVip == 1;
     }
 }
 async function borrarPasajeroVenta(Id) {

@@ -32,6 +32,7 @@ namespace BackAssistanceTravelers.Models.Venta
 		public string? ventaClienteDistrito { get; set; }
 		public string? ventaClienteCiudad { get; set; }
 		public string? ventaClientePais { get; set; }
+		public int ventaClienteVip { get; set; }
 		public string? ventaContactoNombres { get; set; }
 		public string? ventaContactoDireccion { get; set; }
 		public string? ventaContactoEmail { get; set; }

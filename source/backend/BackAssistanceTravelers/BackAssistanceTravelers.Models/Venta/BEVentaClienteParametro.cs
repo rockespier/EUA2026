@@ -24,5 +24,6 @@ namespace BackAssistanceTravelers.Models.Venta
 		public string? ventaClienteCiudad { get; set; }
 		public string? ventaClientePais { get; set; }
 		public string? VentaNacionalidad { get; set; }
+		public int ventaClienteVip { get; set; }
 	}
 }

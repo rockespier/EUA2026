@@ -1,4 +1,4 @@
-﻿function mostrarMensaje(tipo, mensaje, element) {
+function mostrarMensaje(tipo, mensaje, element) {
     if (tipo == 1) {
         swal({
             position: "top-right",
@@ -890,7 +890,7 @@ async function exportarReporteExcelDosPeriodos(tableId1, tableId2, filenamePrefi
     }
     const colImporte = periodos[0].columnas.length - 1;
     try {
-        const response = await fetch('/Reporte/ExportarExcelDosPeriodos', {
+        const response = await fetch('/ExportarExcelDosPeriodos', {
             method: 'POST',
             headers: {
                 'Accept': 'application/octet-stream',

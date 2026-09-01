@@ -1,4 +1,4 @@
-﻿hideLoader();
+hideLoader();
 cargarAcciones();
 async function cargarAcciones() {
     await mostrarFecha(false)
@@ -233,7 +233,7 @@ async function exportarGraficoExcel() {
     }
     showLoader();
     try {
-        const response = await fetch('/Reporte/ExportarExcelDosPeriodos', {
+        const response = await fetch('/ExportarExcelDosPeriodos', {
             method: 'POST',
             headers: {
                 'Accept': 'application/octet-stream',

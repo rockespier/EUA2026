@@ -77,7 +77,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 var parameters = new DynamicParameters();
                 parameters.Add("@pVENTACLIENTE_VentaId", int_pVentaClienteVentaID);
                 var result = await connection.QueryAsync<BEVenta>
-                                        ("VentaCliente_Obtener", parameters,
+                                        ("VentaCliente_Obtener_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
                 return result;
             }

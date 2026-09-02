@@ -1301,15 +1301,18 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 }
                 dblTotalPagar = dblTotalPagar - publicidad;
 
+                double dblTarifaConDescuento = dblTarifa;
                 if (dblDescuentoPorcentaje > 0)
                 {
+                    // El descuento se calcula sobre el total a pagar pero se aplica a la columna "Total" (L),
+                    // no reduce el monto "A PAGAR" a la agencia.
                     dblDescuentoImporte = dblTotalPagar * (dblDescuentoPorcentaje / 100);
-                    dblTotalPagar -= dblDescuentoImporte;
+                    dblTarifaConDescuento = dblTarifa - dblDescuentoImporte;
                     dblDescuentoImporteAcumula += dblDescuentoImporte;
                 }
 
                 dblAcumulaSubTotal += dblSubTotal;
-                dblAcumulaTotal += dblTarifa;
+                dblAcumulaTotal += dblTarifaConDescuento;
                 dblAcumulaComision += TotalComision;
                 dblAcumulaPagar += dblTotalPagar;
                 dblTarifaDescuento += dblDescuento;
@@ -1325,7 +1328,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 worksheet.Cell("I" + intInicioRegistro).Value = item.ventaClienteApellidoNombre;
                 worksheet.Cell("J" + intInicioRegistro).Value = item.ventaNumeroDias;
                 worksheet.Cell("K" + intInicioRegistro).Value = item.ventaClienteEdad;
-                worksheet.Cell("L" + intInicioRegistro).Value = item.ventaImporteVenta;
+                worksheet.Cell("L" + intInicioRegistro).Value = dblTarifaConDescuento;
 
                 if ((int.TryParse(User.FindFirst("PaisDocumentoFormato")?.Value, out var _fmt) ? _fmt : 0) == 2)
                 {

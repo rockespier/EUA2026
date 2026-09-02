@@ -1258,8 +1258,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 double dblTarifaConDescuento = dblTarifa;
                 if (dblDescuentoPorcentaje > 0)
                 {
-                    // El descuento se calcula sobre el total a pagar pero se aplica a la columna "Total" (L),
-                    // no reduce el monto "A PAGAR" a la agencia.
+                    // El descuento se calcula sobre el total y se aplica a la columna "Total" (L),
+                    // reduce el monto "A PAGAR" a la agencia.
                     dblDescuentoImporte = dblTarifa * (dblDescuentoPorcentaje / 100);
                     dblTarifaConDescuento = dblTarifa - dblDescuentoImporte;
                     dblDescuentoImporteAcumula += dblDescuentoImporte;

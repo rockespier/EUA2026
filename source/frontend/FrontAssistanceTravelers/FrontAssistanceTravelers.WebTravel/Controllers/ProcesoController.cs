@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -1254,6 +1254,18 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 dblComision = oAgencia[0].agenciaComision;
 
                 dblTarifa = item.ventaImporteVenta;
+
+                double dblTarifaConDescuento = dblTarifa;
+                if (dblDescuentoPorcentaje > 0)
+                {
+                    // El descuento se calcula sobre el total a pagar pero se aplica a la columna "Total" (L),
+                    // no reduce el monto "A PAGAR" a la agencia.
+                    dblDescuentoImporte = dblTarifa * (dblDescuentoPorcentaje / 100);
+                    dblTarifaConDescuento = dblTarifa - dblDescuentoImporte;
+                    dblDescuentoImporteAcumula += dblDescuentoImporte;
+                    dblTarifa = dblTarifaConDescuento;
+                }
+
                 dblDescuento = item.ventaDescuentoImporte;
                 dblIGV_EUA = dblTarifa * dblVentaPaisImpuesto;
 
@@ -1300,17 +1312,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                     dblTotalPagar = dblTarifa;
                 }
                 dblTotalPagar = dblTotalPagar - publicidad;
-
-                double dblTarifaConDescuento = dblTarifa;
-                if (dblDescuentoPorcentaje > 0)
-                {
-                    // El descuento se calcula sobre el total a pagar pero se aplica a la columna "Total" (L),
-                    // no reduce el monto "A PAGAR" a la agencia.
-                    dblDescuentoImporte = dblTotalPagar * (dblDescuentoPorcentaje / 100);
-                    dblTarifaConDescuento = dblTarifa - dblDescuentoImporte;
-                    dblDescuentoImporteAcumula += dblDescuentoImporte;
-                }
-
+                                
                 dblAcumulaSubTotal += dblSubTotal;
                 dblAcumulaTotal += dblTarifaConDescuento;
                 dblAcumulaComision += TotalComision;
@@ -1328,7 +1330,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 worksheet.Cell("I" + intInicioRegistro).Value = item.ventaClienteApellidoNombre;
                 worksheet.Cell("J" + intInicioRegistro).Value = item.ventaNumeroDias;
                 worksheet.Cell("K" + intInicioRegistro).Value = item.ventaClienteEdad;
-                worksheet.Cell("L" + intInicioRegistro).Value = dblTarifaConDescuento;
+                worksheet.Cell("L" + intInicioRegistro).Value = dblTarifa;
 
                 if ((int.TryParse(User.FindFirst("PaisDocumentoFormato")?.Value, out var _fmt) ? _fmt : 0) == 2)
                 {

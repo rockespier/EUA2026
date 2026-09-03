@@ -1142,6 +1142,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 }
             }
             worksheet.Columns("R:R").Hide();
+            worksheet.Columns("S:S").Hide();
 
             // Definir Tamaño filas y columnas
             worksheet.Column("A").Width = 20;

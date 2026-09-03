@@ -682,6 +682,10 @@ const ProcesarEntidad = async () => {
     const elchkVip = document.getElementById("mdchkVIP");
 
     const eltxtEjecutivoCobrador = await $("#mdSelEjecutivoCobrador option:selected").val();
+    let valorEjecutivoCobrador = 0;
+    if (eltxtEjecutivoCobrador != undefined && eltxtEjecutivoCobrador != '') {
+        valorEjecutivoCobrador = eltxtEjecutivoCobrador;
+    }
 
     let valorAgenciaUbigeoId = 0;
     let valorCredito = 0;
@@ -749,7 +753,7 @@ const ProcesarEntidad = async () => {
         agenciaObservacionCobranzas: eltxtCobranza.value,
         agencia_ActualizarContrasena: cambioPssCheck,
         agenciaVip: valorVipCheck,
-        agenciaEjecutivoCobrador: parseInt(eltxtEjecutivoCobrador)
+        agenciaEjecutivoCobrador: parseInt(valorEjecutivoCobrador)
     };
     console.log(dataEnviar);
     const resultado = await postProcesar(dataEnviar);

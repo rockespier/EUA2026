@@ -477,14 +477,15 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			var menbreteTipo = parametros[1];
 			var precioTipo = parametros[2];
 			var origenTipo = parametros[3];
-			Stream XLSXGarantiaAdjunto = new MemoryStream(await exportVentaImpHmtlMemory(Int32.Parse(ventaId), Int32.Parse(menbreteTipo), Int32.Parse(precioTipo), Int32.Parse(origenTipo)));
+			var destinoTipo = parametros[4];
+			Stream XLSXGarantiaAdjunto = new MemoryStream(await exportVentaImpHmtlMemory(Int32.Parse(ventaId), Int32.Parse(menbreteTipo), Int32.Parse(precioTipo), Int32.Parse(origenTipo), Int32.Parse(destinoTipo)));
 			var XLSXGarantiaType = "application/octet-stream";
 			var XLSXGarantiaNombreArchivo = ventaId.ToString().Trim() + ".pdf";
 			return File(XLSXGarantiaAdjunto, XLSXGarantiaType, XLSXGarantiaNombreArchivo);
 		}
-		private async Task<byte[]> exportVentaImpHmtlMemory(int id, int membrete, int precio, int origen)
+		private async Task<byte[]> exportVentaImpHmtlMemory(int id, int membrete, int precio, int origen, int destino)
 		{
-			string body = await exportVentaImpHmtl(id, membrete, precio, origen);
+			string body = await exportVentaImpHmtl(id, membrete, precio, origen, destino);
 			using (MemoryStream outputStream = new MemoryStream())
 			{
 				PdfWriter writer = new PdfWriter(outputStream);
@@ -495,7 +496,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 				return outputStream.ToArray();
 			}
 		}
-		private async Task<string> exportVentaImpHmtl(int id, int membrete, int precio, int origen)
+		private async Task<string> exportVentaImpHmtl(int id, int membrete, int precio, int origen, int destino)
 		{
 			string strNro = id.ToString();
 			var strValorTipoDatosContacto1 = "ContactoEUALinea1";
@@ -675,8 +676,12 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			} else {
 				writer.AppendLine("<td colspan='2'></td>");
 			}
-			writer.AppendFormat("<td class='espacio'><b>{0}:</b></td>", destinolabel);
-			writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaDestino);
+			if (destino == 1) {
+				writer.AppendFormat("<td class='espacio'><b>{0}:</b></td>", destinolabel);
+				writer.AppendFormat("<td class='espacio'>{0}</td>", oResultado[0].ventaDestino);
+			} else {
+				writer.AppendLine("<td colspan='2'></td>");
+			}
 			writer.AppendLine("</tr>");
 			if (precio == 1) {
 				writer.AppendLine("<tr>");

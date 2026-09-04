@@ -1241,7 +1241,9 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             {
                 worksheet.Cell(colDescuento + "16").Value = "DESCUENTO";
             }
-            worksheet.Cell(colTotal + "16").Value = "TOTAL";
+            worksheet.Cell(colTotal + "16").Value = blnTieneDescuento
+                ? $"TOTAL (-{pLiquidacionExportar.DescuentoPorcentaje:0.##}%)"
+                : "TOTAL";
             worksheet.Cell(colNeta + "16").Value = "NETA";
             worksheet.Cell(colComision + "16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
             worksheet.Cell(colIgv + "16").Value = "IGV 18%";
@@ -1360,7 +1362,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 {
                     worksheet.Cell(colDescuento + intInicioRegistro).Value = Math.Round(dblDescuentoImporte, 2);
                 }
-                worksheet.Cell(colTotal + intInicioRegistro).Value = dblTarifa;
+                worksheet.Cell(colTotal + intInicioRegistro).Value = Math.Round(dblTarifa, 0, MidpointRounding.AwayFromZero);
 
                 if ((int.TryParse(User.FindFirst("PaisDocumentoFormato")?.Value, out var _fmt) ? _fmt : 0) == 2)
                 {
@@ -1467,6 +1469,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             var sumaIni = intInicioRegistro + 1;
             worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + intInicioRegistro).Style = estiloDetalleDatosRight;
+            // El importe Total siempre se muestra redondeado, sin decimales, con o sin descuento.
+            worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style.NumberFormat.Format = "0";
             worksheet.Range(colNeta + intInicioRegistroInicio + ":" + colNeta + intInicioRegistro).Style = estiloDetalleDatosRight;
             worksheet.Range(colComision + intInicioRegistroInicio + ":" + colComision + intInicioRegistro).Style = estiloDetalleDatosRight;
             worksheet.Range(colIgv + intInicioRegistroInicio + ":" + colIgv + intInicioRegistro).Style = estiloDetalleDatosRight;
@@ -1482,7 +1486,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 
 
-            worksheet.Cell(colTotal + sumaIni).Value = Math.Round(dblAcumulaTotal, 2);
+            worksheet.Cell(colTotal + sumaIni).Value = Math.Round(dblAcumulaTotal, 0, MidpointRounding.AwayFromZero);
             worksheet.Cell(colTotalComision + sumaIni).Value = dblAcumulaComision;
             worksheet.Cell(colInc + sumaIni).Value = Math.Round(dblinc, 2);
             worksheet.Cell(colPub + sumaIni).Value = Math.Round(dblPubl, 2);

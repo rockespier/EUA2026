@@ -17,5 +17,6 @@
 		public string? pCodigoExterno { get; set; }
 		public string? pTipoDoc { get; set; }
 		public string? pNumeDoc { get; set; }
+		public string? pPromotorId { get; set; }
 	}
 }

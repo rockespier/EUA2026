@@ -340,11 +340,13 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			string pUsuarioAgencia = pVentaExportar.pAgenciaUsuarioId!;
 			string pTipoDoc = pVentaExportar.pTipoDoc!;
 			string pNumDoc = pVentaExportar.pNumeDoc!;
+			string pPromotorId = pVentaExportar.pPromotorId ?? "0";
 
 			string parametros = "?pOrigen=" + pOrigen + "&pVentaIngresoInicio=" + pfechaIni + "&pVentaIngresoFin=" + pfechaFin
 				+ "&pVentaID=" + pIdVenta + "&pUsuarioId=" + pIdusuario + "&pEstadoId=" + pEstado + "&pSituacionId=" + pSituacion
 				+ "&pAgenciaId=" + pAgencia + "&pAgenciaUsuarioId=" + pUsuarioAgencia + "&pClienteNombres=" + pNombres
-				+ "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pTipoDoc=" + pTipoDoc + "&pNumeDoc=" + pNumDoc;
+				+ "&pClienteApellidos=" + pApellidos + "&pPaisId=" + pPais + "&pCodigoExterno=" + pCodExt + "&pTipoDoc=" + pTipoDoc + "&pNumeDoc=" + pNumDoc
+				+ "&pPromotorId=" + pPromotorId;
 			string RutaApi = configuration.GetValue<string>("Generales:RutaAPI")! + "Venta/";
 			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", User.FindFirst("Token")?.Value ?? string.Empty);
 			var response = await httpClient.GetAsync(RutaApi + "VentasObtener" + parametros);

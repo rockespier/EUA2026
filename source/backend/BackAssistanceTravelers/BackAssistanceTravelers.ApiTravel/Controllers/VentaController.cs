@@ -42,17 +42,9 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
             try
             {
                 var ventasTask = unitOfWork.Ventas.Ventas_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId,
-                                                            pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pTipoDoc, pNumeDoc);
-                var agenciasPromotorTask = pPromotorId > 0
-                    ? unitOfWork.Agencias.Agencia_Obtener(0, 0, pPromotorId, -1, pPaisId)
-                    : Task.FromResult<IEnumerable<BEAgencia>>(Array.Empty<BEAgencia>());
-                await Task.WhenAll(ventasTask, agenciasPromotorTask);
+                                                            pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pTipoDoc, pNumeDoc, pPromotorId);
+
                 var data = ventasTask.Result;
-                if (pPromotorId > 0)
-                {
-                    var agenciaIdsPromotor = agenciasPromotorTask.Result.Select(a => a.agenciaId).ToHashSet();
-                    data = data.Where(v => agenciaIdsPromotor.Contains(v.ventaUsuarioAgenciaId));
-                }
                 if (data == null || !data.Any())
                 {
                     BEErrorApi objError = new BEErrorApi();

@@ -2904,6 +2904,15 @@ async function AbrirModalConsulta(id) {
             divSituacion.setAttribute("class", "badge rounded-pill badge-success");
             divSituacion.innerHTML = "SITUACION: " + laVenta[0].ventaSituacionNombre
 
+            let divVip = document.getElementById('vipModalVentaRead');
+            if (laVenta[0].ventaClienteVip == 1) {
+                divVip.setAttribute("class", "badge rounded-pill badge-warning");
+                divVip.innerHTML = '<i class="fa fa-star"></i> VIP';
+            } else {
+                divVip.setAttribute("class", "");
+                divVip.innerHTML = "";
+            }
+
             if (laVenta[0].ventaSituacionNombre == "VIGENTE") {
                 document.getElementById("btnImprimirVenta").hidden = false;
             } else {

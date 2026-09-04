@@ -1007,9 +1007,20 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             var situacion = pLiquidacionExportar.CodigoMotivo;
             var formula = pLiquidacionExportar.formula; //1 Desglose Regular |2 Plan B | 3 Full
             bool blnTieneDescuento = pLiquidacionExportar.DescuentoPorcentaje > 0;
-            // Si hay descuento, se agrega la columna "DESCUENTO" en S y "A PAGAR"/"DESTINO" se corren a T/U
-            string colPagar = blnTieneDescuento ? "T" : "S";
-            string colDestino = blnTieneDescuento ? "U" : "T";
+            // La columna "DESCUENTO" se ubica a la izquierda de "TOTAL" y solo ocupa una columna cuando existe descuento;
+            // en ese caso el resto de columnas (TOTAL, NETA, COMISION, IGV, TOTAL COMISION, INC., PUB., A PAGAR, DESTINO) se desplazan una posición a la derecha.
+            static string ColumnaLetra(int indiceBase1) => ((char)('A' + indiceBase1 - 1)).ToString();
+            int offsetDescuento = blnTieneDescuento ? 1 : 0;
+            string colDescuento = ColumnaLetra(12);
+            string colTotal = ColumnaLetra(12 + offsetDescuento);
+            string colNeta = ColumnaLetra(13 + offsetDescuento);
+            string colComision = ColumnaLetra(14 + offsetDescuento);
+            string colIgv = ColumnaLetra(15 + offsetDescuento);
+            string colTotalComision = ColumnaLetra(16 + offsetDescuento);
+            string colInc = ColumnaLetra(17 + offsetDescuento);
+            string colPub = ColumnaLetra(18 + offsetDescuento);
+            string colPagar = ColumnaLetra(19 + offsetDescuento);
+            string colDestino = ColumnaLetra(20 + offsetDescuento);
 
             int elcodigVenta1 = Int32.Parse(codigos!.Split(",")[0]);
 
@@ -1125,24 +1136,28 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             if (formula == 2)
             {
                 // PLAN B
-                worksheet.Columns("M:M").Hide();
-                worksheet.Columns("N:N").Hide();
-                worksheet.Columns("O:O").Hide();
+                worksheet.Column(colNeta).Hide();
+                worksheet.Column(colComision).Hide();
+                worksheet.Column(colIgv).Hide();
             }
             else
             {
                 if (formula == 3)
                 {
                     //FULL
-                    worksheet.Columns("M:M").Hide();
-                    worksheet.Columns("N:N").Hide();
-                    worksheet.Columns("O:O").Hide();
-                    worksheet.Columns("P:P").Hide();
-                    worksheet.Columns("Q:Q").Hide();
+                    worksheet.Column(colNeta).Hide();
+                    worksheet.Column(colComision).Hide();
+                    worksheet.Column(colIgv).Hide();
+                    worksheet.Column(colTotalComision).Hide();
+                    worksheet.Column(colInc).Hide();
                 }
             }
-            worksheet.Columns("R:R").Hide();
-            worksheet.Columns("S:S").Hide();
+            worksheet.Column(colPub).Hide();
+            if (blnTieneDescuento)
+            {
+                // La columna DESCUENTO nunca se muestra al usuario final, solo existe para el cálculo interno.
+                worksheet.Column(colDescuento).Hide();
+            }
 
             // Definir Tamaño filas y columnas
             worksheet.Column("A").Width = 20;
@@ -1156,14 +1171,17 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Column("I").Width = 31;
             worksheet.Column("J").Width = 12;
             worksheet.Column("K").Width = 12;
-            worksheet.Column("L").Width = 15;
-            worksheet.Column("M").Width = 20;
-            worksheet.Column("N").Width = 20;
-            worksheet.Column("O").Width = 20;
-            worksheet.Column("P").Width = 20;
-            worksheet.Column("Q").Width = 20;
-            worksheet.Column("R").Width = 20;
-            worksheet.Column("S").Width = 20;
+            if (blnTieneDescuento)
+            {
+                worksheet.Column(colDescuento).Width = 20;
+            }
+            worksheet.Column(colTotal).Width = 15;
+            worksheet.Column(colNeta).Width = 20;
+            worksheet.Column(colComision).Width = 20;
+            worksheet.Column(colIgv).Width = 20;
+            worksheet.Column(colTotalComision).Width = 20;
+            worksheet.Column(colInc).Width = 20;
+            worksheet.Column(colPub).Width = 20;
             worksheet.Column(colPagar).Width = 20;
             worksheet.Column(colDestino).Width = 30;
 
@@ -1212,24 +1230,24 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Cell("I16").Value = "PASAJERO";
             worksheet.Cell("J16").Value = "DIAS";
             worksheet.Cell("K16").Value = "EDAD";
-            worksheet.Cell("L16").Value = "TOTAL";
-            worksheet.Cell("M16").Value = "NETA";
-            worksheet.Cell("N16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
-            worksheet.Cell("O16").Value = "IGV 18%";
+            if (blnTieneDescuento)
+            {
+                worksheet.Cell(colDescuento + "16").Value = "DESCUENTO";
+            }
+            worksheet.Cell(colTotal + "16").Value = "TOTAL";
+            worksheet.Cell(colNeta + "16").Value = "NETA";
+            worksheet.Cell(colComision + "16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
+            worksheet.Cell(colIgv + "16").Value = "IGV 18%";
             if (formula == 2)
             {
-                worksheet.Cell("P16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
+                worksheet.Cell(colTotalComision + "16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
             }
             else
             {
-                worksheet.Cell("P16").Value = "TOTAL COMISION ";
+                worksheet.Cell(colTotalComision + "16").Value = "TOTAL COMISION ";
             }
-            worksheet.Cell("Q16").Value = "INC.";
-            worksheet.Cell("R16").Value = "PUB.";
-            if (blnTieneDescuento)
-            {
-                worksheet.Cell("S16").Value = "DESCUENTO";
-            }
+            worksheet.Cell(colInc + "16").Value = "INC.";
+            worksheet.Cell(colPub + "16").Value = "PUB.";
             worksheet.Cell(colPagar + "16").Value = "A PAGAR";
             worksheet.Cell(colDestino + "16").Value = "DESTINO";
             worksheet.Cell("A16").Value = "COD.EXTERNO";
@@ -1331,25 +1349,25 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 worksheet.Cell("I" + intInicioRegistro).Value = item.ventaClienteApellidoNombre;
                 worksheet.Cell("J" + intInicioRegistro).Value = item.ventaNumeroDias;
                 worksheet.Cell("K" + intInicioRegistro).Value = item.ventaClienteEdad;
-                worksheet.Cell("L" + intInicioRegistro).Value = dblTarifa;
+                if (blnTieneDescuento)
+                {
+                    worksheet.Cell(colDescuento + intInicioRegistro).Value = Math.Round(dblDescuentoImporte, 2);
+                }
+                worksheet.Cell(colTotal + intInicioRegistro).Value = dblTarifa;
 
                 if ((int.TryParse(User.FindFirst("PaisDocumentoFormato")?.Value, out var _fmt) ? _fmt : 0) == 2)
                 {
-                    worksheet.Cell("M" + intInicioRegistro).Value = dblComision;
-                    worksheet.Cell("N" + intInicioRegistro).Value = item.ventaImporteVenta - (dblComision + dblIGV);
+                    worksheet.Cell(colNeta + intInicioRegistro).Value = dblComision;
+                    worksheet.Cell(colComision + intInicioRegistro).Value = item.ventaImporteVenta - (dblComision + dblIGV);
                 }
                 else
                 {
-                    worksheet.Cell("M" + intInicioRegistro).Value = dblSubTotal;
-                    worksheet.Cell("N" + intInicioRegistro).Value = dblNeto;
-                    worksheet.Cell("O" + intInicioRegistro).Value = dblIGV;
-                    worksheet.Cell("P" + intInicioRegistro).Value = TotalComision;
-                    worksheet.Cell("Q" + intInicioRegistro).Value = dblIncentivo;
-                    worksheet.Cell("R" + intInicioRegistro).Value = publicidad;
-                    if (blnTieneDescuento)
-                    {
-                        worksheet.Cell("S" + intInicioRegistro).Value = Math.Round(dblDescuentoImporte, 2);
-                    }
+                    worksheet.Cell(colNeta + intInicioRegistro).Value = dblSubTotal;
+                    worksheet.Cell(colComision + intInicioRegistro).Value = dblNeto;
+                    worksheet.Cell(colIgv + intInicioRegistro).Value = dblIGV;
+                    worksheet.Cell(colTotalComision + intInicioRegistro).Value = TotalComision;
+                    worksheet.Cell(colInc + intInicioRegistro).Value = dblIncentivo;
+                    worksheet.Cell(colPub + intInicioRegistro).Value = publicidad;
                     worksheet.Cell(colPagar + intInicioRegistro).Value = dblTotalPagar;
                     worksheet.Cell(colDestino + intInicioRegistro).Value = item.ventaDestino;
                     worksheet.Cell("A" + intInicioRegistro).Value = item.ventaCodigoExterno;
@@ -1440,30 +1458,30 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range("H" + intInicioRegistroInicio + ":H" + intInicioRegistro).Style = estiloDetalleDatosRight;
 
             var sumaIni = intInicioRegistro + 1;
-            worksheet.Range("L" + intInicioRegistroInicio + ":L" + sumaIni).Style = estiloDetalleDatosRight;
-            worksheet.Range("L" + intInicioRegistroInicio + ":L" + intInicioRegistro).Style = estiloDetalleDatosRight;
-            worksheet.Range("M" + intInicioRegistroInicio + ":M" + intInicioRegistro).Style = estiloDetalleDatosRight;
-            worksheet.Range("N" + intInicioRegistroInicio + ":N" + intInicioRegistro).Style = estiloDetalleDatosRight;
-            worksheet.Range("O" + intInicioRegistroInicio + ":O" + intInicioRegistro).Style = estiloDetalleDatosRight;
+            worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style = estiloDetalleDatosRight;
+            worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + intInicioRegistro).Style = estiloDetalleDatosRight;
+            worksheet.Range(colNeta + intInicioRegistroInicio + ":" + colNeta + intInicioRegistro).Style = estiloDetalleDatosRight;
+            worksheet.Range(colComision + intInicioRegistroInicio + ":" + colComision + intInicioRegistro).Style = estiloDetalleDatosRight;
+            worksheet.Range(colIgv + intInicioRegistroInicio + ":" + colIgv + intInicioRegistro).Style = estiloDetalleDatosRight;
 
-            worksheet.Range("P" + intInicioRegistroInicio + ":P" + sumaIni).Style = estiloDetalleDatosRight;
-            worksheet.Range("Q" + intInicioRegistroInicio + ":Q" + sumaIni).Style = estiloDetalleDatosRight;
-            worksheet.Range("R" + intInicioRegistroInicio + ":R" + sumaIni).Style = estiloDetalleDatosRight;
-            worksheet.Range("S" + intInicioRegistroInicio + ":S" + sumaIni).Style = estiloDetalleDatosRight;
+            worksheet.Range(colTotalComision + intInicioRegistroInicio + ":" + colTotalComision + sumaIni).Style = estiloDetalleDatosRight;
+            worksheet.Range(colInc + intInicioRegistroInicio + ":" + colInc + sumaIni).Style = estiloDetalleDatosRight;
+            worksheet.Range(colPub + intInicioRegistroInicio + ":" + colPub + sumaIni).Style = estiloDetalleDatosRight;
             if (blnTieneDescuento)
             {
-                worksheet.Range(colPagar + intInicioRegistroInicio + ":" + colPagar + sumaIni).Style = estiloDetalleDatosRight;
+                worksheet.Range(colDescuento + intInicioRegistroInicio + ":" + colDescuento + sumaIni).Style = estiloDetalleDatosRight;
             }
+            worksheet.Range(colPagar + intInicioRegistroInicio + ":" + colPagar + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 
 
-            worksheet.Cell("L" + sumaIni).Value = Math.Round(dblAcumulaTotal, 2);
-            worksheet.Cell("P" + sumaIni).Value = dblAcumulaComision;
-            worksheet.Cell("Q" + sumaIni).Value = Math.Round(dblinc, 2);
-            worksheet.Cell("R" + sumaIni).Value = Math.Round(dblPubl, 2);
+            worksheet.Cell(colTotal + sumaIni).Value = Math.Round(dblAcumulaTotal, 2);
+            worksheet.Cell(colTotalComision + sumaIni).Value = dblAcumulaComision;
+            worksheet.Cell(colInc + sumaIni).Value = Math.Round(dblinc, 2);
+            worksheet.Cell(colPub + sumaIni).Value = Math.Round(dblPubl, 2);
             if (blnTieneDescuento)
             {
-                worksheet.Cell("S" + sumaIni).Value = Math.Round(dblDescuentoImporteAcumula, 2);
+                worksheet.Cell(colDescuento + sumaIni).Value = Math.Round(dblDescuentoImporteAcumula, 2);
             }
             worksheet.Cell(colPagar + sumaIni).Value = dblAcumulaPagar;
             

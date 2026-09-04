@@ -41,12 +41,16 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
         {
             try
             {
-                var data = await unitOfWork.Ventas.Ventas_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId,
+                var ventasTask = unitOfWork.Ventas.Ventas_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId,
                                                             pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pTipoDoc, pNumeDoc);
+                var agenciasPromotorTask = pPromotorId > 0
+                    ? unitOfWork.Agencias.Agencia_Obtener(0, 0, pPromotorId, -1, pPaisId)
+                    : Task.FromResult<IEnumerable<BEAgencia>>(Array.Empty<BEAgencia>());
+                await Task.WhenAll(ventasTask, agenciasPromotorTask);
+                var data = ventasTask.Result;
                 if (pPromotorId > 0)
                 {
-                    var agenciasPromotor = await unitOfWork.Agencias.Agencia_Obtener(0, 0, pPromotorId, -1, pPaisId);
-                    var agenciaIdsPromotor = agenciasPromotor.Select(a => a.agenciaId).ToHashSet();
+                    var agenciaIdsPromotor = agenciasPromotorTask.Result.Select(a => a.agenciaId).ToHashSet();
                     data = data.Where(v => agenciaIdsPromotor.Contains(v.ventaUsuarioAgenciaId));
                 }
                 if (data == null || !data.Any())

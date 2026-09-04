@@ -85,7 +85,11 @@ async function cargarCombosSolictud() {
         }
     }
     if (AgenciaId === 0) {
-        const elcomboAgencia = await getAgencia(0, 1, 0, menuUserId, '', '');
+        const [elcomboAgencia, elcomboPais, elcomboPromotor] = await Promise.all([
+            getAgencia(0, 1, 0, menuUserId, '', ''),
+            getPais(0, 1),
+            getPromotoresPais(menuUserId, 0)
+        ]);
         if (elcomboAgencia !== undefined) {
             let cantElementos10 = elcomboAgencia.length;
             if (cantElementos10 > 0) {
@@ -97,7 +101,6 @@ async function cargarCombosSolictud() {
                 }
             }
         }
-        const elcomboPais = await getPais(0, 1);
         if (elcomboPais !== undefined) {
             let cantElementos04 = elcomboPais.length;
             if (cantElementos04 > 0) {
@@ -109,7 +112,6 @@ async function cargarCombosSolictud() {
                 }
             }
         }
-        const elcomboPromotor = await getPromotoresPais(menuUserId, 0);
         if (elcomboPromotor !== undefined) {
             let cantElementos13 = elcomboPromotor.length;
             if (cantElementos13 > 0) {
@@ -2348,6 +2350,8 @@ $('#mdvenSelPaisSearch').change(async function () {
 
     const strIdPais = $(this).val();
 
+    const promotoresPromise = getPromotoresPais(menuUserId, strIdPais === "" ? 0 : strIdPais);
+
     if (AgenciaId === 0) {
 
         // 1. Destruir el typeahead existente
@@ -2386,7 +2390,7 @@ $('#mdvenSelPaisSearch').change(async function () {
             });
         }
     }
-    const elcomboTipo = await getPromotoresPais(menuUserId, strIdPais === "" ? 0 : strIdPais);
+    const elcomboTipo = await promotoresPromise;
     $('#mdvenSelPromoSearch').empty();
     if (elcomboTipo != undefined) {
         let cantElementos11 = elcomboTipo.length;
@@ -3125,8 +3129,12 @@ async function exportaReporteVenta() {
         let BusquedaCodPais = document.getElementById("mdvenSelPaisSearch").value;
         let BusquedaCodAgencia = localStorage.getItem("lsagenciaIdSel");
         let BusquedaCodAgenciaUsuario = document.getElementById("mdvenSelUsuarioSearch").value;
+        let BusquedaCodPromotor = document.getElementById("mdvenSelPromoSearch").value;
         if (BusquedaCodPais === "") {
             BusquedaCodPais = 0;
+        }
+        if (BusquedaCodPromotor === "") {
+            BusquedaCodPromotor = 0;
         }
         if (BusquedaCodAgencia === "" || BusquedaCodAgencia ===null) {
             BusquedaCodAgencia = 0;
@@ -3169,6 +3177,7 @@ async function exportaReporteVenta() {
             pCodigoExterno: BusquedaCodExterno,
             pTipoDoc: BusquedaTipoDoc,
             pNumeDoc: BusquedaNumeDoc,
+            pPromotorId: BusquedaCodPromotor.toString(),
         };
         let response = await fetch('/ReporteVentaGenerarExcel', {
             method: 'POST',
@@ -3233,8 +3242,12 @@ async function exportaExcelVenta() {
         let BusquedaCodPais = document.getElementById("mdvenSelPaisSearch").value;
         let BusquedaCodAgencia = localStorage.getItem("lsagenciaIdSel");
         let BusquedaCodAgenciaUsuario = document.getElementById("mdvenSelUsuarioSearch").value;
+        let BusquedaCodPromotor = document.getElementById("mdvenSelPromoSearch").value;
         if (BusquedaCodPais === "") {
             BusquedaCodPais = 0;
+        }
+        if (BusquedaCodPromotor === "") {
+            BusquedaCodPromotor = 0;
         }
         if (BusquedaCodAgencia === "" || BusquedaCodAgencia === null) {
             BusquedaCodAgencia = 0;
@@ -3277,6 +3290,7 @@ async function exportaExcelVenta() {
             pCodigoExterno: BusquedaCodExterno,
             pTipoDoc: BusquedaTipoDoc,
             pNumeDoc: BusquedaNumeDoc,
+            pPromotorId: BusquedaCodPromotor.toString(),
         };
         let response = await fetch('/ListadoVentaGenerarExcel', {
             method: 'POST',

@@ -107,7 +107,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTACLIENTE_Pais", obj_pVentaCliente.ventaClientePais!.ToString().ToUpper());
                 parameters.Add("@pVENTACLIENTE_Nacionalidad", obj_pVentaCliente.VentaNacionalidad!.ToString().ToUpper());
                 parameters.Add("@pVENTACLIENTE_Vip", obj_pVentaCliente.ventaClienteVip);
-                var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaCliente_Procesar", parameters,
+                var result = await connection.QueryFirstOrDefaultAsync<BEError>("VentaCliente_Procesar_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure);
                 return result!;
             }

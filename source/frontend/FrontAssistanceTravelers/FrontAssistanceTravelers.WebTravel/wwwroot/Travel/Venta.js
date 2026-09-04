@@ -2001,11 +2001,13 @@ let elvalidarImprimir = $("#modalDatosVentaPrint").validate({
         mdvenSelTipoHojaPrint: "required",
         mdvenSelPrecioPrint: "required",
         mdvenSelOrigenPrint: "required",
+        mdvenSelDestinoPrint: "required",
     },
     messages: {
         mdvenSelTipoHojaPrint: "Seleccione el tipo de hoja.",
         mdvenSelPrecioPrint: "Seleccione el tipo documento.",
         mdvenSelOrigenPrint: "Seleccione si desea mostrar el origen.",
+        mdvenSelDestinoPrint: "Seleccione si desea mostrar el destino.",
     },
     errorElement: "em",
     errorPlacement: function (error, element) {
@@ -2031,6 +2033,7 @@ async function AbrirModaImprimir() {
     document.getElementById("mdvenSelTipoHojaPrint").value = "";
     document.getElementById("mdvenSelPrecioPrint").value = "";
     document.getElementById("mdvenSelOrigenPrint").value = "";
+    document.getElementById("mdvenSelDestinoPrint").value = "";
 
     $("#mdvenSelTipoHojaPrint").removeClass("is-valid");
     $("#mdvenSelTipoHojaPrint").removeClass("is-invalid");
@@ -2040,6 +2043,9 @@ async function AbrirModaImprimir() {
 
     $("#mdvenSelOrigenPrint").removeClass("is-valid");
     $("#mdvenSelOrigenPrint").removeClass("is-invalid");
+
+    $("#mdvenSelDestinoPrint").removeClass("is-valid");
+    $("#mdvenSelDestinoPrint").removeClass("is-invalid");
 
     $('#popupModalVentaRead').modal('hide');
     $('#popupModalVentaPrint').modal('show');
@@ -2072,7 +2078,8 @@ async function clickValidarImpirmir() {
             const idMembrete = document.getElementById("mdvenSelTipoHojaPrint").value;
             const idPrecio = document.getElementById("mdvenSelPrecioPrint").value;
             const idOrigen = document.getElementById("mdvenSelOrigenPrint").value;
-            const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen;
+            const idDestino = document.getElementById("mdvenSelDestinoPrint").value;
+            const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen + "_" + idDestino;
 
             let response = await fetch('/exportVentaImprimir/' + paramatro, {
                 method: 'GET',
@@ -2115,7 +2122,8 @@ async function clickValidarImpirmirAll() {
                 const idMembrete = document.getElementById("mdvenSelTipoHojaPrintAll").value;
                 const idPrecio = document.getElementById("mdvenSelPrecioPrintAll").value;
                 const idOrigen = document.getElementById("mdvenSelOrigenPrintAll").value;
-                const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen;
+                const idDestino = document.getElementById("mdvenSelDestinoPrintAll").value;
+                const paramatro = idVenta + "_" + idMembrete + "_" + idPrecio + "_" + idOrigen + "_" + idDestino;
 
                 let response = await fetch('/exportVentaImprimir/' + paramatro, {
                     method: 'GET',
@@ -2186,12 +2194,15 @@ async function AbrirModaImprimirVentas() {
     document.getElementById("mdvenSelTipoHojaPrintAll").value = "";
     document.getElementById("mdvenSelPrecioPrintAll").value = "";
     document.getElementById("mdvenSelOrigenPrintAll").value = "";
+    document.getElementById("mdvenSelDestinoPrintAll").value = "";
     $("#mdvenSelTipoHojaPrintAll").removeClass("is-valid");
     $("#mdvenSelTipoHojaPrintAll").removeClass("is-invalid");
     $("#mdvenSelPrecioPrintAll").removeClass("is-valid");
     $("#mdvenSelPrecioPrintAll").removeClass("is-invalid");
     $("#mdvenSelOrigenPrintAll").removeClass("is-valid");
     $("#mdvenSelOrigenPrintAll").removeClass("is-invalid");
+    $("#mdvenSelDestinoPrintAll").removeClass("is-valid");
+    $("#mdvenSelDestinoPrintAll").removeClass("is-invalid");
     $('#popupModalVentaPrintAll').modal('show');
 }
 let elvalidarImprimirAll = $("#modalDatosVentaPrintAll").validate({
@@ -2199,11 +2210,13 @@ let elvalidarImprimirAll = $("#modalDatosVentaPrintAll").validate({
         mdvenSelTipoHojaPrintAll: "required",
         mdvenSelPrecioPrintAll: "required",
         mdvenSelOrigenPrintAll: "required",
+        mdvenSelDestinoPrintAll: "required",
     },
     messages: {
         mdvenSelTipoHojaPrintAll: "Seleccione el tipo de hoja.",
         mdvenSelPrecioPrintAll: "Seleccione el tipo documento.",
         mdvenSelOrigenPrintAll: "Seleccione si desea mostrar el origen.",
+        mdvenSelDestinoPrintAll: "Seleccione si desea mostrar el destino.",
     },
     errorElement: "em",
     errorPlacement: function (error, element) {

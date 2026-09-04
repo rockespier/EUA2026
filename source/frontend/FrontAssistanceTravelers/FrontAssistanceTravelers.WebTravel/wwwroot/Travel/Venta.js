@@ -1320,11 +1320,8 @@ async function postVentaSituaImporteTarjeta(enviarBody) {
 //10-PRODUCTO
 $('#mdventextModProNewProductoSolicitud').change(async function () {
     const strIdProducto = $(this).val();
-    let AgenciaId = 0;
-    if (menuelOrigen !== 'U') {
-        AgenciaId = menuelAgenciaUsuarioId;
-    }
-    const datosProducto = await getProducto(strIdProducto, 1, menuelAgenciaPaisId, AgenciaId);
+    const laVenta = window.LaVenta;
+    const datosProducto = await getProducto(strIdProducto, 1, 0, laVenta.ventaUsuarioAgenciaId);
 
     if (datosProducto !== undefined) {
         if (datosProducto.length > 0) {

@@ -379,7 +379,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
         public async Task<IEnumerable<BEVenta>> Ventas_Obtener(string? str_pOrigen = "", DateTime dte_pVentaIngresoInicio = default, DateTime dte_pVentaIngresoFin = default,
                     int int_pVentaID = 0, int int_pUsuarioId = 0, string? str_pEstadoId = "", string? str_pSituacionId = "", int int_pAgenciaId = 0,
                     int int_pAgenciaUsuarioId = 0, string? str_pClienteNombres = "", string? str_pClienteApellidos = "", int int_pPaisId = 0,
-                    string? str_pCodigoExterno = "", string? str_pTipoDoc = "", string? str_pNumeDoc = "")
+                    string? str_pCodigoExterno = "", string? str_pTipoDoc = "", string? str_pNumeDoc = "", int int_pPromotorId = 0)
         {
             await using (var connection = new SqlConnection(_connectionString))
             {
@@ -406,6 +406,7 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel
                 parameters.Add("@pVENTA_CodigoExterno", str_pCodigoExterno);
                 parameters.Add("@pVENTA_ClienteDocumentoTipoId", str_pTipoDoc);
                 parameters.Add("@pVENTA_ClienteDocumentoNumero", str_pNumeDoc);
+                parameters.Add("@pAgenciaPromotorId", int_pPromotorId);
 
                 var result = await connection.QueryAsync<BEVenta>("Venta_Obtener_2026", parameters,
                                         commandType: System.Data.CommandType.StoredProcedure, commandTimeout: 900);

@@ -27,6 +27,16 @@ Start the API before the frontend; configure its URL through
 `Generales:RutaAPI` in the frontend development settings. Swagger is available
 at the API's `/swagger` endpoint in Development.
 
+## Stored Procedures
+
+Stored procedures are not version-controlled; most business logic lives in them,
+not in `Repositories.Dapper`. Before changing anything that calls a stored
+procedure, read `documentacion/stored-procedures/README.md` (catalog, template,
+and review checklist) and, if the call changes, update
+`documentacion/stored-procedures/known-procedures.txt`. Use
+`tools/StoredProcedureDocs/SpExporter` to refresh the extracted SQL against the
+live database.
+
 ## Coding Style & Naming Conventions
 
 Follow `.editorconfig`: UTF-8, LF line endings, final newlines, and four-space

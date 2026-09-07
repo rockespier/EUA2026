@@ -34,6 +34,16 @@ source/frontend/FrontAssistanceTravelers/FrontAssistanceTravelers.sln
 - Config secrets (DB connection string, JWT signing key, SMTP) live in `appsettings*.json` per project — no secrets manager is in use. Be careful about not weakening/removing the `TrustServerCertificate`/CORS/JWT settings in `Program.cs` without being asked.
 - The frontend has a `package.json`/`node_modules` (only `acorn`/`acorn-walk` as devDeps, no bundler) — its `npm test` script is a placeholder that always fails; there's no real JS build step, consistent with the one-file-per-screen static JS under `wwwroot/Travel/`.
 
+## Stored procedures
+
+Stored procedures are **not version-controlled**: they live only in SQL Server, and most business logic (validations, calculations, joins) lives inside them rather than in the Dapper repositories, which are thin parameter-passing wrappers (`CommandType.StoredProcedure`). To work on anything that touches a SP:
+
+- `documentacion/stored-procedures/` — full catalog (`catalogo.md`, `known-procedures.txt`) of every SP referenced from `Repositories.Dapper`, the doc template (`_template.md`), and per-SP functional docs (`docs/<Dominio>/<NombreSP>.md`). Read `README.md` there first — it has the workflow and the pre-merge checklist for any new/modified SP (naming, `@p` parameter convention, `BEError` error pattern, transactions, indexing, no `SELECT *`/cursors).
+- `tools/StoredProcedureDocs/SpExporter` — read-only .NET tool that connects to SQL Server and extracts every SP's real definition/parameters into `documentacion/stored-procedures/sql/` plus a coverage report (SPs in code but missing in DB, and vice versa). Run it (see its README) whenever the catalog needs refreshing against the live database.
+- `documentacion/sql/*.sql` — dated, one-off notes/templates about a specific SP change tied to an issue/PR (existing convention, keep using it for that purpose; it's a narrower complement to the full catalog above).
+
+If a change adds/removes/renames a call to a stored procedure, update `known-procedures.txt` and the relevant doc under `documentacion/stored-procedures/`.
+
 ## Coding style
 
 Follow `.editorconfig`: UTF-8, LF endings, final newline, 4-space indent for C# (2 spaces for JSON/YAML/Markdown). Use `BE` prefix for backend entities, `VM` for frontend view models, `I*Repository` for repository interfaces, and keep domain/UI terms in Spanish. Commits use short, imperative Spanish summaries (e.g. `agregar telefono al listado de agencias`), scoped to one change.

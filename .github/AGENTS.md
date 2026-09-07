@@ -18,6 +18,7 @@
 - Do not expose persistence entities directly through API responses.
 - Do not introduce dependencies without justification.
 - If you are going to modify the API endpoints, document it in the api-postman.md file located in the documentation folder.
+- Stored procedures live only in SQL Server, not in this repo. If an issue touches a stored procedure call, check `documentacion/stored-procedures/` (catalog + checklist) first, and update `known-procedures.txt` and the relevant SP doc if the call changes.
 
 
 ## Pull requests

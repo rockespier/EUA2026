@@ -1162,7 +1162,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Column(colPub).Hide();
             if (blnTieneDescuento)
             {
-                // La columna DESCUENTO nunca se muestra al usuario final, solo existe para el cálculo interno.
+                // La columna DESCUENTO permanece oculta por defecto en el Excel, aunque contiene el
+                // porcentaje de descuento ingresado (visible si el usuario la muestra manualmente).
                 worksheet.Column(colDescuento).Hide();
             }
 
@@ -1360,9 +1361,14 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 worksheet.Cell("K" + intInicioRegistro).Value = item.ventaClienteEdad;
                 if (blnTieneDescuento)
                 {
-                    worksheet.Cell(colDescuento + intInicioRegistro).Value = Math.Round(dblDescuentoImporte, 2);
+                    // La columna DESCUENTO muestra el porcentaje ingresado por el usuario (con el simbolo %),
+                    // no el importe calculado; el importe solo se usa para el calculo interno del Total.
+                    worksheet.Cell(colDescuento + intInicioRegistro).Value = $"{dblDescuentoPorcentaje:0.##}%";
                 }
-                worksheet.Cell(colTotal + intInicioRegistro).Value = Math.Round(dblTarifa, 0, MidpointRounding.AwayFromZero);
+                // El Total solo se redondea cuando existe descuento; sin descuento conserva los decimales.
+                worksheet.Cell(colTotal + intInicioRegistro).Value = blnTieneDescuento
+                    ? Math.Round(dblTarifa, 0, MidpointRounding.AwayFromZero)
+                    : dblTarifa;
 
                 if ((int.TryParse(User.FindFirst("PaisDocumentoFormato")?.Value, out var _fmt) ? _fmt : 0) == 2)
                 {
@@ -1469,8 +1475,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             var sumaIni = intInicioRegistro + 1;
             worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + intInicioRegistro).Style = estiloDetalleDatosRight;
-            // El importe Total siempre se muestra redondeado, sin decimales, con o sin descuento.
-            worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style.NumberFormat.Format = "0";
+            // El Total se muestra sin decimales solo cuando existe descuento; si no hay descuento conserva los decimales.
+            worksheet.Range(colTotal + intInicioRegistroInicio + ":" + colTotal + sumaIni).Style.NumberFormat.Format = blnTieneDescuento ? "0" : "0.00";
             worksheet.Range(colNeta + intInicioRegistroInicio + ":" + colNeta + intInicioRegistro).Style = estiloDetalleDatosRight;
             worksheet.Range(colComision + intInicioRegistroInicio + ":" + colComision + intInicioRegistro).Style = estiloDetalleDatosRight;
             worksheet.Range(colIgv + intInicioRegistroInicio + ":" + colIgv + intInicioRegistro).Style = estiloDetalleDatosRight;
@@ -1486,13 +1492,15 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 
 
-            worksheet.Cell(colTotal + sumaIni).Value = Math.Round(dblAcumulaTotal, 0, MidpointRounding.AwayFromZero);
+            worksheet.Cell(colTotal + sumaIni).Value = blnTieneDescuento
+                ? Math.Round(dblAcumulaTotal, 0, MidpointRounding.AwayFromZero)
+                : dblAcumulaTotal;
             worksheet.Cell(colTotalComision + sumaIni).Value = dblAcumulaComision;
             worksheet.Cell(colInc + sumaIni).Value = Math.Round(dblinc, 2);
             worksheet.Cell(colPub + sumaIni).Value = Math.Round(dblPubl, 2);
             if (blnTieneDescuento)
             {
-                worksheet.Cell(colDescuento + sumaIni).Value = Math.Round(dblDescuentoImporteAcumula, 2);
+                worksheet.Cell(colDescuento + sumaIni).Value = $"{dblDescuentoPorcentaje:0.##}%";
             }
             worksheet.Cell(colPagar + sumaIni).Value = dblAcumulaPagar;
             

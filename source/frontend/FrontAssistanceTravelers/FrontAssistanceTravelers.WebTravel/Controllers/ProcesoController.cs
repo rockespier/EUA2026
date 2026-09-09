@@ -1242,9 +1242,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             {
                 worksheet.Cell(colDescuento + "16").Value = "DESCUENTO";
             }
-            worksheet.Cell(colTotal + "16").Value = blnTieneDescuento
-                ? $"TOTAL (-{pLiquidacionExportar.DescuentoPorcentaje:0.##}%)"
-                : "TOTAL";
+            //worksheet.Cell(colTotal + "16").Value = blnTieneDescuento
+            //  ? $"TOTAL (-{pLiquidacionExportar.DescuentoPorcentaje:0.##}%)"
+            //  : "TOTAL";
+            worksheet.Cell(colTotal + "16").Value = "TOTAL";
             worksheet.Cell(colNeta + "16").Value = "NETA";
             worksheet.Cell(colComision + "16").Value = "COMISION " + oAgencia[0].agenciaComision + "%";
             worksheet.Cell(colIgv + "16").Value = "IGV 18%";
@@ -1290,8 +1291,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                     // El descuento se calcula sobre el total y se aplica a la columna "Total" (L),
                     // reduce el monto "A PAGAR" a la agencia.
                     dblDescuentoImporte = dblTarifa * (dblDescuentoPorcentaje / 100);
-                    dblTarifaConDescuento = dblTarifa - dblDescuentoImporte;
-                    dblDescuentoImporteAcumula += dblDescuentoImporte;
+                    dblTarifaConDescuento =  Math.Round(dblTarifa - dblDescuentoImporte, 0, MidpointRounding.AwayFromZero);
+                    dblDescuentoImporteAcumula +=  Math.Round(dblDescuentoImporte, 0, MidpointRounding.AwayFromZero);
                     dblTarifa = dblTarifaConDescuento;
                 }
 
@@ -1484,10 +1485,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range(colTotalComision + intInicioRegistroInicio + ":" + colTotalComision + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colInc + intInicioRegistroInicio + ":" + colInc + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colPub + intInicioRegistroInicio + ":" + colPub + sumaIni).Style = estiloDetalleDatosRight;
-            if (blnTieneDescuento)
-            {
-                worksheet.Range(colDescuento + intInicioRegistroInicio + ":" + colDescuento + sumaIni).Style = estiloDetalleDatosRight;
-            }
+            //if (blnTieneDescuento)
+            //{
+            //    worksheet.Range(colDescuento + intInicioRegistroInicio + ":" + colDescuento + sumaIni).Style = estiloDetalleDatosRight;
+            //}
             worksheet.Range(colPagar + intInicioRegistroInicio + ":" + colPagar + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 
@@ -1498,10 +1499,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Cell(colTotalComision + sumaIni).Value = dblAcumulaComision;
             worksheet.Cell(colInc + sumaIni).Value = Math.Round(dblinc, 2);
             worksheet.Cell(colPub + sumaIni).Value = Math.Round(dblPubl, 2);
-            if (blnTieneDescuento)
-            {
-                worksheet.Cell(colDescuento + sumaIni).Value = $"{dblDescuentoPorcentaje:0.##}%";
-            }
+            //if (blnTieneDescuento)
+            //{
+            //    worksheet.Cell(colDescuento + sumaIni).Value = $"{dblDescuentoPorcentaje:0.##}%";
+            //}
             worksheet.Cell(colPagar + sumaIni).Value = dblAcumulaPagar;
             
 

@@ -1485,10 +1485,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             worksheet.Range(colTotalComision + intInicioRegistroInicio + ":" + colTotalComision + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colInc + intInicioRegistroInicio + ":" + colInc + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range(colPub + intInicioRegistroInicio + ":" + colPub + sumaIni).Style = estiloDetalleDatosRight;
-            //if (blnTieneDescuento)
-            //{
-            //    worksheet.Range(colDescuento + intInicioRegistroInicio + ":" + colDescuento + sumaIni).Style = estiloDetalleDatosRight;
-            //}
+            if (blnTieneDescuento)
+            {
+                worksheet.Range(colDescuento + intInicioRegistroInicio + ":" + colDescuento + sumaIni).Style = estiloDetalleDatosRight;
+            }
             worksheet.Range(colPagar + intInicioRegistroInicio + ":" + colPagar + sumaIni).Style = estiloDetalleDatosRight;
             worksheet.Range("A" + intInicioRegistroInicio + ":A" + intInicioRegistroInicio).Style = estiloDetalleDatosRight;
 

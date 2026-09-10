@@ -145,12 +145,19 @@ async function AbrirModal(productoId, agenciaId, agenciaNombre) {
 
     idPasajero = 0;
     await CargarPasajeros(idVenta)
+    await permisoEditarPasajeroVip();
     setTimeout(async () => {
         //localStorage.removeItem('lsagenciaIdSel');
         //localStorage.removeItem('lsagenciaIdSelVenta');
         $('#popupModalVenta').modal('show');
         $('#top-tab2 a[href="#top-datos"]').tab('show');
     }, 50);
+}
+async function permisoEditarPasajeroVip() {
+    const elPermiso = await getValidarUsuarioMenu(menuUserId, 100);
+    const puedeEditarVip = elPermiso && elPermiso.codigo > 0;
+    $('#mdvenChkVip').prop('disabled', !puedeEditarVip);
+    return puedeEditarVip;
 }
 async function IniciarFechaDatos() {
     const fechaHoy = new Date();

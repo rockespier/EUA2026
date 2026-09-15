@@ -31,6 +31,10 @@ const COLUMNAS_VENTA = [
     },
     {
         grupo: "Cliente", campos: [
+            {
+                campo: "ventaClienteNombreCompleto", etiqueta: "Nombre Completo", tipo: "texto",
+                calculado: function (fila) { return [fila.ventaClienteNombres, fila.ventaClienteApellidos].filter(Boolean).join(" ").trim(); }
+            },
             { campo: "ventaClienteNombres", etiqueta: "Nombres", tipo: "texto" },
             { campo: "ventaClienteApellidos", etiqueta: "Apellidos", tipo: "texto" },
             { campo: "ventaClienteDocumentoTipoNombre", etiqueta: "Tipo de Documento", tipo: "texto" },
@@ -253,7 +257,10 @@ function renderTabla() {
     const columnas = seleccionadas.map(campo => {
         const meta = buscarMetaColumna(campo) || { campo: campo, etiqueta: campo, tipo: 'texto' };
         const columna = { data: meta.campo, title: meta.etiqueta, defaultContent: '' };
-        if (meta.tipo === 'fecha') {
+        if (typeof meta.calculado === 'function') {
+            columna.data = null;
+            columna.render = function (mData, tipo, fila) { return meta.calculado(fila); };
+        } else if (meta.tipo === 'fecha') {
             columna.render = function (mData) { return formatearFechaVisualizar(mData); };
         } else if (meta.tipo === 'moneda') {
             columna.className = 'text-end';

@@ -756,7 +756,7 @@ const ProcesarEntidadTarifaIncentivo = async () => {
         tarifaNumeroDiasMaximo: htmlEncode(eltxtDiasMaximo.value),
         tarifaPublicidad: htmlEncode(eltxtPublicidad.value),
         tarifaId: 0,
-        tarifaProductoId: 0,
+        tarifaProductoId: idEntidad,
         tarifaImporte: 0,
         tarifaCreadoUsuarioId: menuUserId,
         tarifaIncentivo: eltxtIncentivo.value

@@ -145,18 +145,18 @@ async function CargarCombos() {
         });
     }
 
-    const elcomboTipo3 = await getProducto(0, 1, parseInt(PaisSelId));
-    let cantElementos03 = elcomboTipo3.length;
-    if (cantElementos03 > 0) {
+    await CargarProductos(PaisSelId);
+}
+
+async function CargarProductos(paisId) {
+    $('#mdselProducto').empty();
+    const productos = await getProducto(0, 1, parseInt(paisId));
+    if (productos !== undefined && productos.length > 0) {
         $('#mdselProducto').append($('<option/>').attr("value", "").text('---Seleccione---'));
-        console.log(elcomboTipo3, 'datos');
-        for (const cboobj of elcomboTipo3) {
-            const valorId = cboobj.productoId;
-            const valorNombre = cboobj.productoNombre;
-            $('#mdselProducto').append($('<option/>').attr("value", valorId).text(valorNombre));
+        for (const cboobj of productos) {
+            $('#mdselProducto').append($('<option/>').attr("value", cboobj.productoId).text(cboobj.productoNombre));
         }
     }
-    
 }
 
 async function BuscarLista() {
@@ -354,6 +354,8 @@ async function AbrirModal(promocionId) {
 
     $("#mdtxtDiasmin").removeClass("is-valid");
     $("#mdtxtDiasmin").removeClass("is-invalid");
+
+    await CargarProductos(await $("#mdSelPais option:selected").val());
 
     if (promocionId == 0 ) {
         eltitulo.innerHTML = "Nuevo " + nombreEntidad;

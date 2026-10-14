@@ -44,7 +44,7 @@ namespace BackAssistanceTravelers.ApiTravel.Controllers
                 var ventasTask = unitOfWork.Ventas.Ventas_Obtener(pOrigen, pVentaIngresoInicio, pVentaIngresoFin, pVentaID, pUsuarioId, pEstadoId, pSituacionId, pAgenciaId,
                                                             pAgenciaUsuarioId, pClienteNombres, pClienteApellidos, pPaisId, pCodigoExterno, pTipoDoc, pNumeDoc, pPromotorId);
 
-                var data = ventasTask.Result;
+                var data = await ventasTask;
                 if (data == null || !data.Any())
                 {
                     BEErrorApi objError = new BEErrorApi();

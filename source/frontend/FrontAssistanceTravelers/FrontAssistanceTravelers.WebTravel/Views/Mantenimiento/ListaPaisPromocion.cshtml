@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	var indexDashluser = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
@@ -286,7 +286,7 @@
 	<!-- Theme js-->
 	<script src="../assets/js/script.js"></script>
 	<script src="~/travel/General.js?v=1.55"></script>
-	<script src="~/travel/ListaPaisPromocion.js?v=1.53"></script>
+	<script src="~/travel/ListaPaisPromocion.js?v=1.54"></script>
 }
 
 

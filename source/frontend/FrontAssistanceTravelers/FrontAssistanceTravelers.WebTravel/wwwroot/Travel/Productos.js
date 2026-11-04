@@ -735,7 +735,7 @@ async function clickValidarTarifaIncentivo() {
         const resultado = await ProcesarEntidadTarifaIncentivo();
         if (resultado.codigo == 200) {
             $('#popupModalProductoTarifaIncentivo').modal('hide');
-            CargarTarifasTodo();
+            CargarTarifasTodo(true);
             mostrarMensaje(1, resultado.descripcion)
             return false;
         } else {
@@ -802,7 +802,7 @@ async function innactivarTarifa(Id) {
     if (alerta == "ok") {
         const resultado = await deleteAnularTarifa(Id);
         if (resultado.codigo == 200) {
-            CargarTarifasTodo();
+            CargarTarifasTodo(true);
             mostrarMensaje(1, resultado.descripcion)
             return false;
         } else {
@@ -830,14 +830,16 @@ async function deleteAnularTarifa(id) {
         return object;
     }
 }
-async function CargarTarifasTodo() {
+async function CargarTarifasTodo(mantenerPagina = false) {
     const sUrlIdioma = "/travel/spanish.json"
     let botonEditar;
     let botonEliminar;
     let nomeprodotto = document.getElementById("mdtxtNombreProducto").value;
 
+    let paginaActual = 0;
     // Destruir la tabla existente si ya existe
     if ($.fn.DataTable.isDataTable('#dtTarifas')) {
+        if (mantenerPagina) { paginaActual = $('#dtTarifas').DataTable().page(); }
         $('#dtTarifas').DataTable().destroy();
     }
 
@@ -920,6 +922,10 @@ async function CargarTarifasTodo() {
         if (listadoVehiculos.length > 0) {
             tablaGrid.clear().draw();
             tablaGrid.rows.add(listadoVehiculos).draw();
+            if (mantenerPagina && paginaActual > 0) {
+                const ultimaPagina = Math.max(tablaGrid.page.info().pages - 1, 0);
+                tablaGrid.page(Math.min(paginaActual, ultimaPagina)).draw('page');
+            }
         }
     } else {
         const listadoVacio = [];
@@ -988,7 +994,7 @@ async function clickValidarTarifa() {
         const resultado = await ProcesarEntidadTarifa();
         if (resultado.codigo == 200) {
             $('#popupModalProductoTarifa').modal('hide');
-            CargarTarifasTodo();
+            CargarTarifasTodo(true);
             mostrarMensaje(1, resultado.descripcion)
             return false;
         } else {
@@ -1090,7 +1096,7 @@ async function innactivarBeneficio(Id) {
     if (alerta == "ok") {
         const resultado = await deleteAnularBeneficio(Id);
         if (resultado.codigo == 200) {
-            CargarBeneficiosTodo();
+            CargarBeneficiosTodo(true);
             mostrarMensaje(1, resultado.descripcion)
             return false;
         } else {
@@ -1118,17 +1124,19 @@ async function deleteAnularBeneficio(id) {
         return object;
     }
 }
-async function BuscarListaBeneficios(){
-    CargarBeneficiosTodo()
+async function BuscarListaBeneficios(mantenerPagina = false){
+    CargarBeneficiosTodo(mantenerPagina)
 }
-async function CargarBeneficiosTodo() {
+async function CargarBeneficiosTodo(mantenerPagina = false) {
     const sUrlIdioma = "/travel/spanish.json"
     let botonEditar;
     let botonEliminar;
     let nomeprodotto = document.getElementById("mdtxtNombreProducto").value;
 
+    let paginaActual = 0;
     // Destruir la tabla existente si ya existe
     if ($.fn.DataTable.isDataTable('#dtBeneficios')) {
+        if (mantenerPagina) { paginaActual = $('#dtBeneficios').DataTable().page(); }
         $('#dtBeneficios').DataTable().destroy();
     }
 
@@ -1234,6 +1242,10 @@ async function CargarBeneficiosTodo() {
         if (listadoVehiculos.length > 0) {
             tablaGrid.clear().draw();
             tablaGrid.rows.add(listadoVehiculos).draw();
+            if (mantenerPagina && paginaActual > 0) {
+                const ultimaPagina = Math.max(tablaGrid.page.info().pages - 1, 0);
+                tablaGrid.page(Math.min(paginaActual, ultimaPagina)).draw('page');
+            }
         }
     } else {
         const listadoVacio = [];
@@ -1312,7 +1324,7 @@ async function clickValidarBeneficio() {
         const resultado = await ProcesarEntidadBeneficio();
         if (resultado.codigo == 200) {
             $('#popupModalProductoBeneficio').modal('hide');
-            BuscarListaBeneficios();
+            BuscarListaBeneficios(true);
             mostrarMensaje(1, resultado.descripcion)
             return false;
         } else {

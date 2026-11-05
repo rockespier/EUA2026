@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	var indexDashluser = ((ClaimsIdentity)User.Identity).FindFirst("PaginaDashboard").Value;
@@ -137,7 +137,7 @@
 									</div>
 								</div>
 								<div class="col-sm-3 col-6-3">
-									
+
 									<div class="media-body text-start icon-state">
 										<label class="switch">
 											<input type="checkbox" checked="checked" id="mdchkActivos" name="mdchkActivos" wfd-id="id8"><span class="switch-state"></span>
@@ -153,12 +153,12 @@
 										   class="btn btn-primary mb-3">
 											<span class="glyphicon glyphicon-plus"></span> Agregar nuevo producto
 										</a>
-										
+
 									</div>
 								</div>
 							</div>
-						</p>							
-						
+						</p>
+
 						<div class="table-responsive">
 							<table class="display" id="dtProductos">
 								<thead>
@@ -212,7 +212,7 @@
 											</a>
 										</li>
 									</ul>
-									<div class="tab-content" id="top-tabContent2">										
+									<div class="tab-content" id="top-tabContent2">
 										<div class="tab-pane fade active show" id="top-profile2" role="tabpanel" aria-labelledby="profile-top-tab">
 											<div class="row">
 												<div class="col-sm-6">
@@ -227,8 +227,8 @@
 														<select class="form-select digits" id="mdselMarca" name="mdselMarca">
 														</select>
 													</div>
-												</div>											
-												
+												</div>
+
 												<div class="col-sm-2">
 													<div class="mb-3">
 														<label class="form-label">Estado</label>
@@ -269,14 +269,14 @@
 														<label class="form-label">Nro de ordén</label>
 														<input class="form-control" type="text" id="mdtxtNroOrden" name="mdtxtNroOrden" placeholder="">
 													</div>
-												</div>		
+												</div>
 												<div class="col-sm-4">
 													<div class="mb-3">
 														<label class="form-label">Equivalencia ATV</label>
 														<input class="form-control" type="text" id="mdtxtATV" name="mdtxtATV" placeholder="">
 													</div>
 												</div>
-												
+
 												<div class="col-sm-4">
 													<div class="mb-3">
 														<label class="form-label">Web</label>
@@ -287,7 +287,7 @@
 														</div>
 													</div>
 												</div>
-												
+
 											</div>
 										</div>
 										<div class="tab-pane fade" id="top-contact2" role="tabpanel" aria-labelledby="contact-top-tab">
@@ -329,7 +329,7 @@
 														</div>
 													</div>
 													<div class="col-sm-4 col-6-4">
-														<div class="mb-3">															
+														<div class="mb-3">
 															<select class="form-select" id="mdSelIdiomaBeneficio" name="mdSelIdiomaBeneficio">
 															</select>
 														</div>
@@ -346,18 +346,18 @@
 															<button type="button" class="btn btn-success mb-3" onclick="AbrirModalImportarProducto('beneficios');">
 																<i class="fa fa-upload"></i> Importar Excel
 															</button>
-															
+
 														</div>
 													</div>
 												</div>
 											</p>
-											
+
 											<div class="table-responsive user-datatable">
 												<table class="display" id="dtBeneficios">
 													<thead>
-														<tr>															
+														<tr>
 															<th>Descripción</th>
-															<th>Cobertura</th>															
+															<th>Cobertura</th>
 															<th>Acciones</th>
 														</tr>
 													</thead>
@@ -372,8 +372,8 @@
 
 					</div>
 
-					<div class="modal-footer">						
-						<button type="button" id="btnCopiarProducto" class="btn btn-secondary">Copiar Producto</button>						
+					<div class="modal-footer">
+						<button type="button" id="btnCopiarProducto" class="btn btn-secondary">Copiar Producto</button>
 						<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
 						<button class="btn btn-primary" type="button" id="Guardar" name="Guardar" onclick="clickValidar();">Grabar</button>
 					</div>
@@ -391,8 +391,8 @@
 					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<form id="modalTarifa" name="modalTarifa" action="">
-					<div class="modal-body">						
-						<div class="row">											
+					<div class="modal-body">
+						<div class="row">
 							<div class="col-sm-4 col-6-4">
 								<div class="mb-3">
 									<label class="form-label">N° Dias Minimo <span class="req">*</span></label>
@@ -416,7 +416,7 @@
 									<label class="form-label">Incentivo</label>
 									<input class="form-control" type="text" id="mdtextIncentivo" name="mdtextIncentivo" placeholder="">
 								</div>
-							</div>																				
+							</div>
 							<div class="col-sm-4 col-6-4">
 								<div class="mb-3">
 									<label class="form-label">Publicidad</label>
@@ -456,7 +456,7 @@
 									<label class="form-label">N° Dias Hasta</label>
 									<input class="form-control" type="text" id="mdtextDiasMaximoIncentivo" name="mdtextDiasMaximoIncentivo" placeholder="">
 								</div>
-							</div>							
+							</div>
 							<div class="col-sm-4 col-md-4">
 								<div class="mb-3">
 									<label class="form-label">Incentivo</label>
@@ -517,7 +517,6 @@
 		</div>
 	</div>
 	<!-- popup Importar Excel-->
-
 	<!-- popup Beneficios-->
 	<div class="modal fade bd-example-modal-xl" id="popupModalProductoBeneficio" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-xl" role="document">
@@ -528,7 +527,7 @@
 				</div>
 				<form id="modalBeneficio" name="modalBeneficio" action="">
 					<div class="modal-body">
-						<div class="row">							
+						<div class="row">
 							<div class="col-sm-6 col-6-6">
 								<div class="mb-3">
 									<label class="form-label">Descripción <span class="req">*</span></label>
@@ -540,14 +539,14 @@
 									<label class="form-label">Cobertura <span class="req">*</span></label>
 									<input class="form-control" type="text" id="mdtextCobertura" name="mdtextCobertura" placeholder="">
 								</div>
-							</div>							
+							</div>
 							<div class="col-sm-3 col-6-3">
 								<div class="mb-3">
 									<label class="form-label">Orden</label>
 									<input class="form-control" type="text" id="mdtextOrden" name="mdtextOrden" placeholder="">
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -608,7 +607,7 @@
 	<script src="~/assets/js/datatable/datatablesv2/jszip.min.js"></script>
 	<script src="~/assets/js/datatable/datatablesv2/pdfmake.min.js"></script>
 	<script src="~/assets/js/datatable/datatablesv2/vfs_fonts.js"></script>
-	
+
 	<script src="~/assets/js/datatable/datatablesv2/buttons.html5.min.js"></script>
 	<script src="~/assets/js/datatable/datatablesv2/buttons.print.min.js"></script>
 
@@ -620,8 +619,8 @@
 	<!-- Theme js-->
 	<script src="../assets/js/script.js"></script>
 	<script src="~/travel/General.js?v=1.55"></script>
-	<script src="~/travel/productos.js?v=2.55"></script>
-	<script src="~/travel/ProductosImportar.js?v=1.0"></script>
+	<script src="~/travel/productos.js?v=2.56"></script>
+	<script src="~/travel/ProductosImportar.js?v=1.1"></script>
 }
 
 

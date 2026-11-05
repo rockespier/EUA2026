@@ -67,6 +67,7 @@ venta aplicando impuestos por país y descuentos de promoción vigente."-->
 
 ## Lógica de negocio relevante
 
+- Recargo por edad (Issue #113): si la edad del pasajero está en (`productoEdadMaxima`, `productoImporteDiaAdicional`], `ventaImporteVenta = ROUND(tarifa * 1.5, 0)`; `ventaProductoImporte` queda con la tarifa base. Ver `documentacion/sql/2026-11-05_venta_masiva_recargo_edad.sql` (pendiente de aplicar en BD).
 - Reglas de validación aplicadas (qué rechaza y con qué código/mensaje de error).
 - Cálculos o transformaciones no obvias (redondeos, impuestos, tipos de cambio).
 - Efectos secundarios (inserta en tabla de auditoría, dispara triggers, envía a cola, etc.).
@@ -100,4 +101,5 @@ venta aplicando impuestos por país y descuentos de promoción vigente."-->
 | Fecha | Autor | Cambio |
 |---|---|---|
 | `2026-09-07` | `script (New-ProcedureDocs.ps1)` | Documentación inicial |
+| `2026-11-05` | `claude` | Script de recargo por edad (75-84) en importación masiva (#113) |
 

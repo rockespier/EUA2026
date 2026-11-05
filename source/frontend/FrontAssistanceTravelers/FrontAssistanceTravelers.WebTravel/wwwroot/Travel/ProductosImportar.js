@@ -37,6 +37,13 @@ const toBase64Producto = file => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = reject;
 });
+function showLoader() {
+    document.getElementById('mdBotImportarProductoCarga').style.display = 'flex';
+}
+function hideLoader() {
+    document.getElementById('mdBotImportarProductoCarga').style.display = 'none';
+}
+
 function recargarListadoProducto(esTarifas) {
     if (esTarifas) { CargarTarifasTodo(true); } else { CargarBeneficiosTodo(true); }
 }

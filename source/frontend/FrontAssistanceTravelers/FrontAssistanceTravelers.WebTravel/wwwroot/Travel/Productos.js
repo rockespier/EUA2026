@@ -1,4 +1,3 @@
-﻿
 const urlGetEntidad = "mantenimiento/ProductoObtener";
 const urlPostEntidad = "mantenimiento/ProductoProcesar";
 const urlDeleteEntidad = "mantenimiento/ProductoAnular";
@@ -192,7 +191,7 @@ const ProcesarEntidad = async () => {
 
     const elcboTipo = document.getElementById("mdselNrodias");
     valorelcboTipo = elcboTipo.value;
-  
+
     const valorelcboMarca = await $("#mdSelPais option:selected").val();
 
     //const elcboMarca = document.getElementById("mdselMarca");
@@ -294,12 +293,12 @@ async function CargarProductoCombos() {
     let cantElementos03 = elcomboTipo3.length;
     if (cantElementos03 > 0) {
         $('#mdSelIdiomaBeneficio').append($('<option/>').attr("value", "").text('---Seleccione---'));
-        console.log(elcomboTipo3,'datos');
+        console.log(elcomboTipo3, 'datos');
         for (const cboobj of elcomboTipo3) {
             const valorId = cboobj.valorId;
             const valorNombre = cboobj.valorNombre;
             $('#mdSelIdiomaBeneficio').append($('<option/>').attr("value", valorId).text(valorNombre));
-        }          
+        }
     }
     const elcomboTipo4 = await getPais(0, 1);
     let cantElementos04 = elcomboTipo4.length;
@@ -311,7 +310,7 @@ async function CargarProductoCombos() {
             const valorNombre = cboobj.paisNombre;
             $('#mdSelPais').append($('<option/>').attr("value", valorId).text(valorNombre));
         }
-        console.log(menuPaisId,'pais');
+        console.log(menuPaisId, 'pais');
         $("#mdSelPais").val(menuPaisId);
     }
 }
@@ -372,7 +371,7 @@ async function CargarTodo() {
             {
                 "mData": "productoNombre", "render": function (mData, disp, alldata) {
                     botonEditar = "<li class='edit'><a href='javascript:void(0);' onclick='AbrirModal(" + alldata.productoId + ");'><i class='icon-pencil-alt'></i></a></li>"
-                    botonEliminar = "<li class='delete'><a href='javascript:void(0);' onclick='innactivarProducto(" + alldata.productoId + ");'><i class='icon-trash'></i></a></li>"                    
+                    botonEliminar = "<li class='delete'><a href='javascript:void(0);' onclick='innactivarProducto(" + alldata.productoId + ");'><i class='icon-trash'></i></a></li>"
                     if (alldata.productoActivo == 0) {
                         botonEliminar = "";
                     }
@@ -426,7 +425,7 @@ async function CargarTodo() {
         info: false,
         bInfo: false,
         scrollY: "400px",
-        scrollCollapse: true,  
+        scrollCollapse: true,
         ordering: true,
         processing: true,
         responsive: true,
@@ -605,7 +604,7 @@ async function cargarTabs() {
         await CargarTarifasTodo();
         await CargarBeneficiosTodo();
     }, 300);
-    
+
 }
 async function AbrirModal(id) {
     const eltitulo = document.getElementById("tituloModal");
@@ -619,13 +618,13 @@ async function AbrirModal(id) {
     if (id == 0) {
         eltitulo.innerHTML = "Nuevo " + nombreEntidad;
         idEntidad = 0;
-        cargarTabs();  
+        cargarTabs();
         $('#' + nombreModal).modal('show');
         return false;
     } else {
         const elEntidad = await getProducto(id, -1, 0);
         if (elEntidad.length > 0) {
-            cargarTabs();  
+            cargarTabs();
             idEntidad = id;
             eltitulo.innerHTML = "Actualizar " + nombreEntidad;
             document.getElementById("mdtxtNombreProducto").value = elEntidad[0].productoNombre;
@@ -635,8 +634,8 @@ async function AbrirModal(id) {
             document.getElementById("mdtxtDescuento").value = elEntidad[0].productoImporteDiaAdicional;
             document.getElementById("mdselNrodias").value = elEntidad[0].productoNumeroDias;
             document.getElementById("mdtxtNroOrden").value = elEntidad[0].productoOrdenListado;
-            document.getElementById("mdtxtATV").value = elEntidad[0].productoATVCodigo;            
-            document.getElementById("mdSelIdiomaBeneficio").value = menuIdioma.toString();     
+            document.getElementById("mdtxtATV").value = elEntidad[0].productoATVCodigo;
+            document.getElementById("mdSelIdiomaBeneficio").value = menuIdioma.toString();
 
             if (elEntidad[0].productoActivoWeb == 1) {
                 document.getElementById("mdchkWeb").checked = true;
@@ -724,11 +723,11 @@ async function AbrirModalTarifaIncentivo(id) {
     elvalidarTarifaIncentivo.resetForm();
 
     $("#mdtextDiasMinimoIncentivo").removeClass("is-valid");
-    $("#mdtextDiasMinimoIncentivo").removeClass("is-invalid");       
-    
+    $("#mdtextDiasMinimoIncentivo").removeClass("is-invalid");
+
     eltitulo.innerHTML = "Actualizar Masivamente Incentivo y Publicidad";
     $('#popupModalProductoTarifaIncentivo').modal('show');
-        
+
 }
 async function clickValidarTarifaIncentivo() {
     if ($("#frmTarifaIncentivo").valid()) {
@@ -747,7 +746,7 @@ async function clickValidarTarifaIncentivo() {
 const ProcesarEntidadTarifaIncentivo = async () => {
 
     const eltxtDiasMinimo = document.getElementById("mdtextDiasMinimoIncentivo");
-    const eltxtDiasMaximo = document.getElementById("mdtextDiasMaximoIncentivo");    
+    const eltxtDiasMaximo = document.getElementById("mdtextDiasMaximoIncentivo");
     const eltxtIncentivo = document.getElementById("mdtextIncentivoIncentivo");
     const eltxtPublicidad = document.getElementById("mdtextPublicidadIncentivo");
 
@@ -1010,7 +1009,7 @@ const ProcesarEntidadTarifa = async () => {
     const eltxtImporte = document.getElementById("mdtextImporte");
     const eltxtIncentivo = document.getElementById("mdtextIncentivo");
     const eltxtPublicidad = document.getElementById("mdtextPublicidad");
-    
+
     const dataEnviar = {
         tarifaNumeroDiasMinimo: htmlEncode(eltxtDiasMinimo.value),
         tarifaNumeroDiasMaximo: htmlEncode(eltxtDiasMaximo.value),
@@ -1124,7 +1123,7 @@ async function deleteAnularBeneficio(id) {
         return object;
     }
 }
-async function BuscarListaBeneficios(mantenerPagina = false){
+async function BuscarListaBeneficios(mantenerPagina = false) {
     CargarBeneficiosTodo(mantenerPagina)
 }
 async function CargarBeneficiosTodo(mantenerPagina = false) {
@@ -1286,7 +1285,7 @@ let elvalidarBeneficio = $("#modalBeneficio").validate({
         },
         mdtextCobertura: {
             required: true,
-            minlength: 3,
+            minlength: 2,
             maxlength: 250,
         }
     },
@@ -1298,7 +1297,7 @@ let elvalidarBeneficio = $("#modalBeneficio").validate({
         },
         mdtextCobertura: {
             required: "Por favor, ingresar cobertura.",
-            minlength: "Debe al menos con 3 caracteres.",
+            minlength: "Debe al menos con 2 caracteres.",
             maxlength: "No debe pasar de los 250 caracteres.",
         }
     },
@@ -1334,8 +1333,8 @@ async function clickValidarBeneficio() {
     }
 }
 const ProcesarEntidadBeneficio = async () => {
-    
-    const eltxtDescripcion = document.getElementById("mdtextDescripcion");    
+
+    const eltxtDescripcion = document.getElementById("mdtextDescripcion");
     const eltxtCobertura = document.getElementById("mdtextCobertura");
     const eltxtOrden = document.getElementById("mdtextOrden");
     let vIdiomaId = 1;

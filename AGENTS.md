@@ -61,3 +61,25 @@ Recent commits use short, imperative Spanish summaries (for example,
 change. Pull requests should explain the user-facing impact, identify affected
 backend/frontend areas, link the relevant issue when available, and include
 screenshots for UI changes. Do not commit credentials from `appsettings*.json`.
+
+## Fresh checkout & validation
+
+A fresh checkout needs only the .NET 8 SDK; `dotnet build` restores NuGet
+packages. No env files to copy (config lives in `appsettings*.json`). To run the
+API or frontend on a given port: `dotnet run --project <proyecto> --urls http://localhost:<port>`.
+Validation, matching `factory/checks.sh`: build both solutions (no test projects).
+
+## Software factory
+
+`/factory run` builds every open GitHub issue labeled `factory` through
+intake → spec → build → gate → review → approve, one PR per issue. State is in
+`factory/jobs/` (gitignored); `factory/bin/job` is its only writer. Checks:
+`factory/checks.sh`. Dashboard: `cd factory && python -m http.server`, then
+open http://localhost:8000/dashboard.html.
+
+Each job works in its own git worktree, a full checkout of the repo at
+`.worktrees/<job-id>` (gitignored). A tool run from the repo root that doesn't
+read `.gitignore` sees those copies too; exclude `.worktrees/` in its config.
+
+On Windows the scripts run with `python` (not `python3`) from Git Bash; the
+gate uses Git Bash, never WSL's `bash.exe`.

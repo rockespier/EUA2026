@@ -61,3 +61,7 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Software factory scripts must keep LF (shebangs)
+factory/bin/* text eol=lf
+factory/*.sh text eol=lf

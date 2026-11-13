@@ -340,3 +340,7 @@ ASALocalRun/
 healthchecksdb
 /Assistance Travelers/AssistanceTravelers.SitioWeb/App_Readme/Ext.NET/CHANGELOG.txt
 /Assistance Travelers/AssistanceTravelers.SitioWeb
+
+/factory/jobs/
+/.worktrees/
+!/factory/bin/

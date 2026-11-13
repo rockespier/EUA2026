@@ -64,6 +64,10 @@ The approver escalates to a human when one of these is a product decision.
 
 ## Rules
 
+- Write the spec's content in Spanish (title, bullets, requirements, criteria,
+  assumptions). Keep the `## ` section headings exactly as in the template
+  above, in English: the dashboard and the other agents look them up by name.
+  Code identifiers, paths and commands stay as they are.
 - `## Summary` comes right after the issue line: 3 to 5 short bullets a human
   can skim on the dashboard. The detail goes in the sections below it.
 - Don't stop to ask. Intake already asked the author everything only they

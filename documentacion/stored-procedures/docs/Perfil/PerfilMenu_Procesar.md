@@ -10,7 +10,7 @@ No dejar secciones vacías: si algo no aplica, escribir "N/A" y por qué.
 | Dominio | `Perfil, Permiso` |
 | Repositorio (.NET) | `PerfilRepository.cs` |
 | Método(s) que lo invoca | `PerfilRepository.PerfilMenu_Procesar, PermisoRepository.PermisoArbol_Procesar` |
-| Endpoint(s) de API | `<Controller.Accion (verbo HTTP + ruta)>` |
+| Endpoint(s) de API | `ConfiguracionController.postProcesarPermiso (POST configuracion/PermisoProcesar)` |
 | Tipo de operación | `Escritura` |
 | Última extracción de fuente | `2026-09-07` (ver `manifest.csv`) |
 | `modify_date` en BD al extraer | `2025-01-17 09:30:49` |
@@ -47,8 +47,8 @@ venta aplicando impuestos por país y descuentos de promoción vigente."-->
 
 ## Manejo de errores
 
-- Cómo comunica errores al llamador (`BEError`, código de retorno, `RAISERROR`, etc.).
-- Casos conocidos de fallo silencioso o comportamiento no intuitivo.
+- Devuelve una fila con `errorCodigo`/`errorDescripcion` (se lee como `BEError`): `1`/`'ok'` si insertó y `errorDescripcion = ''` si no hubo filas afectadas.
+- `PermisoRepository.PermisoArbol_Procesar` considera fallo cualquier resultado `null` o con `errorDescripcion` distinto de `'ok'` y devuelve error al endpoint.
 
 ## Rendimiento
 

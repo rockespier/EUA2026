@@ -217,6 +217,13 @@ $("body").on("click", ".edad-menos", function () {
     }
 });
 
+$("body").on("change", ".planescheck", function () {
+    if (this.checked && $("#divResultadoInfoPro .planescheck:checked").length > 5) {
+        this.checked = false;
+        mostrarMensaje(4, "Solo puede seleccionar hasta 5 productos");
+    }
+});
+
 
 
 $("#edades").on("change", function () {
@@ -295,9 +302,6 @@ async function AbrirBusqueda() {
     
     let HtmlProducto = "";
     let HtmlResultados = "";
-    let arrProductoids = "";
-    let arrProductoNombres = "";
-    let arrPrecios = "";
     const cotizacion = await getCotizacion(elOrigen.value, elDestino.value, elDias.innerText, elCantidad.value, elModalidad.value, mayor);
     if (cotizacion !== undefined) {
         if (cotizacion.length > 0) {
@@ -307,26 +311,14 @@ async function AbrirBusqueda() {
                 const Total = cotizacion[i].productoTarifaImporte;
                 const Beneficios = cotizacion[i].beneficiosHtml;
                 const Dias = cotizacion[i].productoTarifaDia;
-
-                if (i < 3) {
-                    if (i == 0) {
-                        arrProductoids = IDProducto;
-                        arrProductoNombres = ProductoNombre;
-                        arrPrecios = Total;
-                    } else {
-                        arrProductoids = arrProductoids + "," + IDProducto;
-                        arrProductoNombres = arrProductoNombres + "," + ProductoNombre;
-                        arrPrecios = arrPrecios + "," + Total;
-                    }
-                    
-                }
+                const NombreAtributo = String(ProductoNombre).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 
                 HtmlProducto = `<div class="col-sm-3 caja-plan-categoria categoria-1"> 
                                     <div class="caja-plan2"> 
                                          <div class="row align-items-center"> 
 	                                        <div class="col-sm-12"> 
-		                                        <label for="plancheck1" class="titulo-resultados"> 
-		                                        <input type="checkbox" id="plancheck1" class="form-check-input planescheck" value="1"> 
+		                                        <label for="plancheck_${i}" class="titulo-resultados"> 
+		                                        <input type="checkbox" id="plancheck_${i}" class="form-check-input planescheck" value="${IDProducto}" data-id="${IDProducto}" data-nombre="${NombreAtributo}" data-precio="${Total}"> 
 		                                        <h3>${ProductoNombre}</h3> </label> 
 	                                        </div> 
                             <div class="col-sm-12 "> 
@@ -356,9 +348,6 @@ async function AbrirBusqueda() {
 
                 HtmlResultados = HtmlResultados + HtmlProducto;
             }
-            document.getElementById("mdHidProductosIds").value = arrProductoids;
-            document.getElementById("mdHidProductosNombres").value = arrProductoNombres;
-            document.getElementById("mdHidProductosPrecios").value = arrPrecios;    
             document.getElementById("divResultadoInfoPro").innerHTML = HtmlResultados;
             $('#descargacotizacion').show();
         }
@@ -436,6 +425,12 @@ function isDateInRange(dateStr, startDateStr, endDateStr) {
 }
 
 async function clickImprimir() {
+    const seleccionados = document.querySelectorAll('#divResultadoInfoPro .planescheck:checked');
+    if (seleccionados.length === 0) {
+        mostrarMensaje(4, "Seleccione al menos un producto");
+        return;
+    }
+
     const sesionActiva = await fetch('/validateJS', { credentials: 'include' });
     if (!sesionActiva.ok) {
         const currentUrl = window.location.pathname + window.location.search;
@@ -457,11 +452,12 @@ async function clickImprimir() {
         var selDestino = document.getElementById("mdselDestino");      
         const destino = selDestino.options[selDestino.selectedIndex].text;
         const personas = document.getElementById("edades").value;
-        const codigos = document.getElementById("mdHidProductosIds").value;
-        const nombres = document.getElementById("mdHidProductosNombres").value;
-        const precios = document.getElementById("mdHidProductosPrecios").value;
+        const productos = [...seleccionados];
+        const codigos = productos.map(e => e.dataset.id).join(",");
+        const nombres = productos.map(e => encodeURIComponent(e.dataset.nombre)).join(",");
+        const precios = productos.map(e => e.dataset.precio).join(",");
 
-        const parametro = fechaInicio + "_" + fechaFin + "_" + origen + "_" + destino + "_" + personas + "_" + codigos + "_" + nombres + "_" + precios;
+        const parametro = fechaInicio + "_" + fechaFin + "_" + encodeURIComponent(origen) + "_" + encodeURIComponent(destino) + "_" + personas + "_" + codigos + "_" + nombres + "_" + precios;
 
         let response = await fetch('/exportCotizacionImprimir/' + parametro, {
             method: 'GET',

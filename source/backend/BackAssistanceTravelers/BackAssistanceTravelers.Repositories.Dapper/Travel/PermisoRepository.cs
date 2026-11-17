@@ -1,9 +1,9 @@
-﻿using BackAssistanceTravelers.Models.General;
+﻿using BackAssistanceTravelers.Models.Error;
+using BackAssistanceTravelers.Models.General;
 using BackAssistanceTravelers.Models.Permisos;
 using BackAssistanceTravelers.Repositories.Travel;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +14,11 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel {
 	public class PermisoRepository : Repository, IPermisoRepository {
 		public PermisoRepository(string connectionString) : base(connectionString) {
 		}
-		private async Task<BEResultado> PermisoArbol_Eliminar(int pPerfilId) {
+		private async Task<BEError> PermisoArbol_Eliminar(int pPerfilId) {
 			await using (var connection = new SqlConnection(_connectionString)) {
 				var parameters = new DynamicParameters();
 				parameters.Add("@pPERFIL_Id", pPerfilId);
-				var result = await connection.QueryFirstOrDefaultAsync<BEResultado>
+				var result = await connection.QueryFirstOrDefaultAsync<BEError>
 										("PerfilMenu_Eliminar", parameters,
 										commandType: System.Data.CommandType.StoredProcedure);
 				return result!;
@@ -35,29 +35,23 @@ namespace BackAssistanceTravelers.Repositories.Dapper.Travel {
 			}
 		}
 		public async Task<BEResultado> PermisoArbol_Procesar(int pPerfilId, string pMenuIds) {
-			BEResultado eliminacionPreviaArbol = new BEResultado();
-			eliminacionPreviaArbol = await PermisoArbol_Eliminar(pPerfilId);
-			if (eliminacionPreviaArbol == null || eliminacionPreviaArbol.descripcion == "") {
-				return eliminacionPreviaArbol!;
-			}
-			string[] vtnMenuIds = Strings.Split(pMenuIds, ",");
-			BEResultado Resultado = new BEResultado();
+			// PerfilMenu_Eliminar devuelve '' cuando el perfil no tenía permisos: no es un error
+			await PermisoArbol_Eliminar(pPerfilId);
+			string[] vtnMenuIds = (pMenuIds ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 			for (int i = 0; i < vtnMenuIds.Length; i++) {
 				await using (var connection = new SqlConnection(_connectionString)) {
 					var parameters = new DynamicParameters();
 					parameters.Add("@pPERFIL_Id", pPerfilId);
-					parameters.Add("@pMENU_Id", int.Parse(vtnMenuIds[i].ToString()));
-					var result = await connection.QueryFirstOrDefaultAsync<BEResultado>
+					parameters.Add("@pMENU_Id", int.Parse(vtnMenuIds[i]));
+					var result = await connection.QueryFirstOrDefaultAsync<BEError>
 											("PerfilMenu_Procesar", parameters,
 											commandType: System.Data.CommandType.StoredProcedure);
-					if (result!.descripcion == "") {
-						Resultado.descripcion = "";
-					} else {
-						Resultado.descripcion = result.descripcion;
+					if (result == null || result.errorDescripcion != "ok") {
+						return new BEResultado { descripcion = "" };
 					}
 				}
 			}
-			return Resultado;
+			return new BEResultado { descripcion = "ok" };
 		}
 	}
 }

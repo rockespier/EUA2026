@@ -415,30 +415,6 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			objError.errorDescripcion ??= response.ReasonPhrase;
 			throw new HttpRequestException($"Error en ValorTipoIdObtener ({objError.errorCodigo}): {objError.errorDescripcion}");
 		}
-        private async Task<List<BEProductoBeneficio>> ProductoBeneficioCoti_Obtener(string Ids, int Idioma)
-        {
-            var httpClient = httpClientFactory.CreateClient();           
-            string IdIdioma = Idioma.ToString();
-            string parametros = "?str_pProductoID=" + Ids + "&int_pBeneficioIdioma=" + IdIdioma;
-            string RutaApi = configuration.GetValue<string>("Generales:RutaAPI")! + "mantenimiento/";
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", User.FindFirst("Token")?.Value ?? string.Empty);
-            var response = await httpClient.GetAsync(RutaApi + "ProductoBeneficiosCotizacionObtener" + parametros);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                string jsonOK = await response.Content.ReadAsStringAsync();
-                List<BEProductoBeneficio> objOK = JsonConvert.DeserializeObject<List<BEProductoBeneficio>>(jsonOK)!;
-
-                return objOK;
-            }
-            string jsonError = await response.Content.ReadAsStringAsync();
-            BEErrorApi objError = new BEErrorApi();
-            if (!string.IsNullOrEmpty(jsonError))
-                objError = JsonConvert.DeserializeObject<BEErrorApi>(jsonError) ?? objError;
-            if (objError.errorCodigo == 0)
-                objError.errorCodigo = (int)response.StatusCode;
-            objError.errorDescripcion ??= response.ReasonPhrase;
-            throw new HttpRequestException($"Error en ProductoBeneficiosCotizacionObtener ({objError.errorCodigo}): {objError.errorDescripcion}");
-        }
         private async Task<List<BEProductoBeneficio>> ProductoBeneficio_Obtener(int Id, int Idioma)
 		{
 			var httpClient = httpClientFactory.CreateClient();
@@ -2795,17 +2771,37 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 
         [HttpGet]
         [Route("exportCotizacionImprimir/{id}")]
-        public async Task<FileStreamResult> exportCotizacionImprimir(string id)
+        public async Task<IActionResult> exportCotizacionImprimir(string id)
         {
             var parametros = id.Split("_");
+            if (parametros.Length < 8)
+            {
+                return BadRequest();
+            }
             var fechainicio = parametros[0];
             var fechafin = parametros[1];
             var origen = parametros[2];
             var destino = parametros[3];
             var personas = parametros[4];
-			var arrProductoId = parametros[5];
-			var arrProductosNombre = parametros[6];
-			var arrPrecio = parametros[7];
+            string[] arrProductoId = parametros[5].Split(',');
+            string[] arrProductosNombre = parametros[6].Split(',');
+            string[] arrPrecio = parametros[7].Split(',');
+
+            // De 1 a 5 productos, en el orden recibido; se descartan los ids vacíos o no numéricos
+            var productos = new List<(int Id, string Nombre, string Precio)>();
+            for (int j = 0; j < arrProductoId.Length && productos.Count < 5; j++)
+            {
+                if (int.TryParse(arrProductoId[j].Trim(), out int productoId))
+                {
+                    productos.Add((productoId,
+                        j < arrProductosNombre.Length ? arrProductosNombre[j] : "",
+                        j < arrPrecio.Length ? arrPrecio[j] : ""));
+                }
+            }
+            if (productos.Count == 0)
+            {
+                return BadRequest();
+            }
 
             Stream XLSXGarantiaAdjunto = new MemoryStream(await exportCotizacionImpHmtlMemory(
                 fechainicio.ToString(),
@@ -2813,23 +2809,21 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
                 origen.ToString(),
                 destino.ToString(),
                 int.Parse(personas),
-                arrProductoId,
-                arrProductosNombre,                
-                arrPrecio));
+                productos));
             var XLSXGarantiaType = "application/octet-stream";
             var XLSXGarantiaNombreArchivo = "Cotizacion para " + destino.ToString().Trim() + ".pdf";
             return File(XLSXGarantiaAdjunto, XLSXGarantiaType, XLSXGarantiaNombreArchivo);
         }
         private async Task<byte[]> exportCotizacionImpHmtlMemory(string fechainicio, string fechafin, string origen, string destino,
-            int personas, string arrProductoId, string arrProductosNombre, string arrPrecio)
+            int personas, List<(int Id, string Nombre, string Precio)> productos)
         {
-            string body = await exportCotizacionHmtl(fechainicio, fechafin, origen, destino, personas, arrProductoId, arrProductosNombre, arrPrecio);
+            string body = await exportCotizacionHmtl(fechainicio, fechafin, origen, destino, personas, productos);
             
             using (MemoryStream outputStream = new MemoryStream())
             {
                 PdfWriter writer = new PdfWriter(outputStream);
                 PdfDocument pdfDoc = new PdfDocument(writer);
-                pdfDoc.SetDefaultPageSize(iText.Kernel.Geom.PageSize.A4);
+                pdfDoc.SetDefaultPageSize(iText.Kernel.Geom.PageSize.A4.Rotate());
                 var converterProperties = new ConverterProperties();
                 HtmlConverter.ConvertToPdf(body, pdfDoc, converterProperties);
                 //outputStream.Position = 0;
@@ -2838,14 +2832,11 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
         }
 
         private async Task<string> exportCotizacionHmtl(string fechainicio, string fechafin, string origen, string destino,
-			int personas, string ProductoId, string ProductosNombre, string Precio)
+			int personas, List<(int Id, string Nombre, string Precio)> productos)
         {
 
 			string rutaAppSet = configuration.GetValue<string>("Generales:RutaWebImagenes")!;
 			var rutaURLLogo = rutaAppSet + "logos/cabecera_cotizacion_eua.png";
-			string[] arrProductoId = ProductoId.Split(',');
-            string[] arrProductosNombre = ProductosNombre.Split(',');
-            string[] arrPrecio = Precio.Split(',');	
 
             StringBuilder writer = new StringBuilder();
             #region "CABECERA"
@@ -2883,6 +2874,8 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             writer.AppendLine("padding: 8px;");
             writer.AppendLine("text-align: left;");
             writer.AppendLine("}");
+            writer.AppendLine(".coverage-table {table-layout: fixed;}");
+            writer.AppendLine(".coverage-table th, .coverage-table td {word-wrap: break-word;}");
             writer.AppendLine(".coverage-table td {font-size:70%}");
             writer.AppendLine(".travel-data-table th, .coverage-table th {");
             writer.AppendLine("background-color: #f2f2f2;");
@@ -2890,11 +2883,11 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             writer.AppendLine("color: #333;");
             writer.AppendLine("}");
             writer.AppendLine(".coverage-table th:first-child {");
-            writer.AppendLine("width: 30%; /* Ancho para la columna de Coberturas */");
+            writer.AppendLine("width: 22%; /* Ancho para la columna de Coberturas */");
             writer.AppendLine("}");
             writer.AppendLine(".coverage-table td:nth-child(n+3) {");
             writer.AppendLine("text-align: center; /* Centrar valores en las columnas de planes */");
-            writer.AppendLine("white-space: nowrap; /* Evitar saltos de línea en valores de cobertura */");
+            writer.AppendLine("white-space: normal; /* Permitir saltos de línea para que entren hasta 5 planes */");
             writer.AppendLine("}");
             writer.AppendLine(".prices-section {");
             writer.AppendLine("margin-bottom: 30px;");
@@ -2938,10 +2931,10 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			writer.AppendLine("<h1>Datos del Viaje</h1>");
 
             writer.AppendLine("<table class='travel-data-table'><thead><tr style='background-color:#e3e9ec'>");
-            writer.AppendFormat("<td>Fecha de Salida</td><td>{0}</td></tr>", fechainicio);
-            writer.AppendFormat("<tr><td>Fecha de Regreso</td><td>{0}</td></tr>", fechafin);
-            writer.AppendFormat("<tr style='background-color:#e3e9ec'><td>Origen</td><td>{0}</td></tr>", origen);
-            writer.AppendFormat("<tr><td>Destino</td><td>{0}</td></tr>", destino);
+            writer.AppendFormat("<td>Fecha de Salida</td><td>{0}</td></tr>", WebUtility.HtmlEncode(fechainicio));
+            writer.AppendFormat("<tr><td>Fecha de Regreso</td><td>{0}</td></tr>", WebUtility.HtmlEncode(fechafin));
+            writer.AppendFormat("<tr style='background-color:#e3e9ec'><td>Origen</td><td>{0}</td></tr>", WebUtility.HtmlEncode(origen));
+            writer.AppendFormat("<tr><td>Destino</td><td>{0}</td></tr>", WebUtility.HtmlEncode(destino));
             writer.AppendFormat("<tr style='background-color:#e3e9ec'><td>Personas</td><td>{0}</td></tr></table>", personas);
 
 			//writer.AppendLine("<div class='prices-section'>");
@@ -2949,36 +2942,14 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			//writer.AppendLine("<ul class='price-list'>");
 
            
-            string strIds = "";
             string strTitulos = "";
-			//string strPrecios = "";
 
-            for (int j = 0; j < 3; j++)
-			{
-				
-				
-                //strPrecios = strPrecios + "<li class='price-item'><div class='price-plan'>" + arrProductosNombre[j] + "</div><div class='price-value'>" + arrPrecio[j] + "</div></li>";
-                if (strIds == "")
-                {
-                    strIds = strIds + arrProductoId[j];
-                }
-                else
-                {
-                    strIds = strIds + "," + arrProductoId[j];
-                }
-
-                strTitulos = strTitulos + "<th  style='background-color:#004aad;color:#fff'>" + arrProductosNombre[j] + "</br> <span style='color:#f09000'> " + arrPrecio[j]  + " USD </span> </th>";	
+            foreach (var producto in productos)
+            {
+                strTitulos = strTitulos + "<th  style='background-color:#004aad;color:#fff'>" + WebUtility.HtmlEncode(producto.Nombre) + "</br> <span style='color:#f09000'> " + WebUtility.HtmlEncode(producto.Precio) + " USD </span> </th>";
             }
 
-			//writer.AppendLine(strPrecios);
-			// writer.AppendLine("</ul>");
-			//writer.AppendLine("</div>");
-
 			writer.AppendLine("<h1>Coberturas</h1>");
-
-
-			List<BEProductoBeneficio> oResultadoProductoBeneficios = new List<BEProductoBeneficio>();
-						
 
 			writer.AppendLine("<table class='coverage-table'><thead><tr><th></th>");
 
@@ -2991,9 +2962,26 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
             string strFondo ="" ;
             int int_filas = 0;
 
-            oResultadoProductoBeneficios = await ProductoBeneficioCoti_Obtener(strIds, intIdiomaBeneficio);
-			
-			foreach (BEProductoBeneficio item in oResultadoProductoBeneficios)
+            // Filas: unión de beneficios por nombre; primero los del primer producto y luego los nuevos de cada siguiente, por beneficioOrden
+            List<string> filasBeneficio = new List<string>();
+            List<Dictionary<string, string>> importesPorProducto = new List<Dictionary<string, string>>();
+            foreach (var producto in productos)
+            {
+                List<BEProductoBeneficio> oResultadoProductoBeneficios = await ProductoBeneficio_Obtener(producto.Id, intIdiomaBeneficio);
+                Dictionary<string, string> importes = new Dictionary<string, string>();
+                foreach (BEProductoBeneficio item in oResultadoProductoBeneficios.OrderBy(b => b.beneficioOrden))
+                {
+                    string beneficioNombre = (item.beneficioNombre ?? "").Trim();
+                    importes.TryAdd(beneficioNombre, item.beneficioImporte ?? "");
+                    if (!filasBeneficio.Contains(beneficioNombre))
+                    {
+                        filasBeneficio.Add(beneficioNombre);
+                    }
+                }
+                importesPorProducto.Add(importes);
+            }
+
+			foreach (string beneficioNombre in filasBeneficio)
 			{
 				if (int_contador < 100)
 				{
@@ -3005,14 +2993,18 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 					{
 						strFondo = "";
 					}
-					writer.AppendFormat("<tr {0} ><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>", strFondo, item.beneficioNombre, item.coberturaProd01, item.coberturaProd02, item.coberturaProd03);
+					writer.AppendFormat("<tr {0} ><td>{1}</td>", strFondo, WebUtility.HtmlEncode(beneficioNombre));
+					foreach (var importes in importesPorProducto)
+					{
+						writer.AppendFormat("<td>{0}</td>", WebUtility.HtmlEncode(importes.TryGetValue(beneficioNombre, out string? importe) ? importe : ""));
+					}
+					writer.AppendLine("</tr>");
 
 					int_filas = int_filas + 1;
 				}
 				int_contador = int_contador + 1;
 			}
 
-			writer.AppendLine("</tr>");
 			writer.AppendLine("</tbody>");
 			writer.AppendLine("</table>");
 

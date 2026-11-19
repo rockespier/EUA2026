@@ -751,6 +751,12 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 			writer.AppendLine("</table>");
 			writer.AppendLine("</td>");
 			writer.AppendLine("</tr>");
+			writer.AppendLine("<tr>");
+			writer.AppendLine("<td colspan='2' style='text-align:left;padding:2px 10px 2px 10px;font-size: 85%;'>");
+			writer.AppendLine("<p align='justify'>(1)Para viajes adquiridos por más de 60 días. AGE UPGRADE: Las tarifas tienen un recargo del 50% para pasajeros de 75 a 84 años.</p>");
+			writer.AppendLine("<p align='justify'>(2) El beneficio de asistencia por enfermedades preexistentes bajo modalidad Up grade se ofrece de manera independiente al resto de coberturas, siempre que el pasajero adquiera este adicional: USD 50.00 para pasajeros de 0 a 69 años y USD 70.00 para pasajeros de 70 a 79 años hasta un máximo de 30 días. No aplican promociones para el Up grade. Todos nuestros planes cubren asistencias por COVID 19. Vigente desde el 01/11/2026. Todos los beneficios pueden darse “hasta” los gastos descritos en este folleto. Recomendamos leer las condiciones generales del producto adquirido en nuestra página web: www.euroamericanassistance.com.</p>");
+			writer.AppendLine("</td>");
+			writer.AppendLine("</tr>");
 			writer.AppendLine("<tr><td colspan='2'>&nbsp;<br><br><br><br></td></tr>");
 			if (membrete == 3) {
 				writer.AppendLine("<tr>");

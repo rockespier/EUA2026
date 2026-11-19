@@ -2,7 +2,7 @@
   "concurrency": 3,
   "max_rounds": 3,
   "base_branch": "main",
-  "merge_method": "merge",
+  "merge_method": "squash",
   "labels": {
     "queue": "factory",
     "needs_info": "factory:needs-info",

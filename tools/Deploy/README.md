@@ -32,8 +32,14 @@ ssh-add "$env:USERPROFILE\.ssh\id_ed25519"                    # pide la passphra
 Copiar la llave pública al servidor (pide tu contraseña de SSH por última vez). Como `rramos` es administrador del servidor, OpenSSH para Windows lee `administrators_authorized_keys`:
 
 ```powershell
-Get-Content "$env:USERPROFILE\.ssh\id_ed25519.pub" | ssh rramos@161.132.56.79 "powershell -NoProfile -Command `"`$input | Add-Content -Encoding ascii C:\ProgramData\ssh\administrators_authorized_keys; icacls C:\ProgramData\ssh\administrators_authorized_keys /inheritance:r /grant *S-1-5-32-544:F /grant *S-1-5-18:F`""
+$pub = (Get-Content "$env:USERPROFILE\.ssh\id_ed25519.pub" -Raw).Trim()
+$f = 'C:\ProgramData\ssh\administrators_authorized_keys'
+$remoto = "Add-Content -Encoding ascii '$f' '$pub'; icacls '$f' /inheritance:r /grant '*S-1-5-32-544:F' /grant '*S-1-5-18:F'"
+$enc = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($remoto))
+ssh rramos@161.132.56.79 "powershell -NoProfile -EncodedCommand $enc"
 ```
+
+(Se envía codificado en base64 para evitar problemas de comillas entre PowerShell local, la shell remota y PowerShell remoto).
 
 (Los SIDs son Administradores y SYSTEM, para que funcione en Windows en cualquier idioma. Si el usuario no fuera administrador, la llave iría en `C:\Users\rramos\.ssh\authorized_keys`, pero detener pools de IIS requiere administrador).
 

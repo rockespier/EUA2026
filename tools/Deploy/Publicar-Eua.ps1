@@ -106,9 +106,12 @@ foreach ($app in $apps) {
 
 # 9-11. En el servidor: detener pools, descomprimir, levantar pools.
 # Los pools se levantan en 'finally' para que el sitio no quede caído si falla la descompresión.
+# Sin TTY, PowerShell remoto serializa progreso/Write-Host como CLIXML: se usa Write-Output y se silencia el progreso.
 $sitios = ($apps | ForEach-Object { "@{Pool='$($_.Pool)';Ruta='$($_.RutaIIS)';Zip='$($_.RutaIIS)/$($_.Zip)'}" }) -join ','
 $remoto = @"
 `$ErrorActionPreference = 'Stop'
+`$ProgressPreference = 'SilentlyContinue'
+`$fallo = `$false
 Import-Module WebAdministration
 `$sitios = @($sitios)
 try {
@@ -119,19 +122,24 @@ try {
             if (`$t -ge 60) { throw "El pool `$(`$s.Pool) no se detuvo en 60 s." }
             Start-Sleep -Seconds 1; `$t++
         }
-        Write-Host "Pool detenido: `$(`$s.Pool)"
+        Write-Output "Pool detenido: `$(`$s.Pool)"
     }
     foreach (`$s in `$sitios) {
         Expand-Archive -Path `$s.Zip -DestinationPath `$s.Ruta -Force
-        Write-Host "Descomprimido: `$(`$s.Zip)"
+        Write-Output "Descomprimido: `$(`$s.Zip)"
     }
+}
+catch {
+    Write-Output "ERROR: `$(`$_.Exception.Message)"
+    `$fallo = `$true
 }
 finally {
     foreach (`$s in `$sitios) {
         Start-WebAppPool -Name `$s.Pool
-        Write-Host "Pool iniciado: `$(`$s.Pool) -> `$((Get-WebAppPoolState -Name `$s.Pool).Value)"
+        Write-Output "Pool iniciado: `$(`$s.Pool) -> `$((Get-WebAppPoolState -Name `$s.Pool).Value)"
     }
 }
+if (`$fallo) { exit 1 }
 "@
 
 Write-Paso "Despliegue remoto en $Servidor (detener pools, descomprimir, iniciar pools)"

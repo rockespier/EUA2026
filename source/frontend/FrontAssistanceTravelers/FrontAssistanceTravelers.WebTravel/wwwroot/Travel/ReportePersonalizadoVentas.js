@@ -296,6 +296,9 @@ function clickBuscarLimpiar() {
     document.getElementById("mdvenSelSituacionSearch").value = "";
     document.getElementById("txtAgencia").value = "";
     localStorage.removeItem("lsReportePersonalizadoAgenciaSel");
+    if (menuelOrigen === 'U') {
+        cargarAgenciasPorPais("");
+    }
 }
 
 async function clickBuscarVentas() {
@@ -344,26 +347,40 @@ async function cargarCombosBusqueda() {
     }
 
     if (AgenciaId === 0) {
-        const elcomboAgencia = await getAgencia(0, 1, menuPaisId, menuUserId, '', '');
-        if (elcomboAgencia !== undefined && elcomboAgencia.length > 0) {
-            var dataSource = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('agenciaNombre'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: elcomboAgencia
-            });
-            $('#txtAgencia').typeahead(
-                { hint: true, highlight: true, minLength: 1 },
-                { name: 'agenciaId', display: 'agenciaNombre', source: dataSource }
-            );
-            $('#txtAgencia').on('typeahead:select', function (e, selection) {
-                $('#txtAgencia').val(selection.agenciaId);
-                localStorage.setItem("lsReportePersonalizadoAgenciaSel", selection.agenciaId);
-            });
-        }
+        await cargarAgenciasPorPais(menuPaisId);
     } else {
         $('#divVenSelAgenciaSearch').hide();
     }
 }
+
+async function cargarAgenciasPorPais(paisId) {
+    $('#txtAgencia').typeahead('destroy');
+    $('#txtAgencia').val('');
+
+    const elcomboAgencia = await getAgencia(0, 1, paisId, menuUserId, '', '');
+    if (elcomboAgencia !== undefined && elcomboAgencia.length > 0) {
+        var dataSource = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('agenciaNombre'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: elcomboAgencia
+        });
+        $('#txtAgencia').typeahead(
+            { hint: true, highlight: true, minLength: 1 },
+            { name: 'agenciaId', display: 'agenciaNombre', source: dataSource }
+        );
+        $('#txtAgencia').off('typeahead:select').on('typeahead:select', function (e, selection) {
+            $('#txtAgencia').val(selection.agenciaId);
+            localStorage.setItem("lsReportePersonalizadoAgenciaSel", selection.agenciaId);
+        });
+    }
+}
+
+$('#mdvenSelPaisSearch').change(async function () {
+    if (menuelOrigen === 'U') {
+        localStorage.removeItem("lsReportePersonalizadoAgenciaSel");
+        await cargarAgenciasPorPais($(this).val());
+    }
+});
 
 async function buscarVentas() {
     showLoader();

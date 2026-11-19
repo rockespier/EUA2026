@@ -87,7 +87,7 @@ dotnet run --project source/frontend/FrontAssistanceTravelers/FrontAssistanceTra
 
 The API serves Swagger UI at `/swagger` in Development, and redirects `/` there. Frontend expects the API's base URL in `Generales:RutaAPI` (`appsettings.Development.json`) — run the API first.
 
-There are **no automated test projects** in the solution (CI's `dotnet test` step is `continue-on-error: true` and is effectively a no-op).
+Tests: xUnit + Moq projects `BackAssistanceTravelers.Tests` and `FrontAssistanceTravelers.Tests` (one per solution, unit tests on controllers with mocked dependencies, no DB/HTTP). Run with `dotnet test <solution>.sln`. CI's `dotnet test` step is still `continue-on-error: true`, so failures don't block the build.
 
 ## Deployment
 

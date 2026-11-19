@@ -2936,7 +2936,7 @@ namespace FrontAssistanceTravelers.WebTravel.Controllers
 
 			writer.AppendLine("<h1>Datos del Viaje</h1>");
 
-            writer.AppendLine("<table class='travel-data-table'><thead><tr style='background-color:#e3e9ec'>");
+            writer.AppendLine("<table class='travel-data-table' style='font-family: Arial, Helvetica, sans-serif;'><thead><tr style='background-color:#e3e9ec'>");
             writer.AppendFormat("<td>Fecha de Salida</td><td>{0}</td></tr>", WebUtility.HtmlEncode(fechainicio));
             writer.AppendFormat("<tr><td>Fecha de Regreso</td><td>{0}</td></tr>", WebUtility.HtmlEncode(fechafin));
             writer.AppendFormat("<tr style='background-color:#e3e9ec'><td>Origen</td><td>{0}</td></tr>", WebUtility.HtmlEncode(origen));
